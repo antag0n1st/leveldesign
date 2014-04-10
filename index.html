@@ -30,6 +30,8 @@ and open the template in the editor.
         <script type="text/javascript" src="lib/move_to.js"></script>
         <script type="text/javascript" src="lib/state_machine.js" ></script>
         
+        <script type="text/javascript" src="game/states.js" ></script>
+        
         <script type="text/javascript" src="game/game.js" ></script>
 
         <script type="text/javascript" src="lib/screen.js" ></script>
@@ -45,6 +47,9 @@ and open the template in the editor.
         <script type="text/javascript" src="game/plane.js" ></script>
         <script type="text/javascript" src="game/smoke.js" ></script>
         <script type="text/javascript" src="game/ui/screens/game_screen.js" ></script>
+        
+        <script type="text/javascript" src="game/obsticle.js" ></script>
+        <script type="text/javascript" src="game/tile.js" ></script>
         
         
         
@@ -119,6 +124,17 @@ and open the template in the editor.
             }
         </style>
         <canvas id="stage" style="position: absolute;z-index: 999;left: 0;top:0;"></canvas>
+        <div style="position: absolute;z-index: 999;left: 810px;top:0; text-align: right;">
+            <label></label>  <input type="text" readonly="readonly" />
+            <br />
+            <label>z-index: </label><input id="z_index" type="text" />
+            <br />
+            <label>Type: </label><input id="type" type="text" />
+            <br />
+            <label>Tag: </label><input id="tag" type="text" />
+            <br />
+            <label></label><input type="button" value="update" />
+        </div>
         <script type="text/javascript">
 
                 var resource_ids = {};
