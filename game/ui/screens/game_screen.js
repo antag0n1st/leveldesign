@@ -9,20 +9,52 @@
 
     GameScreen.prototype.initialize = function() {
         this.screen_initialize();
-
-        game.input.snap_mode = true;
+                game.input.snap_mode = true;
 
         this.polygons = [];
         this.queue = [];
         this.layers = [];
 
         var layer = new Layer();
-        layer.set_position(0, 0);
+        layer.set_position(400, 300);
         layer.set_size(Config.screen_width, Config.screen_height);
         this.layers.push(layer);
         this.add_child(layer);
 
         this.active_layer = layer;
+        
+        
+        //////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        
+        
+        
+        
+        
+        
+        
+        
+        var knight = new SpineAnimation('knight');
+        knight.set_position(0,0);
+        knight.play('run');
+        knight.z_index = -10;
+        this.active_layer.add_child(knight);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
 
         this.start_drag_point = new Vector();
         this.start_drag_screen_position = new Vector();
@@ -196,8 +228,8 @@
         if (this.is_space_pressed) {
 
             this.start_drag_point = new Vector(event.point.x, event.point.y);
-            this.start_drag_screen_position = this.active_layer.position;
-            this.last_move_position = new V(this.start_drag_point.x,this.start_drag_point.y);
+            this.start_drag_screen_position = this.active_layer.get_position();
+            this.last_move_position = this.start_drag_point.clone();
 
         }
 
@@ -278,8 +310,8 @@
             }
 
             var v = new V(event.point.x, event.point.y);
-            v.sub(this.start_drag_point);
-            var p = new V().copy(this.start_drag_screen_position).add(v);
+            v.sub(this.start_drag_point.clone());
+            var p = this.start_drag_screen_position.clone().add(v);
 
             this.active_layer.set_position(p.x, p.y);
 
@@ -288,7 +320,7 @@
                 // lets move some points
 
                 var v = new V(event.point.x, event.point.y);
-                v.sub(this.last_move_position);
+                v.sub(this.last_move_position.clone());
 
                 for (var i = 0; i < this.queue.length; i++) {
                     //   this.queue[i].add(v);
@@ -310,9 +342,8 @@
                     if (obsticle.is_selected) {
                         // move the obsticle
                         var v = new V(event.point.x, event.point.y);
-                        v.sub(this.start_drag_point);
-                        var p = new V(this.start_obsticle_position.x,this.start_obsticle_position.y);
-                        p.add(v);
+                        v.sub(this.start_drag_point.clone());
+                        var p = this.start_obsticle_position.clone().add(v);
 
                         obsticle.set_position(p.x, p.y);
                         this.update_inspector_with_obsticle(obsticle);
@@ -395,13 +426,12 @@
         
         if(obsticle){
             
-          //  console.log(obsticle);
-            this.name_label.value = obsticle.name + '';
-            this.z_index_label.value = obsticle.z_index + '';
-            this.tag_label.value = obsticle.tag + '';
-            this.type_label.value = obsticle.type + '';
-            this.x_position_label.value =  obsticle.get_position().x + "";
-            this.y_position_label.value =  obsticle.get_position().y + "";
+            this.name_label.value = obsticle.name;
+            this.z_index_label.value = obsticle.z_index;
+            this.tag_label.value = obsticle.tag;
+            this.type_label.value = obsticle.type;
+            this.x_position_label.value =  obsticle.get_position().x;
+            this.y_position_label.value =  obsticle.get_position().y;
                              
         }else{
             
@@ -428,6 +458,13 @@
     GameScreen.prototype.draw = function(context) {
         Screen.prototype.draw.call(this, context);
 
+        
+
+    };
+    
+    GameScreen.prototype.on_draw_finished = function(context){
+        Screen.prototype.on_draw_finished.call(this,context);
+        
         this.draw_queue(context);
 
         var strokeStyle = context.strokeStyle;
@@ -437,12 +474,20 @@
         context.strokeStyle = 'yellow';
 
         context.beginPath();
+        
+        var p = this.active_layer.bounds.pos.clone();
+        
+        context.moveTo(p.x+0, p.y-this.height);
+        context.lineTo(p.x+0, p.y+this.height);
+        
+        context.moveTo(p.x-this.width, p.y);
+        context.lineTo(p.x+this.width, p.y);
 
-        context.moveTo(this.width / 2, 0);
-        context.lineTo(this.width / 2, this.height);
-
-        context.moveTo(0, Config.tile_height * 10);
-        context.lineTo(this.width, Config.tile_height * 10);
+//        context.moveTo(p.x+this.width / 2, p.y+ 0);
+//        context.lineTo(p.x+this.width / 2, p.y+this.height);
+//
+//        context.moveTo(p.x+0,p.y+ Config.tile_height * 15);
+//        context.lineTo(p.x+this.width, p.y+Config.tile_height * 15);
 
         context.stroke();
         context.closePath();
@@ -451,7 +496,38 @@
         context.strokeStyle = strokeStyle;
 
         context.lineWidth = lineWidth;
-
+    };
+    
+    GameScreen.prototype.export_polygons = function() {
+        this.end_polygon();
+       // console.log(JSON.stringify(this.obsticles));
+       
+       var json = [];
+       
+       this.active_layer.set_position(0,0);
+       
+       var create_string = "";
+       
+       for(var i=0;i<this.polygons.length;i++){
+           var o = {};
+           o.pos = this.polygons[i].bounds.pos;
+           o.points = this.polygons[i].bounds.points;
+           json.push(o);
+         
+            create_string += " var bounds = new Polygon(new Vector("+o.pos.x+","+o.pos.y+"), [";
+            for(var j=0;j<o.points.length;j++){
+                var pp = o.points[j];
+                create_string += " new Vector("+pp.x+","+pp.y+"),";
+            }
+            create_string = create_string.slice(0, - 1);    
+            create_string += " ]); ";
+         
+       }
+       
+       log(JSON.stringify(json));
+       log("");
+       log(create_string);
+       
     };
 
     GameScreen.prototype.draw_queue = function(context) {
@@ -467,7 +543,7 @@
         var first = true;
         for (var ind in this.queue) {
 
-            var c = new V().copy(this.queue[ind]);
+            var c = this.queue[ind].clone();
             c.add(p);
 
             if (first) {
@@ -481,7 +557,7 @@
 
         if (this.queue.length > 0 && !this.is_space_pressed) {
             
-            var last = new V().copy(this.queue[this.queue.length-1]);
+            var last = this.queue[this.queue.length-1].clone();
             last.add(p);
             
             if(this.snap_axis_mode === 0){
