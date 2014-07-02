@@ -514,13 +514,14 @@
            o.points = this.polygons[i].bounds.points;
            json.push(o);
          
-            create_string += " var bounds = new Polygon(new Vector("+o.pos.x+","+o.pos.y+"), [";
+            create_string += " var bounds = new Polygon(new Vector("+0+","+0+"), [";
             for(var j=0;j<o.points.length;j++){
                 var pp = o.points[j];
                 create_string += " new Vector("+pp.x+","+pp.y+"),";
             }
             create_string = create_string.slice(0, - 1);    
             create_string += " ]); ";
+            create_string += " bounds.translate("+o.pos.x+","+o.pos.y+"); ";
          
        }
        
