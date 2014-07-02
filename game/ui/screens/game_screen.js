@@ -503,7 +503,7 @@
        // console.log(JSON.stringify(this.obsticles));
        
        var json = [];
-       
+       var the_pos = this.active_layer.position.clone();
        this.active_layer.set_position(0,0);
        
        var create_string = "";
@@ -528,6 +528,9 @@
        log(JSON.stringify(json));
        log("");
        log(create_string);
+       
+       
+       this.active_layer.set_position(the_pos.x,the_pos.y);
        
     };
 
