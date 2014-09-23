@@ -9,24 +9,29 @@
     LoadingScreen.prototype.initialize = function(){        
         this.screen_initialize();
         
+        var mid_x = Config.screen_width/2;
+        var mid_y = Config.screen_height/2;
+        var height = Config.screen_height;
+        var width = Config.screen_width;
+        
         var logo = new Sprite('logo');
-        logo.set_position(400,150);
+        logo.set_position(mid_x,height*0.4);
         logo.set_anchor(0.5,0.5);
         
         var light1 = new Sprite('lights1');
-        light1.set_position(400,150);
+        light1.set_position(mid_x,height*0.4);
         light1.set_anchor(0.5,0.5);
         
         var light2 = new Sprite('lights2');
-        light2.set_position(400,150);
+        light2.set_position(mid_x,height*0.4);
         light2.set_anchor(0.5,0.5);
         
         var loading_bg = new Sprite('loading_bg');
-        loading_bg.set_position(400,350);
+        loading_bg.set_position(mid_x,height*0.7);
         loading_bg.set_anchor(0.5,0.5);
         
         this.loading_fr = new Sprite('loading_fr');
-        this.loading_fr.set_position(400 - this.loading_fr.width/2 ,350);
+        this.loading_fr.set_position(mid_x - this.loading_fr.width/2 ,height*0.7);
         this.loading_fr.set_anchor(0,0.5);
         this.loading_fr.z_index = 2;
         

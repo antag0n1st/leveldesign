@@ -35,13 +35,13 @@
         
         
         
-        knight = new SpineAnimation('child');
-        knight.set_position(0,0);
-        knight.play('run');
-        //knight.set_scale(0.4,0.4);
-        knight.z_index = -10;
-        this.active_layer.add_child(knight);
-        Config.slow_motion_factor = 0.2;
+//        knight = new SpineAnimation('child');
+//        knight.set_position(0,0);
+//        knight.play('run');
+//        //knight.set_scale(0.4,0.4);
+//        knight.z_index = -10;
+//        this.active_layer.add_child(knight);
+//        Config.slow_motion_factor = 0.2;
         
         
         
@@ -229,8 +229,8 @@
         if (this.is_space_pressed) {
 
             this.start_drag_point = new Vector(event.point.x, event.point.y);
-            this.start_drag_screen_position = this.active_layer.get_position();
-            this.last_move_position = this.start_drag_point.clone();
+            this.start_drag_screen_position = new Vector(this.active_layer.get_position().x,this.active_layer.get_position().y); 
+            this.last_move_position = new Vector(this.start_drag_point.x,this.start_drag_point.y); 
 
         }
 
@@ -281,7 +281,7 @@
                     if (SAT.pointInPolygon(event.point, poly)) {
 
                         this.polygons[i].is_selected = true;
-                        this.start_obsticle_position = this.polygons[i].get_position();
+                        this.start_obsticle_position = new Vector(this.polygons[i].get_position().x,this.polygons[i].get_position().y); 
                         this.selected_obsticle = this.polygons[i];
 
                         this.update_inspector_with_obsticle(this.polygons[i]);
@@ -425,24 +425,24 @@
 
     GameScreen.prototype.update_inspector_with_obsticle = function(obsticle){
         
-        if(obsticle){
-            
-            this.name_label.value = obsticle.name;
-            this.z_index_label.value = obsticle.z_index;
-            this.tag_label.value = obsticle.tag;
-            this.type_label.value = obsticle.type;
-            this.x_position_label.value =  obsticle.get_position().x;
-            this.y_position_label.value =  obsticle.get_position().y;
-                             
-        }else{
-            
-            this.name_label.value = '';
-            this.z_index_label.value = '';
-            this.tag_label.value = '';
-            this.type_label.value = '';
-            this.x_position_label.value = '';
-            this.y_position_label.value = '';
-        }
+//        if(obsticle){
+//            
+//            this.name_label.value = obsticle.name;
+//            this.z_index_label.value = obsticle.z_index;
+//            this.tag_label.value = obsticle.tag;
+//            this.type_label.value = obsticle.type;
+//            this.x_position_label.value =  obsticle.get_position().x;
+//            this.y_position_label.value =  obsticle.get_position().y;
+//                             
+//        }else{
+//            
+//            this.name_label.value = '';
+//            this.z_index_label.value = '';
+//            this.tag_label.value = '';
+//            this.type_label.value = '';
+//            this.x_position_label.value = '';
+//            this.y_position_label.value = '';
+//        }
         
     };
 

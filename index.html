@@ -1,79 +1,130 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
-        <title>HTML5 Framework</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title>Level Editor</title>
 
-        <script src="lib/sat.js" type="text/javascript" ></script>
-        <script src="lib/kibo.js" type="text/javascript" ></script>
-        <script src="lib/spine.js" type="text/javascript"></script>
-               
-        <script src="lib/ticker.js" type="text/javascript" ></script>
-        <script src="lib/drawable.js" type="text/javascript" ></script>
-        <script src="lib/sprite.js" type="text/javascript" ></script>
-        <script src="lib/animation.js" type="text/javascript" ></script>
-        <script src="lib/config.js" type="text/javascript" ></script>
-        <script src="lib/images.js" type="text/javascript"></script>
-        <script src="lib/sounds.js" type="text/javascript"></script>
-        <script src="lib/content_manager.js" type="text/javascript" ></script>
-        <script src="lib/sprite_sheet.js" type="text/javascript" ></script>
-        <script src="lib/stage.js" type="text/javascript" ></script>
-        <script src="lib/uid.js" type="text/javascript" ></script>
-        <script src="lib/helpers.js" type="text/javascript" ></script>        
-        <script src="lib/event.js" type="text/javascript" ></script>   
-        <script src="lib/input.js" type="text/javascript" ></script>        
-        <script src="lib/easystar-0.1.5.js" type="text/javascript" ></script>        
-        <script src="lib/state_machine.js" type="text/javascript" ></script>
-        <script src="lib/howler.js" type="text/javascript" ></script>
-        <script src="lib/spine_animation.js" type="text/javascript"></script>
-        
-        <script src="lib/actions.js" type="text/javascript" ></script>
-        <script src="lib/bezier.js" type="text/javascript" ></script>
-        <script src="lib/tween_move_to.js" type="text/javascript" ></script>
-        <script src="lib/tween_alpha.js" type="text/javascript" ></script>
-        <script src="lib/tween_scale.js" type="text/javascript" ></script>
-        <script src="lib/tween_rotate.js" type="text/javascript" ></script>
-        <script src="lib/tween_rotate_by.js" type="text/javascript" ></script>
-        <script src="lib/tween_rotate_to.js" type="text/javascript" ></script>
-        <script src="lib/tween_shake.js" type="text/javascript" ></script>
-        <script src="lib/tween_time.js" type="text/javascript" ></script>
-        <script src="lib/tween_blink.js" type="text/javascript" ></script>
-        <script src="lib/tween_pulsate.js" type="text/javascript" ></script>
-        <script src="lib/emitter.js" type="text/javascript" ></script>
-        
-        <script src="game/game.js" type="text/javascript" ></script>
-        <script src="assets/assets.js" type="text/javascript" ></script>
+        <!-- Allow fullscreen mode on iOS devices. (These are Apple specific meta tags.) -->
+        <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+        <script type="text/javascript">
 
-        <script src="lib/screen.js" type="text/javascript" ></script>
-        <script src="lib/game_hud.js" type="text/javascript" ></script>
-        <script src="lib/ui/navigator.js" type="text/javascript" ></script>
-        <script src="lib/ui/button.js" type="text/javascript" ></script>
-        <script src="lib/ui/label.js" type="text/javascript" ></script>
-        <script src="lib/ui/layer.js" type="text/javascript" ></script>        
-        <script src="lib/ui/tableview.js" type="text/javascript" ></script>
-        <script src="lib/ui/tablecell.js" type="text/javascript" ></script>
-        <script src="lib/ui/image_view.js" type="text/javascript" ></script>     
+            var isIPhone = false;
+            var isAndroid = false;
+            var scrollToY = 0;
+            var scrollToX = 0;
+
+            function _get_window_size() {
+                var e = window, a = 'inner';
+                if (!('innerWidth' in window)) {
+                    a = 'client';
+                    e = document.documentElement || document.body;
+                }
+                return {width: e[ a + 'Width' ], height: e[ a + 'Height' ]};
+            }
+          
+            if (/iPhone|iPod/i.test(navigator.userAgent)) {
+                isIPhone = true;
+                var vp = window.document.getElementById("viewport");
+                vp.setAttribute("content", "width=device-width, initial-scale=0.5, maximum-scale=1.0, minimum-scale=0.5, user-scalable=no, minimal-ui");
+
+            } else if (/Android/i.test(navigator.userAgent)) {
+                
+                isAndroid = true;
+                var size = _get_window_size();
+                scrollToY = 200;
+                scrollToX = 0;
+
+                if (size.width < 590 || size.height <= 246) {
+
+                    var vp = window.document.getElementById("viewport");
+                    vp.setAttribute("", "width=device-width, initial-scale=0.5, maximum-scale=1.0, minimum-scale=0.5, user-scalable=no, minimal-ui");
+
+                }
+
+            }
+
+        </script>
+
+
         
-        <script src="game/ui/screens/loading_screen.js" type="text/javascript" ></script>
-        <script src="game/ui/screens/game_screen.js" type="text/javascript" ></script>
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <link rel="apple-touch-icon" sizes="256x256" href="icon-256.png" />
+        <meta name="HandheldFriendly" content="true" />
+
+        <!-- Chrome for Android web app tags -->
+        <meta name="mobile-web-app-capable" content="yes" />
+        <link rel="shortcut icon" sizes="256x256" href="icon-256.png" />
+
+
+        <!-- CONFIGURATION -->
+        <script src="lib/config.js" type="application/javascript" ></script>
+
+        <!-- EXTERNAL -->
+        <script src="lib/external/sat.js" type="application/javascript"></script>
+        <script src="lib/external/kibo.js" type="application/javascript"></script>
+        <script src="lib/external/howler.js" type="application/javascript"></script>
+        <script src="lib/external/spine.js" type="application/javascript"></script>
+
+        <!-- UTILITY -->
+        <script src="lib/utility/helpers.js" type="application/javascript"></script>
+        <script src="lib/utility/ticker.js" type="application/javascript"></script>
+        <script src="lib/utility/uid.js" type="text/javascript"></script>
+
+        <!-- RESOURCES -->
+        <script src="lib/resources/images.js" type="application/javascript"></script>
+        <script src="lib/resources/sounds.js" type="application/javascript"></script>
+        <script src="lib/resources/content_manager.js" type="application/javascript"></script>
+
+        <!-- GRAPHICS -->
+        <script src="lib/graphics/stage.js" type="application/javascript"></script>
+        <script src="lib/graphics/drawable.js" type="application/javascript"></script>
+        <script src="lib/graphics/screen.js" type="application/javascript"></script>                
+        <script src="lib/graphics/sprite_sheet.js" type="application/javascript"></script>
+        <script src="lib/graphics/sprite.js" type="application/javascript"></script>
+        <script src="lib/graphics/animation.js" type="application/javascript"></script>
+        <script src="lib/graphics/spine_animation.js" type="application/javascript"></script>
+        <script src="lib/graphics/emitter.js" type="application/javascript"></script>
+
+        <!-- EVENTS -->
+        <script src="lib/events/event.js" type="application/javascript"></script>
+        <script src="lib/events/input.js" type="application/javascript"></script>
+        <script src="lib/events/state_machine.js" type="application/javascript"></script>
+        <script src="lib/events/notes.js" type="application/javascript"></script>
+
+        <!-- TWEEN -->
+        <script src="lib/tweens/actions.js" type="application/javascript"></script>
+        <script src="lib/tweens/bezier.js" type="application/javascript"></script>
+        <script src="lib/tweens/tween_alpha.js" type="application/javascript"></script>
+        <script src="lib/tweens/tween_blink.js" type="application/javascript"></script>
+        <script src="lib/tweens/tween_move_to.js" type="application/javascript"></script>
+        <script src="lib/tweens/tween_pulsate.js" type="application/javascript"></script>
+        <script src="lib/tweens/tween_rotate.js" type="application/javascript"></script>
+        <script src="lib/tweens/tween_rotate_by.js" type="application/javascript"></script>
+        <script src="lib/tweens/tween_rotate_to.js" type="application/javascript"></script>
+        <script src="lib/tweens/tween_scale.js" type="application/javascript"></script>
+        <script src="lib/tweens/tween_shake.js" type="application/javascript"></script>
+        <script src="lib/tweens/tween_time.js" type="application/javascript"></script>
+
+        <!-- USER INTERFACE -->
+        <script src="lib/ui/navigator.js" type="application/javascript" ></script>
+        <script src="lib/ui/button.js" type="application/javascript" ></script>
+        <script src="lib/ui/label.js" type="application/javascript" ></script>
+        <script src="lib/ui/layer.js" type="application/javascript" ></script>        
+        <script src="lib/ui/tableview.js" type="application/javascript" ></script>
+        <script src="lib/ui/tablecell.js" type="application/javascript" ></script>  
+
+        <!-- SYSTEM GAME OBJECTS -->
+        <script src="game/game.js" type="application/javascript" ></script>
+        <script src="assets/assets.js" type="application/javascript" ></script>        
+        <script src="game/ui/screens/loading_screen.js" type="application/javascript" ></script>
+        <script src="game/ui/screens/game_screen.js" type="application/javascript" ></script>
+
+        <!-- USER GAME OBJECTS -->
         <script src="game/states.js" type="text/javascript"></script>
-        <script type="text/javascript" src="game/obsticle.js" ></script>
-        <script type="text/javascript" src="game/tile.js" ></script>
-        
-        
-        
-        
-        
-    </head>
-    <body>
-        <style type="text/css" scoped="">
+        <script src="game/obsticle.js" type="text/javascript"></script>
+
+        <style type="text/css">
 
             html, body, div, span, applet, object, iframe, 
             h1, h2, h3, h4, h5, h6, p, blockquote, pre, 
@@ -85,9 +136,7 @@ and open the template in the editor.
             table, caption, tbody, tfoot, thead, tr, th, td{margin:0; padding:0; border:0; outline:0; font-weight:inherit; font-style:inherit; font-size:100%; font-family:inherit; vertical-align:baseline}
 
             :focus{outline:0}
-            body{line-height:1; color:black; background:white; text-align: center; font-family: Cambria, serif; background-repeat: no-repeat; }
             ol, ul{list-style:none}
-
             table{border-collapse:separate; border-spacing:0}
             caption, th, td{text-align:left; font-weight:normal}
             blockquote:before, blockquote:after, 
@@ -95,11 +144,27 @@ and open the template in the editor.
             blockquote, q{quotes:""""}
             strong{font-weight: bold;}
 
+        
+
             #stage
             {
                 -webkit-transform-origin:  0% 0%;
                 transform-origin: 0% 0%;
                 -ms-transform-origin: 0% 0%;
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+                    position: relative;
+                overflow: hidden;
+                -webkit-transform: translate3d(0, 0, 0);
+                
+                perspective: 1000px;
+                -webkit-perspective: 1000px;
+                -moz-perspective: 1000px;
+                -o-perspective: 1000px;
+                
+                padding: 0;
+                margin: 0;
+                border: none;
+                border-image-width: 0;
 
             }
             ::-moz-selection{
@@ -113,60 +178,79 @@ and open the template in the editor.
                 transform-origin: 0% 0%;
                 -ms-transform-origin: 0% 0%;
             }
-            body{
-                overflow:hidden;
-
+            
+            div{
+                padding:0;
+                margin: 0;
+                left:0;
+                overflow: hidden;
+                border: none;
+                border-image-width: 0;
+                line-height: 0;
             }
 
+
             body{
+               overflow: hidden;
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
                 margin: 0 ;
                 padding: 0 ;
-                color: #666666; 
-                line-height: 1.5 ;
-                font-family: Helvetica, Tahoma, Verdana; 
-                font-size: 12px;
                 transform: translateZ(0px);
                 -ms-transform: translateZ(0px); /* IE 9 */
                 -moz-transform: translateZ(0px); /* Firefox */
                 -webkit-transform: translateZ(0px); /* Safari and Chrome */
                 -o-transform: translateZ(0px); /* Opera */
-
-
-            }
-            #hud{
-                 -webkit-transform-origin:  0% 0%;
-                transform-origin: 0% 0%;
-                -ms-transform-origin: 0% 0%;
+                border: none;
+                border-image-width: 0;
+                line-height: 0;
             }
         </style>
-        <canvas id="stage" style="position: absolute;z-index: 999;left: 0;top:0;"></canvas>
-        <div style="position: absolute;z-index: 999;left: 810px;top:0; text-align: right;">
-            <label>name:</label>  <input id="name" type="text"  />
-            <br />
-            <label>z-index: </label><input id="z_index" type="text" />
-            <br />
-            <label>Type: </label><input id="type" type="text" />
-            <br />
-            <label>Tag: </label><input id="tag" type="text" />
-            <br />
-            <label>X: </label><input id="x_position" type="text" />
-            <br />
-            <label>Y: </label><input id="y_position" type="text" />
-            <br />
-            <input onclick="game.navigator.current_screen.export_polygons();" type="button" value="export" />
-            <input type="button" value="update" />
+
+
+    </head>
+    <body>
+        
+          <div id="wrapper" style="position: fixed;top:200px;">
+            <canvas id="stage" >
+                <h1>Your browser does not appear to support HTML5.  Try upgrading your browser to the latest version.  <a href="http://www.whatbrowser.org">What is a browser?</a>
+                    <br/><br/><a href="http://www.microsoft.com/windows/internet-explorer/default.aspx">Microsoft Internet Explorer</a><br/>
+                    <a href="http://www.mozilla.com/firefox/">Mozilla Firefox</a><br/>
+                    <a href="http://www.google.com/chrome/">Google Chrome</a><br/>
+                    <a href="http://www.apple.com/safari/download/">Apple Safari</a><br/>
+                    <a href="http://www.google.com/chromeframe">Google Chrome Frame for Internet Explorer</a><br/></h1>
+
+            </canvas>
         </div>
+
         <script type="text/javascript">
 
-                var resource_ids = {};
 
-               if (!Config.is_mobile) {
-                   Config.set_screen_size(800, 480);
-                   var game = new Game();
-               }
+            function game_start(){
+                
+                Config.set_game_size(960, 640, Config.MODE_FLEXIBLE_WIDTH);
+                game = new Game();
+                
+                if(isAndroid){
+                    var _size = Config.window_size();
+                    window.document.body.style.height =  (_size.height+400)+"px";
+                    window.scrollTo(0,scrollToY);
+                }else{
+                    
+                    var wrapper = window.document.getElementById("wrapper");
+                    wrapper.style.position = "relative";
+                    wrapper.style.top = "0";
+                    wrapper.style.left = "0";
+                    
+                }
+                
+                
+                
+            }
+            
+            window.addEventListener("load", function() {
+                game_start();
+            });
 
-               
-              
         </script>
 
     </body>
