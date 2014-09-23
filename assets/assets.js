@@ -4,7 +4,7 @@ Game.prototype.load_assets = function() {
     //////////////////////   LOAD YOUR ASSETS HERE   ///////////////////////
 
     ContentManager.add_image('sonic_plane', 'assets/images/sonic_plane.png');
-    ContentManager.add_spine_animation('knight');
+    ContentManager.add_spine_animation('child');
     
     
     ////////////////////////////////////////////////////////////////////////

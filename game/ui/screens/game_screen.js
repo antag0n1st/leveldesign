@@ -35,12 +35,13 @@
         
         
         
-        var knight = new SpineAnimation('knight');
+        knight = new SpineAnimation('child');
         knight.set_position(0,0);
         knight.play('run');
+        //knight.set_scale(0.4,0.4);
         knight.z_index = -10;
         this.active_layer.add_child(knight);
-        
+        Config.slow_motion_factor = 0.2;
         
         
         
