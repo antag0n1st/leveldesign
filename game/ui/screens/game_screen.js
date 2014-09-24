@@ -12,7 +12,8 @@
         game.input.snap_mode = true;
 
         this.polygons = [];
-        this.queue = [];
+        this.queue_points = [];
+        this.queue_box = null;
         this.layers = [];
 
         var layer = new Layer();
@@ -61,6 +62,7 @@
         this.start_drag_screen_position = new Vector();
         this.last_move_position = new Vector();
         this.start_obsticle_position = new Vector();
+        this.box_reference_point = new Vector();
 
         this.snap_axis_mode = 0;
 
@@ -70,34 +72,34 @@
         this.type_label = document.getElementById('type');
         this.x_position_label = document.getElementById('x_position');
         this.y_position_label = document.getElementById('y_position');
-        
+
         var button_distance = 100;
         var button_padding = 10;
 
         this.modes_button = new Button({image: Images.blank_black});
         this.modes_button.text_color = "#ffffff";
-        this.modes_button.set_position(button_padding+button_distance*0, 20);
+        this.modes_button.set_position(button_padding + button_distance * 0, 20);
         this.modes_button.on_mouse_up = GameScreen.prototype.on_modes_button.bind(this);
         this.modes_button.on_mouse_down = GameScreen.prototype.on_modes_button_down.bind(this);
 
         this.undo_button = new Button({image: Images.blank_black});
         this.undo_button.text_color = "#ffffff";
         this.undo_button.text = "Undo";
-        this.undo_button.set_position(button_padding+button_distance*1, 20);
+        this.undo_button.set_position(button_padding + button_distance * 1, 20);
         this.undo_button.on_mouse_up = GameScreen.prototype.on_undo_button.bind(this);
         this.undo_button.on_mouse_down = GameScreen.prototype.on_undo_button_down.bind(this);
 
         this.snap_button = new Button({image: Images.blank_black});
         this.snap_button.text_color = "#ffffff";
         this.snap_button.text = "Snap";
-        this.snap_button.set_position(button_padding+button_distance*2, 20);
+        this.snap_button.set_position(button_padding + button_distance * 2, 20);
         this.snap_button.on_mouse_up = GameScreen.prototype.on_snap_button.bind(this);
         this.snap_button.on_mouse_down = GameScreen.prototype.on_snap_button_down.bind(this);
 
         this.snap_axis_button = new Button({image: Images.blank_black});
         this.snap_axis_button.text_color = "#ffffff";
         this.snap_axis_button.text = "Free Mode";
-        this.snap_axis_button.set_position(button_padding+button_distance*3, 20);
+        this.snap_axis_button.set_position(button_padding + button_distance * 3, 20);
         this.snap_axis_button.on_mouse_up = GameScreen.prototype.on_snap_axis_button.bind(this);
         this.snap_axis_button.on_mouse_down = GameScreen.prototype.on_snap_axis_button_down.bind(this);
 
@@ -105,10 +107,13 @@
         this.mouse_position_label.set({text: "x:0  y:0", text_color: "#ffffff"});
         this.mouse_position_label.set_position(20, 60);
 
-        this.modes = [States.main_states.polygon_draw,
+        this.modes = [
+            States.main_states.polygon_draw,
+            States.main_states.box_draw,
             States.main_states.circle_draw,
             States.main_states.graphics_draw,
-            States.main_states.path_draw];
+            States.main_states.path_draw
+        ];
         this.mode_count = 0;
 
         this.current_mode = 'polygon';
@@ -148,7 +153,7 @@
     GameScreen.prototype.on_state = function (prev_state, current_state, data) {
 
         if (current_state.name === States.main_states.polygon_draw) {
-            log("polygon draw state");
+
         }
 
         this.end_polygon();
@@ -167,8 +172,8 @@
 
     GameScreen.prototype.on_undo_button = function (event) {
 
-        if (this.queue.length > 0) {
-            this.queue.splice(this.queue.length - 1, 1);
+        if (this.queue_points.length > 0) {
+            this.queue_points.splice(this.queue_points.length - 1, 1);
         } else {
 
             if (this.polygons.length > 0) {
@@ -237,19 +242,34 @@
 
         }
 
+        if (input_state.get() === States.main_states.box_draw && !this.is_space_pressed) {
+
+
+            if (this.queue_box === null) {
+                var p = this.active_layer.get_position();
+                var pp = new Vector(event.point.x, event.point.y);
+                pp.sub(p);
+                this.box_reference_point.copy(pp);
+            }
+
+        }
+
     };
 
     GameScreen.prototype.on_mouse_up = function (event) {
 
+        var p = this.active_layer.get_position();
+        var pp = new Vector(event.point.x, event.point.y);
+        pp.sub(p);
+
+
+
         if (input_state.get() === States.main_states.polygon_draw && !this.is_space_pressed) {
 
 
-            var p = this.active_layer.get_position();
-            var pp = new Vector(event.point.x, event.point.y);
-            pp.sub(p);
-
-            if (this.queue.length > 0) {
-                var last = this.queue[this.queue.length - 1];
+            // determine the snap acording the last point
+            if (this.queue_points.length > 0) {
+                var last = this.queue_points[this.queue_points.length - 1];
                 if (this.snap_axis_mode === 1) {
                     pp.y = last.y;
                 } else if (this.snap_axis_mode === 2) {
@@ -257,26 +277,41 @@
                 }
             }
 
+            this.queue_points.push(pp);
 
 
-            this.queue.push(pp);
+
+        } else if (input_state.get() === States.main_states.box_draw && !this.is_space_pressed) {
+
+            if (this.queue_box !== null && !this.selected_obsticle) {
+                //  this.box_reference_point.copy(pp);
+                this.polygons.push(this.queue_box);
+                this.queue_box = null;
+                this.selected_obsticle = null;
+
+            }
+
+        }
+
+
+        if (!this.is_space_pressed &&
+                (input_state.get() === States.main_states.polygon_draw
+                        || input_state.get() === States.main_states.box_draw)) {
 
 
             // check if we are selecting existing polugon
             // but first deselect all of them
             for (var i = 0; i < this.polygons.length; i++) {
-
                 if (this.polygons[i].is_selected) {
                     this.polygons[i].is_selected = false;
                     this.selected_obsticle = null;
                     this.end_polygon(); // it will remove the previous point added
                     this.update_inspector_with_obsticle(null);
                 }
-
-
             }
 
-            if (this.queue.length < 2) {
+
+            if (this.queue_points.length < 2) {
 
                 for (var i = 0; i < this.polygons.length; i++) {
                     var poly = this.polygons[i].bounds;
@@ -296,10 +331,6 @@
                 }
 
             }
-
-
-
-
         }
 
     };
@@ -319,15 +350,15 @@
 
             this.active_layer.set_position(p.x, p.y);
 
-            if (this.queue.length > 0) {
+            if (this.queue_points.length > 0) {
 
                 // lets move some points
 
                 var v = new V(event.point.x, event.point.y);
                 v.sub(this.last_move_position.clone());
 
-                for (var i = 0; i < this.queue.length; i++) {
-                    //   this.queue[i].add(v);
+                for (var i = 0; i < this.queue_points.length; i++) {
+                    //   this.queue_points[i].add(v);
                 }
 
                 this.last_move_position = new V(event.point.x, event.point.y);
@@ -338,23 +369,55 @@
 
             // we are probably moveing some polgons
 
-            if (input_state.get() === States.main_states.polygon_draw) {
+            for (var i = 0; i < this.polygons.length; i++) {
+                var obsticle = this.polygons[i];
 
-                for (var i = 0; i < this.polygons.length; i++) {
-                    var obsticle = this.polygons[i];
+                if (obsticle.is_selected) {
+                    // move the obsticle
+                    var v = new V(event.point.x, event.point.y);
+                    v.sub(this.start_drag_point.clone());
+                    var p = this.start_obsticle_position.clone().add(v);
 
-                    if (obsticle.is_selected) {
-                        // move the obsticle
-                        var v = new V(event.point.x, event.point.y);
-                        v.sub(this.start_drag_point.clone());
-                        var p = this.start_obsticle_position.clone().add(v);
+                    obsticle.set_position(p.x, p.y);
+                    this.update_inspector_with_obsticle(obsticle);
+                    break;
+                }
 
-                        obsticle.set_position(p.x, p.y);
-                        this.update_inspector_with_obsticle(obsticle);
-                        break;
+            }
+
+            if (input_state.get() === States.main_states.box_draw && !this.selected_obsticle) {
+
+                var bp = new Vector().copy(this.box_reference_point);
+
+
+                var v = new V(event.point.x, event.point.y).sub(this.active_layer.get_position());
+
+                var width = v.x - bp.x;
+                var height = v.y - bp.y;
+
+                if (width < 0) {
+                    bp.x += width;
+                    width *= -1;
+                }
+
+                if (height < 0) {
+                    bp.y += height;
+                    height *= -1;
+                }
+
+                if (width > 2 && height > 2) {
+                    if (this.queue_box) {
+                        this.queue_box.remove_from_parent();
                     }
 
+                    this.queue_box = new Obsticle();
+                    var bb = new Box(bp, width, height).toPolygon();
+                    this.queue_box.bounds = bb;
+                    this.queue_box.set_position(bb.pos.x, bb.pos.y);
+                    this.active_layer.add_child(this.queue_box);
                 }
+
+
 
             }
 
@@ -366,7 +429,8 @@
 
     GameScreen.prototype.on_right_mouse_down = function (event) {
 
-        if (input_state.get() === States.main_states.polygon_draw) {
+        if (input_state.get() === States.main_states.polygon_draw ||
+            input_state.get() === States.main_states.box_draw    ) {
             this.end_polygon();
 
             for (var i = 0; i < this.polygons.length; i++) {
@@ -385,6 +449,8 @@
                 }
 
             }
+            
+            this.selected_obsticle = null;
 
         }
 
@@ -454,16 +520,16 @@
         var p = this.active_layer.get_position();
         var m = new Vector(game.input.point.x, game.input.point.y);
         m.sub(p);
-        this.mouse_position_label.set({text: "x: " + Math.round_decimal( m.x,2) + "  y: " + Math.round_decimal( m.y,2)});
+        this.mouse_position_label.set({text: "x: " + Math.round_decimal(m.x, 2) + "  y: " + Math.round_decimal(m.y, 2)});
 
 
     };
 
     GameScreen.prototype.draw = function (context) {
-        
+
         context.fillStyle = "#094837";
-        context.fillRect(0,0,Config.screen_width,Config.screen_height);
-        
+        context.fillRect(0, 0, Config.screen_width, Config.screen_height);
+
         Screen.prototype.draw.call(this, context);
 
 
@@ -553,9 +619,9 @@
         var p = this.active_layer.get_position();
 
         var first = true;
-        for (var ind in this.queue) {
+        for (var ind in this.queue_points) {
 
-            var c = this.queue[ind].clone();
+            var c = this.queue_points[ind].clone();
             c.add(p);
 
             if (first) {
@@ -567,9 +633,9 @@
         }
 
 
-        if (this.queue.length > 0 && !this.is_space_pressed) {
+        if (this.queue_points.length > 0 && !this.is_space_pressed) {
 
-            var last = this.queue[this.queue.length - 1].clone();
+            var last = this.queue_points[this.queue_points.length - 1].clone();
             last.add(p);
 
             if (this.snap_axis_mode === 0) {
@@ -585,9 +651,12 @@
 
         context.closePath();
 
-
         context.fill();
         context.stroke();
+
+
+
+
         context.globalAlpha = alpha;
 
     };
@@ -609,9 +678,9 @@
 
     GameScreen.prototype.end_polygon = function () {
         // create polygon 
-        if (this.queue.length > 2) {
+        if (this.queue_points.length > 2) {
 
-            var o = this.queue;
+            var o = this.queue_points;
             var polygon_vectors = [];
             var first_vector;
             for (var j = 0; j < o.length; j++) {
@@ -652,7 +721,7 @@
 
 
         }
-        this.queue = [];
+        this.queue_points = [];
         return false;
     };
 
