@@ -14,6 +14,8 @@ States.main_states.box_draw = 'box_draw';
 States.main_states.box_selected = 'box_selected';
 States.main_states.path_draw = 'path_draw';
 States.main_states.path_selected = 'path_selected';
+States.main_states.point_draw = 'point_draw';
+States.main_states.point_selected = 'point_selected';
 
 var _main_states = [
     {
@@ -56,6 +58,7 @@ var _main_states = [
             circle_draw : 'circle_draw',
             graphics_draw: 'graphics_draw',
             path_draw: 'path_draw',
+            point_draw: 'point_draw',
             box_draw: 'box_draw'
         }
     },
@@ -68,6 +71,7 @@ var _main_states = [
             circle_draw : 'circle_draw',
             graphics_draw: 'graphics_draw',
             path_draw: 'path_draw',
+            point_draw: 'point_draw',
             box_draw: 'box_draw'
         }
     },
@@ -80,6 +84,7 @@ var _main_states = [
             circle_draw : 'circle_draw',
             graphics_draw: 'graphics_draw',
             path_draw: 'path_draw',
+            point_draw: 'point_draw',
             box_draw: 'box_draw'
         }
     },
@@ -92,6 +97,7 @@ var _main_states = [
             circle_draw : 'circle_draw',
             graphics_draw: 'graphics_draw',
             path_draw: 'path_draw',
+            point_draw: 'point_draw',
             box_draw: 'box_draw'
         }
     },
@@ -105,7 +111,8 @@ var _main_states = [
             graphics_draw: 'graphics_draw',
             path_draw: 'path_draw',
             polygon_selected: 'polygon_selected',
-            box_draw: 'box_draw'
+            box_draw: 'box_draw',
+            point_draw: 'point_draw'
         }
     },
     {
@@ -118,6 +125,21 @@ var _main_states = [
             graphics_draw: 'graphics_draw',
             path_draw: 'path_draw',
             box_draw: 'box_draw',
+            point_draw: 'point_draw',
+            polygon_selected: 'polygon_selected'
+        }
+    },
+    {
+        name: 'point_draw',
+        events: {
+            inital_state: 'inital_state',
+            move_canvas: 'move_canvas',
+            polygon_draw: 'polygon_draw',
+            circle_draw : 'circle_draw',
+            graphics_draw: 'graphics_draw',
+            path_draw: 'path_draw',
+            box_draw: 'box_draw',
+            point_draw: 'point_draw',
             polygon_selected: 'polygon_selected'
         }
     }
