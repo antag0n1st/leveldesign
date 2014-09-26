@@ -35,6 +35,7 @@
         
         if(this.normal_color && !this.is_selected){
             context.fillStyle = this.normal_color;
+            context.globalAlpha = 0.3;
         }else{
             context.fillStyle = "blue";
         }
@@ -42,7 +43,7 @@
         
         this.debug_bounds(context);
         
-        if(this.is_selected){
+        if(this.is_selected || this.normal_color ){
             context.globalAlpha = 0.3;
             
         }
