@@ -7,6 +7,7 @@
         this.response = new Response();
         this.name = '';
         this.is_selected = false;
+        this.normal_color = null;
     }    
     
     Obsticle.prototype = new Drawable();
@@ -32,11 +33,21 @@
         var fillStyle = context.fillStyle;
         var alpha = context.globalAlpha;
         
-        context.fillStyle = "blue";
+        if(this.normal_color && !this.is_selected){
+            context.fillStyle = this.normal_color;
+        }else{
+            context.fillStyle = "blue";
+        }
+        
+        
         this.debug_bounds(context);
         
         if(this.is_selected){
             context.globalAlpha = 0.3;
+            
+        }
+        
+        if(this.normal_color || this.is_selected){
             context.fill();
         }
         

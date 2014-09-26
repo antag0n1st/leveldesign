@@ -78,11 +78,11 @@
 
         var button_distance = 100;
         var button_padding = 10;
-        
+
         /////////////// mode buttons
 
         // polygon
-        this.polygon_button = new Button({image: Images.blank_black,selected_image:Images.blank_black_highlighted});
+        this.polygon_button = new Button({image: Images.blank_black, selected_image: Images.blank_black_highlighted});
         this.polygon_button.tag = 0;
         this.polygon_button.is_selected = true;
         this.polygon_button.text = "Polygon";
@@ -90,52 +90,52 @@
         this.polygon_button.set_position(button_padding + button_distance * 0, 20);
         this.polygon_button.on_mouse_up = GameScreen.prototype.on_modes_button.bind(this);
         this.polygon_button.on_mouse_down = GameScreen.prototype.on_modes_button_down.bind(this);
-        
+
         //box
-        this.box_button = new Button({image: Images.blank_black,selected_image:Images.blank_black_highlighted});
+        this.box_button = new Button({image: Images.blank_black, selected_image: Images.blank_black_highlighted});
         this.box_button.tag = 1;
         this.box_button.text = "Box";
         this.box_button.text_color = "#ffffff";
         this.box_button.set_position(button_padding + button_distance * 1, 20);
         this.box_button.on_mouse_up = GameScreen.prototype.on_modes_button.bind(this);
         this.box_button.on_mouse_down = GameScreen.prototype.on_modes_button_down.bind(this);
-        
+
         // circle
-        this.circle_button = new Button({image: Images.blank_black,selected_image:Images.blank_black_highlighted});
+        this.circle_button = new Button({image: Images.blank_black, selected_image: Images.blank_black_highlighted});
         this.circle_button.tag = 2;
         this.circle_button.text = "Circle";
         this.circle_button.text_color = "#ffffff";
         this.circle_button.set_position(button_padding + button_distance * 2, 20);
         this.circle_button.on_mouse_up = GameScreen.prototype.on_modes_button.bind(this);
         this.circle_button.on_mouse_down = GameScreen.prototype.on_modes_button_down.bind(this);
-        
+
         // point
-        this.point_button = new Button({image: Images.blank_black,selected_image:Images.blank_black_highlighted});
+        this.point_button = new Button({image: Images.blank_black, selected_image: Images.blank_black_highlighted});
         this.point_button.tag = 3;
         this.point_button.text = "Point";
         this.point_button.text_color = "#ffffff";
         this.point_button.set_position(button_padding + button_distance * 3, 20);
         this.point_button.on_mouse_up = GameScreen.prototype.on_modes_button.bind(this);
         this.point_button.on_mouse_down = GameScreen.prototype.on_modes_button_down.bind(this);
-        
+
         // path
-        this.path_button = new Button({image: Images.blank_black,selected_image:Images.blank_black_highlighted});
+        this.path_button = new Button({image: Images.blank_black, selected_image: Images.blank_black_highlighted});
         this.path_button.tag = 4;
         this.path_button.text = "Path";
         this.path_button.text_color = "#ffffff";
         this.path_button.set_position(button_padding + button_distance * 4, 20);
         this.path_button.on_mouse_up = GameScreen.prototype.on_modes_button.bind(this);
         this.path_button.on_mouse_down = GameScreen.prototype.on_modes_button_down.bind(this);
-        
+
         // grapics
-        this.graphics_button = new Button({image: Images.blank_black,selected_image:Images.blank_black_highlighted});
+        this.graphics_button = new Button({image: Images.blank_black, selected_image: Images.blank_black_highlighted});
         this.graphics_button.tag = 5;
         this.graphics_button.text = "Graphics";
         this.graphics_button.text_color = "#ffffff";
         this.graphics_button.set_position(button_padding + button_distance * 5, 20);
         this.graphics_button.on_mouse_up = GameScreen.prototype.on_modes_button.bind(this);
         this.graphics_button.on_mouse_down = GameScreen.prototype.on_modes_button_down.bind(this);
-        
+
         ////////////////////////////////
 
         this.undo_button = new Button({image: Images.blank_black});
@@ -143,7 +143,7 @@
         this.undo_button.text = "Undo";
         this.undo_button.set_position(button_padding + button_distance * 7, 20);
         this.undo_button.on_mouse_up = GameScreen.prototype.on_undo_button.bind(this);
-        this.undo_button.on_mouse_down = GameScreen.prototype.on_undo_button_down.bind(this);       
+        this.undo_button.on_mouse_down = GameScreen.prototype.on_undo_button_down.bind(this);
 
         this.snap_axis_button = new Button({image: Images.blank_black});
         this.snap_axis_button.text_color = "#ffffff";
@@ -160,7 +160,7 @@
             States.main_states.polygon_draw,
             States.main_states.box_draw,
             States.main_states.circle_draw,
-            States.main_states.point_draw,            
+            States.main_states.point_draw,
             States.main_states.path_draw,
             States.main_states.graphics_draw
         ];
@@ -176,7 +176,7 @@
         this.add_child(this.point_button);
         this.add_child(this.path_button);
         this.add_child(this.graphics_button);
-        
+
         this.add_child(this.mouse_position_label);
         this.add_child(this.undo_button);
         this.add_child(this.snap_axis_button);
@@ -205,7 +205,7 @@
     };
 
     GameScreen.prototype.on_state = function (prev_state, current_state, data) {
-        
+
         if (current_state.name === States.main_states.polygon_draw) {
 
         }
@@ -213,35 +213,40 @@
         this.end_polygon();
 
     };
-    
-    GameScreen.prototype.deselect_buttons = function(){
-        
+
+    GameScreen.prototype.deselect_buttons = function () {
+
         this.polygon_button.is_selected = false;
         this.box_button.is_selected = false;
         this.circle_button.is_selected = false;
         this.point_button.is_selected = false;
         this.path_button.is_selected = false;
         this.graphics_button.is_selected = false;
-        
+
     };
 
-    GameScreen.prototype.on_modes_button = function (event,element) {
-      
-      this.deselect_buttons(); // deselect the others
-      element.is_selected = true;
-            
-        if(element.tag === 0){
+    GameScreen.prototype.on_modes_button = function (event, element) {
+
+        this.deselect_buttons(); // deselect the others
+        element.is_selected = true;
+
+        if (element.tag === 0) {
             input_state.set(States.main_states.polygon_draw);
-        }else if(element.tag === 1){
+        } else if (element.tag === 1) {
             input_state.set(States.main_states.box_draw);
-        }else if(element.tag === 2){
+        } else if (element.tag === 2) {
             input_state.set(States.main_states.circle_draw);
-        }else if(element.tag === 3){
+        } else if (element.tag === 3) {
             input_state.set(States.main_states.point_draw);
-        }else if(element.tag === 4){
+        } else if (element.tag === 4) {
             input_state.set(States.main_states.path_draw);
-        }else if(element.tag === 5){
+        } else if (element.tag === 5) {
             input_state.set(States.main_states.graphics_draw);
+        }
+        
+        if(this.selected_obsticle){
+            this.selected_obsticle.is_selected = false;
+            this.selected_obsticle = null;
         }
 
     };
@@ -262,7 +267,7 @@
 
     };
 
-  
+
 
     GameScreen.prototype.on_snap_axis_button = function (event) {
 
@@ -284,7 +289,7 @@
         event.stop_propagation();
     };
 
-   
+
 
     GameScreen.prototype.on_undo_button_down = function (event) {
         event.stop_propagation();
@@ -295,7 +300,7 @@
     };
 
     GameScreen.prototype.on_mouse_down = function (event) {
-        
+
         event.point.x = Math.round(event.point.x);
         event.point.y = Math.round(event.point.y);
 
@@ -318,7 +323,7 @@
                 this.box_reference_point.copy(pp);
             }
         }
-        
+
         if (input_state.get() === States.main_states.circle_draw && !this.is_space_pressed) {
 
             if (this.queue_circle === null) {
@@ -329,16 +334,17 @@
             }
         }
 
+        
     };
 
-    
+
 
     GameScreen.prototype.on_mouse_move = function (event) {
-        
-        this.mouse_has_moved = true;        
+
+        this.mouse_has_moved = true;
         event.point.x = Math.round(event.point.x);
         event.point.y = Math.round(event.point.y);
-        
+
         if (this.is_space_pressed) {
 
             if (!game.input.snap_mode) {
@@ -421,33 +427,33 @@
 
 
 
-            }else if (input_state.get() === States.main_states.circle_draw && !this.selected_obsticle) {
+            } else if (input_state.get() === States.main_states.circle_draw && !this.selected_obsticle) {
                 var bp = new Vector().copy(this.circle_reference_poiont);
 
 
                 var v = new V(event.point.x, event.point.y).sub(this.active_layer.get_position());
-                 v.sub(bp);
-                 var r = v.len();
-                 
-                 if(this.queue_circle){
-                     this.queue_circle.remove_from_parent();
-                 }
-                
-                    this.queue_circle = new Obsticle();
-                    var bb = new Circle(new V().copy(bp),r);
-                    this.queue_circle.bounds = bb;
-                    this.queue_circle.set_position(bb.pos.x, bb.pos.y);
-                    this.active_layer.add_child(this.queue_circle);
-                
+                v.sub(bp);
+                var r = v.len();
+
+                if (this.queue_circle) {
+                    this.queue_circle.remove_from_parent();
+                }
+
+                this.queue_circle = new Obsticle();
+                var bb = new Circle(new V().copy(bp), r);
+                this.queue_circle.bounds = bb;
+                this.queue_circle.set_position(bb.pos.x, bb.pos.y);
+                this.active_layer.add_child(this.queue_circle);
+
             }
 
 
         }
 
     };
-    
+
     GameScreen.prototype.on_mouse_up = function (event) {
-        
+
         event.point.x = Math.round(event.point.x);
         event.point.y = Math.round(event.point.y);
 
@@ -489,8 +495,9 @@
 
         if (!this.is_space_pressed &&
                 (input_state.get() === States.main_states.polygon_draw ||
-                 input_state.get() === States.main_states.box_draw || 
-                 input_state.get() === States.main_states.circle_draw)) {
+                        input_state.get() === States.main_states.box_draw ||
+                        input_state.get() === States.main_states.circle_draw ||
+                        input_state.get() === States.main_states.point_draw)) {
 
 
 
@@ -506,61 +513,90 @@
             }
 
 
-            if (this.queue_points.length < 2 && !this.mouse_has_moved ) {
+            if (this.queue_points.length < 2 && !this.mouse_has_moved) {
+                var collided = this.is_point_in_obsticles(event.point);
+                if (collided) {
+                    collided.is_selected = true;
+                    this.start_obsticle_position = new Vector(collided.get_position().x, collided.get_position().y);
+                    this.selected_obsticle = collided;
 
-                for (var i = 0; i < this.obsticles.length; i++) {
-                    
-                    var obsticle = this.obsticles[i].bounds;
-                    
-                    var hasCollided = false;
-                    
-                    if(obsticle instanceof Polygon){
-                        if(SAT.pointInPolygon(event.point, obsticle)){
-                            hasCollided = true;
-                        }
-                    }else if(obsticle instanceof Circle){
-                        if(SAT.pointInCircle(event.point, obsticle)){
-                            hasCollided = true;
-                        }
-                    }
-                    
-                    if (hasCollided) {
+                    this.update_inspector_with_obsticle(collided);
 
-                        this.obsticles[i].is_selected = true;
-                        this.start_obsticle_position = new Vector(this.obsticles[i].get_position().x, this.obsticles[i].get_position().y);
-                        this.selected_obsticle = this.obsticles[i];
+                    this.end_polygon(); // it will remove the previous point added
 
-                        this.update_inspector_with_obsticle(this.obsticles[i]);
 
-                        this.end_polygon(); // it will remove the previous point added
-
-                        break;
-                    }
                 }
 
             }
         }
-        
-        if(!this.is_space_pressed && input_state.get() === States.main_states.circle_draw){
-                    
-                if (this.queue_circle !== null && !this.selected_obsticle) {
-                    this.obsticles.push(this.queue_circle);
-                    this.queue_circle = null;
-                    this.selected_obsticle = null;
-                }
+
+        if (!this.is_space_pressed && input_state.get() === States.main_states.circle_draw) {
+
+            if (this.queue_circle !== null && !this.selected_obsticle) {
+                this.obsticles.push(this.queue_circle);
+                this.queue_circle = null;
+                this.selected_obsticle = null;
+            }
         }
+        
+        if (input_state.get() === States.main_states.point_draw && !this.is_space_pressed) {
+
+            var collided = this.is_point_in_obsticles(event.point);
+        
+            if (collided) {
+               
+            } else {
+                var p = this.active_layer.get_position();
+                var pp = new Vector(event.point.x, event.point.y);
+                pp.sub(p);
+
+                var obsticle = new Obsticle();
+                var bb = new Circle(new V().copy(pp), 10);
+                obsticle.bounds = bb;
+                obsticle.normal_color = 'yellow';
+                obsticle.set_position(bb.pos.x, bb.pos.y);
+                this.obsticles.push(obsticle);
+                this.active_layer.add_child(obsticle);
+            }
+
+
+
+        }
+        
         this.mouse_has_moved = false;
     };
 
+    GameScreen.prototype.is_point_in_obsticles = function (point) {
+
+        for (var i = 0; i < this.obsticles.length; i++) {
+
+            var obsticle = this.obsticles[i].bounds;
+
+            if (obsticle instanceof Polygon) {
+                if (SAT.pointInPolygon(point, obsticle)) {
+                    return this.obsticles[i];
+                }
+            } else if (obsticle instanceof Circle) {
+                if (SAT.pointInCircle(point, obsticle)) {
+                    return this.obsticles[i];
+                }
+            }
+
+        }
+        return false;
+
+    };
+
     GameScreen.prototype.on_right_mouse_down = function (event) {
-        
+
         event.point.x = Math.round(event.point.x);
         event.point.y = Math.round(event.point.y);
 
         if (input_state.get() === States.main_states.polygon_draw ||
-            input_state.get() === States.main_states.box_draw  ||
-            input_state.get() === States.main_states.circle_draw ) {
-        
+                input_state.get() === States.main_states.box_draw ||
+                input_state.get() === States.main_states.circle_draw||
+                input_state.get() === States.main_states.point_draw) {
+
             this.end_polygon();
 
             for (var i = 0; i < this.obsticles.length; i++) {
@@ -568,17 +604,17 @@
                 if (this.obsticles[i].is_selected) {
 
                     var obsticle = this.obsticles[i].bounds;
-                    
-                    if(obsticle instanceof Polygon){
-                        
+
+                    if (obsticle instanceof Polygon) {
+
                         if (SAT.pointInPolygon(event.point, obsticle)) {
 
                             this.obsticles[i].remove_from_parent();
                             this.obsticles.splice(i, 1);
                             break;
                         }
-                        
-                    }else if(obsticle instanceof Circle){
+
+                    } else if (obsticle instanceof Circle) {
                         if (SAT.pointInCircle(event.point, obsticle)) {
 
                             this.obsticles[i].remove_from_parent();
@@ -587,12 +623,14 @@
                         }
                     }
 
-                    
+
 
                 }
 
             }
-            
+            if(this.selected_obsticle){
+                this.selected_obsticle.is_selected = false;
+            }
             this.selected_obsticle = null;
 
         }
@@ -815,7 +853,7 @@
         game.input.add(this.point_button);
         game.input.add(this.path_button);
         game.input.add(this.graphics_button);
-        
+
         game.input.add(this.undo_button);
         game.input.add(this.snap_axis_button);
     };
