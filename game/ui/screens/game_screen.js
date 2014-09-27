@@ -231,6 +231,7 @@
     };
 
     GameScreen.prototype.draw_path_last_point = function (context) {
+        
         if (this.queue_path !== null) {
 
             var p = this.active_layer.bounds.pos.clone();
@@ -238,7 +239,6 @@
 
             var last_point = this.queue_path.points[this.queue_path.points.length - 1].clone();
             last_point.add(p);
-
 
             //////////////////
 
@@ -262,7 +262,6 @@
             context.closePath();
             context.stroke();
         }
-
 
     };
 
