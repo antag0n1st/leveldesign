@@ -9,6 +9,7 @@ GameScreen.prototype.initialize = function () {
     this.queue_path = null;
     this.layers = [];
     this.mouse_has_moved = false;
+    this.selected_image = null;
 
     var layer = new Layer();
     layer.set_position(Config.screen_width / 2, Config.screen_height / 2);
@@ -17,15 +18,17 @@ GameScreen.prototype.initialize = function () {
     this.add_child(layer);
 
     this.active_layer = layer;
-    
-    
-    this.name_label = document.getElementById('name');
-        this.z_index_label = document.getElementById('z_index');
-        this.tag_label = document.getElementById('tag');
-        this.type_selector = document.getElementById('type');
-        this.x_position_label = document.getElementById('x_position');
-        this.y_position_label = document.getElementById('y_position');
 
+    this.inspector = document.getElementById('inspector');
+    this.name_label = document.getElementById('name');
+    this.z_index_label = document.getElementById('z_index');
+    this.tag_label = document.getElementById('tag');
+    this.type_selector = document.getElementById('type');
+    this.x_position_label = document.getElementById('x_position');
+    this.y_position_label = document.getElementById('y_position');
+    this.library = document.getElementById('library');
+    
+    this.inspector.style.height = (Config.screen_height-13)+"px";
 
     //////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////
@@ -193,11 +196,11 @@ GameScreen.prototype.initialize = function () {
         game.stage.context.canvas.style.cursor = 'default';
     });
 
-    
-    for (var i = 0; i<ContentManager.object_types.length; i++){
-        
+
+    for (var i = 0; i < ContentManager.object_types.length; i++) {
+
         var type = ContentManager.object_types[i];
-    
+
         var opt = document.createElement('option');
         opt.value = i;
         opt.innerHTML = type;

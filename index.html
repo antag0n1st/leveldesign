@@ -221,10 +221,10 @@
                 margin-top: -1px;
                 margin-right: -1px;
                 padding: 10px 5px 5px 0;
-                height: 800px;
+                height: 620px;
             }
             
-            .inspector input[type=text]{
+            .inspector input[type=text],input[type=file]{
                 width: 170px;
                 padding: 3px 5px 3px 5px;
                 background-color: #f6efbd;
@@ -258,13 +258,28 @@
                 float: right;
                 
             }
+            .library{
+                overflow-x: hidden;
+                overflow-y: scroll;
+                padding: 5px;
+                background-color: #bdedf6;
+                margin: 5px 0px 5px 10px;
+                height: 300px;
+            }
+            .library img{
+                float: right;
+                width: 90px;
+                height: 90px;
+                border: 1px solid black;
+                margin: 5px 3px 5px 3px;
+            }
         </style>
 
 
     </head>
     <body>
         
-          <div class="inspector">
+          <div id="inspector" class="inspector">
             
             <div class="i-w"><label>Name:</label>  <input onkeyup="game.navigator.current_screen.on_name_change(this);" id="name" type="text"  /></div>
             
@@ -285,7 +300,12 @@
             <div class="i-w"><input onclick="game.navigator.current_screen.export_polygons();" type="button" value="export" /></div>
             
             <div class="separator"></div>
-               
+            
+            <div class="i-w"><label>Library:</label><input type="file" webkitdirectory onchange="game.navigator.current_screen.list_files(this.files)" /></div>
+            <div class="i-w">
+                <div class="library" id="library">
+                </div>
+            </div>
           </div>
           <div id="wrapper" style="position: fixed;top:200px;">
             <canvas id="stage" >

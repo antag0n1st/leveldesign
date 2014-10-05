@@ -158,6 +158,19 @@ GameScreen.prototype.on_mouse_up = function (event) {
             
         }
     }
+    
+    if (input_state.get() === States.main_states.graphics_draw && !this.is_space_pressed) {
+        if(this.selected_image){
+            
+            var p = this.active_layer.get_position();
+            var sprite = new Sprite(this.selected_image.image_name);
+            var pos = this.selected_image.get_position();
+            var pp = pos.clone().sub(p);
+            sprite.set_position(pp.x,pp.y);
+            
+            this.active_layer.add_child(sprite);
+        }
+    }
 
     this.mouse_has_moved = false;
 };

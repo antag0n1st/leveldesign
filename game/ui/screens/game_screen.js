@@ -163,6 +163,11 @@
         m.sub(p);
         this.mouse_position_label.set({text: "x: " + Math.round_decimal(m.x, 2) + "  y: " + Math.round_decimal(m.y, 2)});
 
+        if(input_state.get() === States.main_states.graphics_draw && this.selected_image){
+            var w = this.selected_image.width;
+            var h = this.selected_image.height;
+            this.selected_image.set_position(game.input.point.x-w/2,game.input.point.y-h/2);
+        }
 
     };
 
