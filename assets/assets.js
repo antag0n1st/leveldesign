@@ -14,6 +14,11 @@ Game.prototype.load_assets = function() {
         ContentManager.object_types = types;
     },function(){});
     
+    ContentManager.add_file('game/layers.json',function(data){
+        var layers = JSON.parse(data);      
+        ContentManager.layers = layers;
+    },function(){});
+    
     ////////////////////////////////////////////////////////////////////////
 
 };

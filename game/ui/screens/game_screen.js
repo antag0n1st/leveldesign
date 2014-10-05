@@ -11,6 +11,11 @@
 
     GameScreen.prototype.on_state = function (prev_state, current_state, data) {
         this.end_polygon();
+        if(this.selected_image){
+            this.selected_image.remove_from_parent();
+            this.selected_image = null;
+            this.deselect_images();
+        }
     };
 
     GameScreen.prototype.deselect_buttons = function () {
@@ -159,6 +164,7 @@
     GameScreen.prototype.update = function () {
 
         var p = this.active_layer.get_position();
+        p.scale(this.active_layer.factor,this.active_layer.factor);
         var m = new Vector(game.input.point.x, game.input.point.y);
         m.sub(p);
         this.mouse_position_label.set({text: "x: " + Math.round_decimal(m.x, 2) + "  y: " + Math.round_decimal(m.y, 2)});
@@ -342,7 +348,19 @@
 
     };
 
-
+    GameScreen.prototype.move_layers_to = function(point){
+        
+        var pp = point.clone();
+       // log(pp);
+        var d = this.active_layer.factor;
+        
+        for(var i=0;i<this.layers.length;i++){
+            var layer = this.layers[i];
+            var f = layer.factor/d;
+            layer.set_position(pp.x*f,pp.y*f);
+        }
+        
+    };
 
     GameScreen.prototype.show = function () {
         Screen.prototype.show.call(this);

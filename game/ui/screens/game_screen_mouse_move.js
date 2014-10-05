@@ -15,7 +15,9 @@ GameScreen.prototype.on_mouse_move = function (event) {
             v.sub(this.start_drag_point.clone());
             var p = this.start_drag_screen_position.clone().add(v);
 
-            this.active_layer.set_position(p.x, p.y);
+            //this.active_layer.set_position(p.x, p.y);
+            this.move_layers_to(p);
+            
 
             if (this.queue_points.length > 0) {
 

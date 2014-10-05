@@ -1,3 +1,10 @@
+GameScreen.prototype.on_layer_change = function(object){
+    
+    var value = object.value;
+    this.active_layer = this.layers[value];
+    
+};
+
 GameScreen.prototype.on_name_change = function (object) {
 
     var value = object.value;

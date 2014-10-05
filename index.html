@@ -281,6 +281,10 @@
         
           <div id="inspector" class="inspector">
             
+            <div class="i-w"><label>Layer: </label> <select onchange="game.navigator.current_screen.on_layer_change(this);" id="layers"></select> </div>
+                          
+            <div class="separator"></div>
+            
             <div class="i-w"><label>Name:</label>  <input onkeyup="game.navigator.current_screen.on_name_change(this);" id="name" type="text"  /></div>
             
             <div class="i-w"><label>Z-index: </label><input onkeyup="game.navigator.current_screen.on_z_index_change(this);" id="z_index" type="text" /></div>

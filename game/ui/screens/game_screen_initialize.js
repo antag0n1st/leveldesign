@@ -11,15 +11,27 @@ GameScreen.prototype.initialize = function () {
     this.mouse_has_moved = false;
     this.selected_image = null;
 
-    var layer = new Layer();
-    layer.set_position(Config.screen_width / 2, Config.screen_height / 2);
-    layer.set_size(Config.screen_width, Config.screen_height);
-    this.layers.push(layer);
-    this.add_child(layer);
-
-    this.active_layer = layer;
+    
+    
+    for(var i=0;i<ContentManager.layers.length;i++){
+        
+        var l = ContentManager.layers[i];
+        var layer = new Layer();
+        layer.factor = l.factor;
+        layer.name = l.name;
+        layer.set_size(Config.screen_width, Config.screen_height);
+        this.layers.push(layer);
+        this.add_child(layer);
+        
+        if(i===0){
+            this.active_layer = layer;
+        }
+    }
+    
+    this.move_layers_to(new V(Config.screen_width / 2, Config.screen_height / 2));
 
     this.inspector = document.getElementById('inspector');
+    this.layer_selector = document.getElementById('layers');
     this.name_label = document.getElementById('name');
     this.z_index_label = document.getElementById('z_index');
     this.tag_label = document.getElementById('tag');
@@ -205,6 +217,16 @@ GameScreen.prototype.initialize = function () {
         opt.value = i;
         opt.innerHTML = type;
         this.type_selector.appendChild(opt);
+    }
+    
+    for (var i = 0; i < ContentManager.layers.length; i++) {
+
+        var l = ContentManager.layers[i];
+
+        var opt = document.createElement('option');
+        opt.value = i;
+        opt.innerHTML = l.name;
+        this.layer_selector.appendChild(opt);
     }
 
 /////////////////////////////////////

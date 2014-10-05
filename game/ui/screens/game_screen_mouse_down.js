@@ -7,9 +7,13 @@ GameScreen.prototype.on_mouse_down = function (event) {
 
     if (this.is_space_pressed) {
 
-        this.start_drag_point = new Vector(event.point.x, event.point.y);
+        //this.start_drag_point = new Vector(event.point.x, event.point.y);
+        //this.start_drag_point.scale(this.active_layer.factor,this.active_layer.factor);
+        
         this.start_drag_screen_position = new Vector(this.active_layer.get_position().x, this.active_layer.get_position().y);
         this.last_move_position = new Vector(this.start_drag_point.x, this.start_drag_point.y);
+        
+        
 
     }
 
