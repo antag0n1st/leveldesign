@@ -10,11 +10,6 @@
 
 
     GameScreen.prototype.on_state = function (prev_state, current_state, data) {
-
-        if (current_state.name === States.main_states.polygon_draw) {
-
-        }
-
         this.end_polygon();
     };
 
@@ -53,7 +48,11 @@
             this.selected_obsticle = null;
         }
 
+        this.update_inspector_with_obsticle();
+
     };
+
+
 
     GameScreen.prototype.on_undo_button = function (event) {
 
@@ -134,11 +133,8 @@
             var collided = this.is_point_in_obsticles(event.point);
             if (collided) {
                 if (collided.is_selected) {
+                    this.remove_obsticle(collided);
                     collided.remove_from_parent();
-                    var index = this.obsticles.indexOf(collided);
-                    if (index !== -1) {
-                        this.obsticles.splice(index, 1);
-                    }
                 }
             }
 
@@ -151,64 +147,14 @@
 
     };
 
-    GameScreen.prototype.on_name_change = function (value) {
-        if (this.selected_obsticle) {
-            this.selected_obsticle.name = value;
+    GameScreen.prototype.remove_obsticle = function (obsticle) {
+        var index = this.obsticles.indexOf(obsticle);
+        if (index !== -1) {
+            this.obsticles.splice(index, 1);
         }
-    };
-
-    GameScreen.prototype.on_z_index_change = function (value) {
-        if (this.selected_obsticle) {
-            this.selected_obsticle.z_index = parseInt(value);
-        }
-    };
-
-    GameScreen.prototype.on_type_change = function (value) {
-        if (this.selected_obsticle) {
-            this.selected_obsticle.type = value;
-        }
-    };
-
-    GameScreen.prototype.on_tag_change = function (value) {
-        if (this.selected_obsticle) {
-            this.selected_obsticle.tag = value;
-        }
-    };
-
-    GameScreen.prototype.on_x_change = function (value) {
-        if (this.selected_obsticle) {
-            this.selected_obsticle.set_position(parseInt(value), null);
-        }
-    };
-
-    GameScreen.prototype.on_y_change = function (value) {
-        if (this.selected_obsticle) {
-            this.selected_obsticle.set_position(null, parseInt(value));
-        }
-    };
-
-    GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
-
-//        if(obsticle){
-//            
-//            this.name_label.value = obsticle.name;
-//            this.z_index_label.value = obsticle.z_index;
-//            this.tag_label.value = obsticle.tag;
-//            this.type_label.value = obsticle.type;
-//            this.x_position_label.value =  obsticle.get_position().x;
-//            this.y_position_label.value =  obsticle.get_position().y;
-//                             
-//        }else{
-//            
-//            this.name_label.value = '';
-//            this.z_index_label.value = '';
-//            this.tag_label.value = '';
-//            this.type_label.value = '';
-//            this.x_position_label.value = '';
-//            this.y_position_label.value = '';
-//        }
 
     };
+
 
     GameScreen.prototype.update = function () {
 
@@ -231,7 +177,7 @@
     };
 
     GameScreen.prototype.draw_path_last_point = function (context) {
-        
+
         if (this.queue_path !== null) {
 
             var p = this.active_layer.bounds.pos.clone();
@@ -244,16 +190,16 @@
 
             if (this.snap_axis_mode === 0) {
 
-            } else if (this.snap_axis_mode === 1) {                
+            } else if (this.snap_axis_mode === 1) {
                 // snap x
                 new_point = new V(game.input.point.x, last_point.y);
-                
+
             } else if (this.snap_axis_mode === 2) {
                 // snap y
                 new_point = new V(last_point.x, game.input.point.y);
-                
+
             }
-            
+
             this.queue_path.buffer_point = new_point.clone().sub(p);
 
             context.beginPath();

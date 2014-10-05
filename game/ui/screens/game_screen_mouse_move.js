@@ -32,7 +32,7 @@ GameScreen.prototype.on_mouse_move = function (event) {
 
             }
 
-        } else {
+        } else if(input_state.get() !== States.main_states.set_parent) {
 
             // we are probably moveing some polgons
 

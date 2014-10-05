@@ -17,6 +17,14 @@ GameScreen.prototype.initialize = function () {
     this.add_child(layer);
 
     this.active_layer = layer;
+    
+    
+    this.name_label = document.getElementById('name');
+        this.z_index_label = document.getElementById('z_index');
+        this.tag_label = document.getElementById('tag');
+        this.type_selector = document.getElementById('type');
+        this.x_position_label = document.getElementById('x_position');
+        this.y_position_label = document.getElementById('y_position');
 
 
     //////////////////////////////////////////////////////////////////
@@ -60,13 +68,6 @@ GameScreen.prototype.initialize = function () {
     this.circle_reference_poiont = new Vector();
 
     this.snap_axis_mode = 0;
-
-    this.name_label = document.getElementById('name');
-    this.z_index_label = document.getElementById('z_index');
-    this.tag_label = document.getElementById('tag');
-    this.type_label = document.getElementById('type');
-    this.x_position_label = document.getElementById('x_position');
-    this.y_position_label = document.getElementById('y_position');
 
     var button_distance = 100;
     var button_padding = 10;
@@ -192,7 +193,16 @@ GameScreen.prototype.initialize = function () {
         game.stage.context.canvas.style.cursor = 'default';
     });
 
-
+    
+    for (var i = 0; i<ContentManager.object_types.length; i++){
+        
+        var type = ContentManager.object_types[i];
+    
+        var opt = document.createElement('option');
+        opt.value = i;
+        opt.innerHTML = type;
+        this.type_selector.appendChild(opt);
+    }
 
 /////////////////////////////////////
 

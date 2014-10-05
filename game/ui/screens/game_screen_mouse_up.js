@@ -112,7 +112,7 @@ GameScreen.prototype.on_mouse_up = function (event) {
     if (input_state.get() === States.main_states.path_draw && !this.is_space_pressed) {
 
 
-        if(!this.selected_obsticle && !this.mouse_has_moved){
+        if (!this.selected_obsticle && !this.mouse_has_moved) {
             var p = this.active_layer.get_position();
             var pp = new Vector(event.point.x, event.point.y);
             pp.sub(p);
@@ -125,9 +125,38 @@ GameScreen.prototype.on_mouse_up = function (event) {
                 this.queue_path.add_point(pp);
             }
         }
+    }
+
+    if (input_state.get() === States.main_states.set_parent) {
+
+        var collided = this.is_point_in_obsticles(event.point);
+        if (collided) {
+            collided.remove_from_parent();
+            this.selected_obsticle.add_child(collided);
+            if (collided instanceof Path) {
+                var p = this.selected_obsticle.get_position();
+                collided.set_position(p.x * -1, p.y * -1);
+            } else {
+                collided.set_position(0, 0);
+            }
+            input_state.go_to_previus_state();
 
 
-
+            this.selected_obsticle.is_selected = false;
+            this.selected_obsticle = null;
+            this.update_inspector_with_obsticle();
+            
+            
+            var m = new Sprite('child_message');
+            m.set_position( Config.screen_width/2 - 100,Config.screen_height/2 - 50 );
+            this.add_child(m);
+            
+            var a = new TweenAlpha(m,0,new Bezier(.81,.09,.96,.63),2000,function(){
+                this.object.remove_from_parent();
+            });
+            a.run();
+            
+        }
     }
 
     this.mouse_has_moved = false;
