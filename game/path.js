@@ -8,7 +8,7 @@
     Path.prototype.drawable_initialize = Path.prototype.initialize;    
     Path.prototype.initialize = function(){        
         this.drawable_initialize();
-        
+        this.layer_name = "";
         this.type = 0;
         this.response = new Response();
         this.name = '';

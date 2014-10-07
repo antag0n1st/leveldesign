@@ -103,6 +103,7 @@ GameScreen.prototype.on_mouse_up = function (event) {
             obsticle.set_position(bb.pos.x, bb.pos.y);
             this.obsticles.push(obsticle);
             this.active_layer.add_child(obsticle);
+            obsticle.layer_name = this.active_layer.name;
         }
 
 
@@ -121,6 +122,7 @@ GameScreen.prototype.on_mouse_up = function (event) {
                 this.queue_path = new Path();
                 this.queue_path.add_point(pp);
                 this.active_layer.add_child(this.queue_path);
+                this.queue_path.layer_name = this.active_layer.name;
             } else {
                 this.queue_path.add_point(pp);
             }
@@ -160,15 +162,31 @@ GameScreen.prototype.on_mouse_up = function (event) {
     }
     
     if (input_state.get() === States.main_states.graphics_draw && !this.is_space_pressed) {
-        if(this.selected_image){
-            
+        if(this.selected_image){            
             var p = this.active_layer.get_position();
             var sprite = new Sprite(this.selected_image.image_name);
             var pos = this.selected_image.get_position();
             var pp = pos.clone().sub(p);
-            sprite.set_position(pp.x,pp.y);
-            
+            sprite.set_position(pp.x,pp.y);            
             this.active_layer.add_child(sprite);
+            sprite.layer_name = this.active_layer.name;
+            this.graphics.push(sprite);
+        }else{
+            
+            this.deselect_graphics();
+            
+            for(var i=0;i<this.graphics.length;i++){
+                var g = this.graphics[i];
+                if(g.layer_name === this.active_layer.name){
+                    if( SAT.pointInPolygon(event.point,g.bounds) ){
+                       this.selected_graphics = g;
+                       this.selected_graphics.is_selected = true;
+                       this.selected_graphics.alpha = 0.5;
+                       break;
+                    }
+                }
+            }
+            
         }
     }
 

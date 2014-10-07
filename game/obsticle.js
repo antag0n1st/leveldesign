@@ -8,7 +8,7 @@
     Obsticle.prototype.drawable_initialize = Obsticle.prototype.initialize;
     Obsticle.prototype.initialize = function () {
         this.drawable_initialize();
-        
+        this.layer_name = "";
         this.type = 0;
         this.response = new Response();
         this.name = '';

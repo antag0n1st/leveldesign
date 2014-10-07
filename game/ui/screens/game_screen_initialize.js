@@ -3,6 +3,7 @@ GameScreen.prototype.initialize = function () {
     game.input.snap_mode = true;
 
     this.obsticles = [];
+    this.graphics = [];
     this.queue_points = [];
     this.queue_box = null;
     this.queue_circle = null;
@@ -10,7 +11,7 @@ GameScreen.prototype.initialize = function () {
     this.layers = [];
     this.mouse_has_moved = false;
     this.selected_image = null;
-
+    this.selected_graphics = null;
     
     
     for(var i=0;i<ContentManager.layers.length;i++){

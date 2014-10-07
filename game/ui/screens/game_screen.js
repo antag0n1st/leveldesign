@@ -16,6 +16,9 @@
             this.selected_image = null;
             this.deselect_images();
         }
+        if(this.selected_graphics){
+            this.deselect_graphics();
+        }
     };
 
     GameScreen.prototype.deselect_buttons = function () {
@@ -148,6 +151,11 @@
             }
             this.selected_obsticle = null;
 
+        }
+        
+        if(input_state.get() === States.main_states.graphics_draw){
+            this.deselect_images();
+            this.deselect_graphics();
         }
 
     };
@@ -416,6 +424,7 @@
 
                 this.obsticles.push(obsticle);
                 this.active_layer.add_child(obsticle);
+                obsticle.layer_name = this.active_layer.name;
 
             } else {
                 alert("polygon points must be defined clockwise");
@@ -424,6 +433,18 @@
         }
         this.queue_points = [];
         return false;
+    };
+    
+    GameScreen.prototype.deselect_graphics = function(){
+        
+        for(var i=0;i<this.graphics.length;i++){
+                var g = this.graphics[i];
+                if(g.is_selected){
+                    g.is_selected = false;
+                    g.alpha = 1;
+                }
+        }
+        this.selected_graphics = null;
     };
 
     window.GameScreen = GameScreen;

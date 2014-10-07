@@ -163,5 +163,10 @@ GameScreen.prototype.deselect_images = function () {
         var child = childs[i];
         child.style.backgroundColor = "transparent";
     }
+    
+    if(this.selected_image){
+        this.selected_image.remove_from_parent();
+        this.selected_image = null;
+    }
 
 };
