@@ -16,9 +16,9 @@
             this.selected_image = null;
             this.deselect_images();
         }
-        if(this.selected_graphics){
-            this.deselect_graphics();
-        }
+//        if(this.selected_graphics){
+//            this.deselect_graphics();
+//        }
     };
 
     GameScreen.prototype.deselect_buttons = function () {
@@ -129,7 +129,8 @@
                 input_state.get() === States.main_states.box_draw ||
                 input_state.get() === States.main_states.circle_draw ||
                 input_state.get() === States.main_states.point_draw ||
-                input_state.get() === States.main_states.path_draw) {
+                input_state.get() === States.main_states.path_draw ||
+                input_state.get() === States.main_states.graphics_draw) {
 
             this.end_polygon();
 
@@ -157,6 +158,8 @@
             this.deselect_images();
             this.deselect_graphics();
         }
+        
+        this.update_inspector_with_obsticle();
 
     };
 
@@ -164,6 +167,13 @@
         var index = this.obsticles.indexOf(obsticle);
         if (index !== -1) {
             this.obsticles.splice(index, 1);
+        }
+        
+        if(obsticle instanceof Graphic){
+            var index = this.graphics.indexOf(obsticle);
+            if (index !== -1) {
+                this.graphics.splice(index, 1);
+            }
         }
 
     };
@@ -444,7 +454,7 @@
                     g.alpha = 1;
                 }
         }
-        this.selected_graphics = null;
+        this.selected_obsticle = null;
     };
 
     window.GameScreen = GameScreen;

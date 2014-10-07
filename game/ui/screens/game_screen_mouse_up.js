@@ -38,12 +38,14 @@ GameScreen.prototype.on_mouse_up = function (event) {
     }
 
 
-    if (!this.is_space_pressed &&
+    if (!this.is_space_pressed && !this.selected_image &&
             (input_state.get() === States.main_states.polygon_draw ||
                     input_state.get() === States.main_states.box_draw ||
                     input_state.get() === States.main_states.circle_draw ||
                     input_state.get() === States.main_states.point_draw ||
-                    input_state.get() === States.main_states.path_draw)) {
+                    input_state.get() === States.main_states.path_draw ||
+                    input_state.get() === States.main_states.graphics_draw
+            )) {
 
 
 
@@ -57,6 +59,8 @@ GameScreen.prototype.on_mouse_up = function (event) {
                 this.update_inspector_with_obsticle(null);
             }
         }
+        
+        this.deselect_graphics();
 
 
         if (this.queue_points.length < 2 && !this.mouse_has_moved && this.queue_path === null) {
@@ -161,31 +165,38 @@ GameScreen.prototype.on_mouse_up = function (event) {
         }
     }
     
-    if (input_state.get() === States.main_states.graphics_draw && !this.is_space_pressed) {
-        if(this.selected_image){            
+    if (input_state.get() === States.main_states.graphics_draw && !this.is_space_pressed ) {
+        
+        if(this.selected_image && !this.selected_obsticle){            
             var p = this.active_layer.get_position();
-            var sprite = new Sprite(this.selected_image.image_name);
+            var sprite = new Graphic(this.selected_image.image_name);
             var pos = this.selected_image.get_position();
             var pp = pos.clone().sub(p);
             sprite.set_position(pp.x,pp.y);            
             this.active_layer.add_child(sprite);
             sprite.layer_name = this.active_layer.name;
+            this.obsticles.push(sprite);
             this.graphics.push(sprite);
         }else{
             
-            this.deselect_graphics();
+
             
-            for(var i=0;i<this.graphics.length;i++){
-                var g = this.graphics[i];
-                if(g.layer_name === this.active_layer.name){
-                    if( SAT.pointInPolygon(event.point,g.bounds) ){
-                       this.selected_graphics = g;
-                       this.selected_graphics.is_selected = true;
-                       this.selected_graphics.alpha = 0.5;
-                       break;
-                    }
-                }
-            }
+//            this.deselect_graphics();
+//            this.update_inspector_with_obsticle();
+//            
+//            for(var i=0;i<this.graphics.length;i++){
+//                var g = this.graphics[i];
+//                if(g.layer_name === this.active_layer.name){
+//                    if( SAT.pointInPolygon(event.point,g.bounds) ){
+//                       this.selected_obsticle = g;
+//                       this.selected_obsticle.is_selected = true;
+//                       this.selected_obsticle.alpha = 0.5;
+//                       this.update_inspector_with_obsticle(this.selected_obsticle);
+//                       this.start_obsticle_position = new V().copy(this.selected_obsticle.get_position());
+//                       break;
+//                    }
+//                }
+//            }
             
         }
     }

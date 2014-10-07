@@ -11,7 +11,7 @@ GameScreen.prototype.initialize = function () {
     this.layers = [];
     this.mouse_has_moved = false;
     this.selected_image = null;
-    this.selected_graphics = null;
+    //this.selected_graphics = null;
     
     
     for(var i=0;i<ContentManager.layers.length;i++){

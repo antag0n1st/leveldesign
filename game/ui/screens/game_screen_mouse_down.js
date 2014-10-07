@@ -37,10 +37,10 @@ GameScreen.prototype.on_mouse_down = function (event) {
         }
     }
     
-    if(input_state.get() === States.main_states.graphics_draw && this.selected_graphics){
-        this.start_obsticle_position = new V().copy(this.selected_graphics.get_position());
-       
-    }
+//    if(input_state.get() === States.main_states.graphics_draw && this.sel){
+//        this.start_obsticle_position = new V().copy(this.selected_graphics.get_position());
+//       
+//    }
     
     // this.start_obsticle_position
 

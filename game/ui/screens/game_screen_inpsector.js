@@ -136,7 +136,9 @@ GameScreen.prototype.list_files = function (files) {
 };
 
 GameScreen.prototype.on_image_click = function (element, name) {
-    this.deselect_images();
+    
+    this.deselect_images(); 
+    this.deselect_graphics();
 
 
     if (input_state.get() === States.main_states.graphics_draw) {

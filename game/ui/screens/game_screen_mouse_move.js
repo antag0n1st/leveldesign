@@ -108,20 +108,21 @@ GameScreen.prototype.on_mouse_move = function (event) {
                 this.active_layer.add_child(this.queue_circle);
                 this.queue_circle.layer_name = this.active_layer.name;
 
-            } else if (input_state.get() === States.main_states.graphics_draw && this.selected_graphics) {
-                
-                    var v = new V(event.point.x, event.point.y).sub(this.active_layer.get_position());
-                    
-                    var d = this.start_drag_point.clone().sub(this.active_layer.get_position());
-                    var t = this.start_obsticle_position.clone();
-                    
-                    var p = d.sub(t);
-                    v.sub(p);
-                                       
-                    this.selected_graphics.set_position(v.x, v.y);
-                    this.update_inspector_with_obsticle(this.selected_graphics);
-                   
-            }  
+            } 
+//            else if (input_state.get() === States.main_states.graphics_draw && this.selected_graphics) {
+//                
+//                    var v = new V(event.point.x, event.point.y).sub(this.active_layer.get_position());
+//                    
+//                    var d = this.start_drag_point.clone().sub(this.active_layer.get_position());
+//                    var t = this.start_obsticle_position.clone();
+//                    
+//                    var p = d.sub(t);
+//                    v.sub(p);
+//                                       
+//                    this.selected_graphics.set_position(v.x, v.y);
+//                    this.update_inspector_with_obsticle(this.selected_graphics);
+//                   
+//            }  
 
 
         }

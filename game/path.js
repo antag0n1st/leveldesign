@@ -95,9 +95,9 @@
     
     Path.prototype.on_remove_from_parent = function(parent){
         Drawable.prototype.on_remove_from_parent.call(this,parent);
-        if(parent instanceof Obsticle || parent instanceof Path){
+        if(parent instanceof Obsticle || parent instanceof Path || parent instanceof Graphic){
             game.navigator.current_screen.remove_obsticle(this);
-        }        
+        }       
     };
     
     Path.prototype.draw = function(context){
