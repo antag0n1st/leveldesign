@@ -25,6 +25,15 @@ GameScreen.prototype.on_z_index_change = function (object) {
 
 };
 
+GameScreen.prototype.on_c_index_change = function (object) {
+
+    var value = object.value;
+
+    if (this.selected_obsticle) {
+        this.selected_obsticle.c_index = value;
+    }
+};
+
 
 GameScreen.prototype.on_tag_change = function (object) {
 
@@ -82,6 +91,7 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
 
         this.name_label.value = obsticle.name;
         this.z_index_label.value = obsticle.z_index;
+        this.c_index_label.value = obsticle.c_index;
         this.tag_label.value = obsticle.tag;
         this.type_selector.selectedIndex = obsticle.type;
         this.x_position_label.value = obsticle.get_position().x;
@@ -91,6 +101,7 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
 
         this.name_label.value = '';
         this.z_index_label.value = '';
+        this.c_index_label.value = '';
         this.tag_label.value = '';
         this.type_selector.selectedIndex = 0;
         this.x_position_label.value = '';

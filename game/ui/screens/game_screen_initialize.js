@@ -19,6 +19,7 @@ GameScreen.prototype.initialize = function () {
     this.layer_selector = document.getElementById('layers');
     this.name_label = document.getElementById('name');
     this.z_index_label = document.getElementById('z_index');
+    this.c_index_label = document.getElementById('c_index');
     this.tag_label = document.getElementById('tag');
     this.type_selector = document.getElementById('type');
     this.x_position_label = document.getElementById('x_position');

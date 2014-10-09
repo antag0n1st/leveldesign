@@ -13,7 +13,7 @@
         this.response = new Response();
         this.name = '';
         this._is_selected = false;
-        
+        this.c_index = 0;
         this.normal_color = null;
         
         this.points = [];
