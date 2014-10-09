@@ -11,25 +11,9 @@ GameScreen.prototype.initialize = function () {
     this.layers = [];
     this.mouse_has_moved = false;
     this.selected_image = null;
-    //this.selected_graphics = null;
+    this.is_shift_pressed = false;
+    this.is_space_pressed = false;
     
-    
-    for(var i=0;i<ContentManager.layers.length;i++){
-        
-        var l = ContentManager.layers[i];
-        var layer = new Layer();
-        layer.factor = l.factor;
-        layer.name = l.name;
-        layer.set_size(Config.screen_width, Config.screen_height);
-        this.layers.push(layer);
-        this.add_child(layer);
-        
-        if(i===0){
-            this.active_layer = layer;
-        }
-    }
-    
-    this.move_layers_to(new V(Config.screen_width / 2, Config.screen_height / 2));
 
     this.inspector = document.getElementById('inspector');
     this.layer_selector = document.getElementById('layers');
@@ -173,11 +157,28 @@ GameScreen.prototype.initialize = function () {
         States.main_states.path_draw,
         States.main_states.graphics_draw
     ];
+    
     this.mode_count = 0;
-
     this.current_mode = 'polygon';
-
     this.current_mode = this.modes[this.mode_count % this.modes.length];
+    
+    
+    for(var i=0;i<ContentManager.layers.length;i++){
+        
+        var l = ContentManager.layers[i];
+        var layer = new Layer();
+        layer.factor = l.factor;
+        layer.name = l.name;
+        layer.set_size(Config.screen_width, Config.screen_height);
+        this.layers.push(layer);
+        this.add_child(layer);
+        
+        if(i===0){
+            this.active_layer = layer;
+        }
+    }
+    
+    this.move_layers_to(new V(Config.screen_width / 2, Config.screen_height / 2));
 
     this.add_child(this.polygon_button);
     this.add_child(this.box_button);
@@ -194,7 +195,7 @@ GameScreen.prototype.initialize = function () {
 
     input_state.set(States.main_states.polygon_draw);
 
-    this.is_space_pressed = false;
+    
     var that = this;
 
     this.kibo = new Kibo();
@@ -207,6 +208,31 @@ GameScreen.prototype.initialize = function () {
     this.kibo.up('space', function () {
         that.is_space_pressed = false;
         game.stage.context.canvas.style.cursor = 'default';
+    });
+    
+    
+    this.kibo.down('shift', function () {
+        that.is_shift_pressed = true;
+    });
+
+    this.kibo.up('shift', function () {
+        that.is_shift_pressed = false;
+    });
+    
+    this.kibo.down('right', function () {
+        that.move_right();
+    });
+    
+    this.kibo.down('down', function () {
+        that.move_down();
+    });
+    
+    this.kibo.down('left', function () {
+        that.move_left();
+    });
+    
+    this.kibo.down('up', function () {
+        that.move_up();
     });
 
 

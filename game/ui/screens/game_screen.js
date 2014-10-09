@@ -11,7 +11,7 @@
 
     GameScreen.prototype.on_state = function (prev_state, current_state, data) {
         this.end_polygon();
-        if(this.selected_image){
+        if (this.selected_image) {
             this.selected_image.remove_from_parent();
             this.selected_image = null;
             this.deselect_images();
@@ -153,12 +153,12 @@
             this.selected_obsticle = null;
 
         }
-        
-        if(input_state.get() === States.main_states.graphics_draw){
+
+        if (input_state.get() === States.main_states.graphics_draw) {
             this.deselect_images();
             this.deselect_graphics();
         }
-        
+
         this.update_inspector_with_obsticle();
 
     };
@@ -168,8 +168,8 @@
         if (index !== -1) {
             this.obsticles.splice(index, 1);
         }
-        
-        if(obsticle instanceof Graphic){
+
+        if (obsticle instanceof Graphic) {
             var index = this.graphics.indexOf(obsticle);
             if (index !== -1) {
                 this.graphics.splice(index, 1);
@@ -182,15 +182,15 @@
     GameScreen.prototype.update = function () {
 
         var p = this.active_layer.get_position();
-        p.scale(this.active_layer.factor,this.active_layer.factor);
+        p.scale(this.active_layer.factor, this.active_layer.factor);
         var m = new Vector(game.input.point.x, game.input.point.y);
         m.sub(p);
         this.mouse_position_label.set({text: "x: " + Math.round_decimal(m.x, 2) + "  y: " + Math.round_decimal(m.y, 2)});
 
-        if(input_state.get() === States.main_states.graphics_draw && this.selected_image){
+        if (input_state.get() === States.main_states.graphics_draw && this.selected_image) {
             var w = this.selected_image.width;
             var h = this.selected_image.height;
-            this.selected_image.set_position(game.input.point.x-w/2,game.input.point.y-h/2);
+            this.selected_image.set_position(game.input.point.x - w / 2, game.input.point.y - h / 2);
         }
 
     };
@@ -366,18 +366,18 @@
 
     };
 
-    GameScreen.prototype.move_layers_to = function(point){
-        
+    GameScreen.prototype.move_layers_to = function (point) {
+
         var pp = point.clone();
-       // log(pp);
+        // log(pp);
         var d = this.active_layer.factor;
-        
-        for(var i=0;i<this.layers.length;i++){
+
+        for (var i = 0; i < this.layers.length; i++) {
             var layer = this.layers[i];
-            var f = layer.factor/d;
-            layer.set_position(pp.x*f,pp.y*f);
+            var f = layer.factor / d;
+            layer.set_position(pp.x * f, pp.y * f);
         }
-        
+
     };
 
     GameScreen.prototype.show = function () {
@@ -432,6 +432,11 @@
 
             if (sum < 0) {
 
+                var p = obsticle.get_position();
+                p.x = Math.round(p.x);
+                p.y = Math.round(p.y);
+                obsticle.set_position(p.x, p.y);
+
                 this.obsticles.push(obsticle);
                 this.active_layer.add_child(obsticle);
                 obsticle.layer_name = this.active_layer.name;
@@ -444,17 +449,53 @@
         this.queue_points = [];
         return false;
     };
-    
-    GameScreen.prototype.deselect_graphics = function(){
-        
-        for(var i=0;i<this.graphics.length;i++){
-                var g = this.graphics[i];
-                if(g.is_selected){
-                    g.is_selected = false;
-                    g.alpha = 1;
-                }
+
+    GameScreen.prototype.deselect_graphics = function () {
+
+        for (var i = 0; i < this.graphics.length; i++) {
+            var g = this.graphics[i];
+            if (g.is_selected) {
+                g.is_selected = false;
+                g.alpha = 1;
+            }
         }
         this.selected_obsticle = null;
+    };
+
+    GameScreen.prototype.move_up = function () {
+        if (this.selected_obsticle) {
+            var p = this.selected_obsticle.get_position();
+            p.y -= 1;
+            this.selected_obsticle.set_position(p.x, p.y);
+        }
+        this.update_inspector_with_obsticle(this.selected_obsticle);
+    };
+
+    GameScreen.prototype.move_down = function () {
+        if (this.selected_obsticle) {
+            var p = this.selected_obsticle.get_position();
+            p.y += 1;
+            this.selected_obsticle.set_position(p.x, p.y);
+        }
+        this.update_inspector_with_obsticle(this.selected_obsticle);
+    };
+
+    GameScreen.prototype.move_left = function () {
+        if (this.selected_obsticle) {
+            var p = this.selected_obsticle.get_position();
+            p.x -= 1;
+            this.selected_obsticle.set_position(p.x, p.y);
+        }
+        this.update_inspector_with_obsticle(this.selected_obsticle);
+    };
+
+    GameScreen.prototype.move_right = function () {
+        if (this.selected_obsticle) {
+            var p = this.selected_obsticle.get_position();
+            p.x += 1;
+            this.selected_obsticle.set_position(p.x, p.y);
+        }
+        this.update_inspector_with_obsticle(this.selected_obsticle);
     };
 
     window.GameScreen = GameScreen;

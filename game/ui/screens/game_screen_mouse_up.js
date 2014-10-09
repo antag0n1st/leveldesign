@@ -28,7 +28,12 @@ GameScreen.prototype.on_mouse_up = function (event) {
     } else if (input_state.get() === States.main_states.box_draw && !this.is_space_pressed) {
 
         if (this.queue_box !== null && !this.selected_obsticle) {
-            //  this.box_reference_point.copy(pp);
+            
+            var p = this.queue_box.get_position();
+            p.x = Math.round(p.x);
+            p.y = Math.round(p.y);
+            this.queue_box.set_position(p.x,p.y);
+            
             this.obsticles.push(this.queue_box);
             this.queue_box = null;
             this.selected_obsticle = null;
@@ -83,6 +88,13 @@ GameScreen.prototype.on_mouse_up = function (event) {
     if (!this.is_space_pressed && input_state.get() === States.main_states.circle_draw) {
 
         if (this.queue_circle !== null && !this.selected_obsticle) {
+            
+            this.queue_circle.bounds.r = Math.round(this.queue_circle.bounds.r);
+            var p = this.queue_circle.get_position();
+            p.x = Math.round(p.x);
+            p.y = Math.round(p.y);
+            this.queue_circle.set_position(p.x,p.y);
+            
             this.obsticles.push(this.queue_circle);
             this.queue_circle = null;
             this.selected_obsticle = null;
@@ -104,6 +116,8 @@ GameScreen.prototype.on_mouse_up = function (event) {
             var bb = new Circle(new V().copy(pp), 10);
             obsticle.bounds = bb;
             obsticle.normal_color = 'yellow';
+            bb.pos.x = Math.round(bb.pos.x);
+            bb.pos.y = Math.round(bb.pos.y);
             obsticle.set_position(bb.pos.x, bb.pos.y);
             this.obsticles.push(obsticle);
             this.active_layer.add_child(obsticle);
@@ -172,6 +186,8 @@ GameScreen.prototype.on_mouse_up = function (event) {
             var sprite = new Graphic(this.selected_image.image_name);
             var pos = this.selected_image.get_position();
             var pp = pos.clone().sub(p);
+            pp.x = Math.round(pp.x);
+            pp.y = Math.round(pp.y);
             sprite.set_position(pp.x,pp.y);            
             this.active_layer.add_child(sprite);
             sprite.layer_name = this.active_layer.name;

@@ -59,6 +59,10 @@
             p = this.buffer_point;
         }
         
+      
+        p.x = Math.round(p.x);
+        p.y = Math.round(p.y);
+        
         this.points.push(new V().copy(p));
         var c = new Circle(new V().copy(p),7);
         
