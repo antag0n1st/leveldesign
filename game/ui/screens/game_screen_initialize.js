@@ -165,7 +165,7 @@ GameScreen.prototype.initialize = function () {
     this.current_mode = this.modes[this.mode_count % this.modes.length];
     
     
-    for(var i=0;i<ContentManager.layers.length;i++){
+    for(var i=ContentManager.layers.length-1;i>=0;i--){
         
         var l = ContentManager.layers[i];
         var layer = new Layer();
