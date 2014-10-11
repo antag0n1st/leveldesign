@@ -1,6 +1,7 @@
 GameScreen.prototype.on_mouse_up = function (event) {
     
     if(!this.active_layer.is_visible){ // do not interact with invisible layers
+        Popup.show("layer is invisible",this);
         return;
     }
 
@@ -173,14 +174,7 @@ GameScreen.prototype.on_mouse_up = function (event) {
             this.update_inspector_with_obsticle();
             
             
-            var m = new Sprite('child_message');
-            m.set_position( Config.screen_width/2 - 100,Config.screen_height/2 - 50 );
-            this.add_child(m);
-            
-            var a = new TweenAlpha(m,0,new Bezier(.81,.09,.96,.63),2000,function(){
-                this.object.remove_from_parent();
-            });
-            a.run();
+            Popup.show("element is now child",this);
             
         }
     }
