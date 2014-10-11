@@ -260,4 +260,11 @@ GameScreen.prototype.initialize = function () {
 
 /////////////////////////////////////
 
+    // START AUTO SAVE 
+    
+    window.setInterval(function(){
+        that.save_current_data();
+    },1000*60); // save every minute
+
+
 };

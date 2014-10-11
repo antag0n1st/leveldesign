@@ -1,5 +1,33 @@
-GameScreen.prototype.export_polygons = function (button) {
+GameScreen.prototype.export_polygons = function () {
 
+    var data = this.get_export_data();    
+    window.open('data:application/json;charset=utf-8,' + escape(data), "_blank");
+
+};
+
+GameScreen.prototype.save_current_data = function(){
+    
+    var data = this.get_export_data();
+    
+    var saved_data = localStorage.getItem("level_editor_auto_save");
+    if(saved_data){
+        saved_data = JSON.parse(saved_data);
+        if(saved_data.length > 10){
+            saved_data.shift();
+        }
+        saved_data.push(data);
+        
+    }else{
+        saved_data = [];
+        saved_data.push(data);        
+    }
+    
+    localStorage.setItem("level_editor_auto_save",JSON.stringify(saved_data));
+ 
+};
+
+GameScreen.prototype.get_export_data = function(){
+    
     this.end_polygon();
 
     var json = {}
@@ -13,28 +41,16 @@ GameScreen.prototype.export_polygons = function (button) {
         var obsticle = this.obsticles[i];
 
         if (obsticle.get_parent() instanceof Layer) {
+            var o = this.make_obsticle(obsticle);
+            o.children = [];
+            obsticles.push(o);
 
-            var o = {};
-            o.object_type = obsticle.inner_type;
-            o.pos = obsticle.get_position();
-            o.layer_name = obsticle.layer_name;
-            o.z_index = obsticle.z_index;
-            o.c_index = obsticle.c_index;
-            o.tag = obsticle.tag;
-            o.name = obsticle.name;
-            o.type = obsticle.type;
-
-            if (obsticle.inner_type === "Path") {
-                o.points = obsticle.points;
-            } else if (obsticle.inner_type === "Circle") {
-                o.radius = obsticle.bounds.r;
-            } else if (obsticle.inner_type === "Graphic") {
-                o.image_name = obsticle.image_name;
-            } else {
-                o.points = obsticle.bounds.points;
+            for (var j = 0; j < obsticle.children.length; j++) {
+                var c = this.make_obsticle(obsticle.children[j]);
+                c.children = []; // just for consistency
+                o.children.push(c);
             }
 
-            obsticles.push(o);
         }
 
     }
@@ -56,10 +72,32 @@ GameScreen.prototype.export_polygons = function (button) {
     }
 
     this.move_layers_to(the_pos);
+    
+    return data = JSON.stringify(json);
+};
 
-    var data = JSON.stringify(json);
-    window.open('data:application/json;charset=utf-8,' + escape(data), "_blank");
+GameScreen.prototype.make_obsticle = function (obsticle) {
+    var o = {};
+    o.object_type = obsticle.inner_type;
+    o.pos = obsticle.get_position();
+    o.layer_name = obsticle.layer_name;
+    o.z_index = obsticle.z_index;
+    o.c_index = obsticle.c_index;
+    o.tag = obsticle.tag;
+    o.name = obsticle.name;
+    o.type = obsticle.type;
 
+    if (obsticle.inner_type === "Path") {
+        o.points = obsticle.points;
+    } else if (obsticle.inner_type === "Circle") {
+        o.radius = obsticle.bounds.r;
+    } else if (obsticle.inner_type === "Graphic") {
+        o.image_name = obsticle.image_name;
+    } else {
+        o.points = obsticle.bounds.points;
+    }
+
+    return o;
 };
 
 GameScreen.prototype.import = function (json) {
@@ -91,148 +129,146 @@ GameScreen.prototype.import_obsticles = function (data) {
     var obsticles = data.obsticles;
 
 
-//            o.object_type = obsticle.inner_type;
-//            o.pos = obsticle.get_position();
-//            o.layer_name = obsticle.layer_name;
-//            o.z_index = obsticle.z_index;
-//            o.c_index = obsticle.c_index;
-//            o.tag = obsticle.tag;
-//            o.name = obsticle.name;
-//            o.type = obsticle.type;
-//
-//            if (obsticle.inner_type === "Path") {
-//                o.points = obsticle.points;
-//            } else if (obsticle.inner_type === "Circle") {
-//                o.radius = obsticle.bounds.r;
-//            } else if (obsticle.inner_type === "Graphic") {
-//                o.image_name = obsticle.image_name;
-//            } else {
-//                o.points = obsticle.bounds.points;
-//            }
-
     for (var i = 0; i < obsticles.length; i++) {
         var obsticle = obsticles[i];
         var layer = this.get_layer_by_name(obsticle.layer_name);
-        
-        
 
-        if (obsticle.object_type === "Polygon") {
-            var points = this.get_points(obsticle);
-            var polygon = new Polygon(new Vector(obsticle.pos.x, obsticle.pos.y), points);            
+
+        var o = this.unfold_object(obsticle,layer);
+        layer.add_child(o);
+        
+        if(obsticle.children){
             
-            var o = new Obsticle();
-            
-            o.bounds = polygon;            
-            o.layer = layer;
-            o.layer_name = layer.name;
-            o.inner_type = "Polygon";
-            o.z_index = obsticle.z_index;
-            o.c_index = obsticle.c_index;
-            o.tag = obsticle.tag;
-            o.name = obsticle.name;
-            o.type = obsticle.type;
-            
-            o.set_position(obsticle.pos.x, obsticle.pos.y);
-            
-            layer.add_child(o);
-            this.obsticles.push(o);
-            
-        }else if (obsticle.object_type === "Circle") {
-      
-            var radius = obsticle.radius;
-            var circle = new Circle(new Vector(obsticle.pos.x, obsticle.pos.y), radius);            
-            
-            var o = new Obsticle();
-            
-            o.bounds = circle;            
-            o.layer = layer;
-            o.layer_name = layer.name;
-            o.inner_type = "Circle";
-            o.z_index = obsticle.z_index;
-            o.c_index = obsticle.c_index;
-            o.tag = obsticle.tag;
-            o.name = obsticle.name;
-            o.type = obsticle.type;
-            
-            o.set_position(obsticle.pos.x, obsticle.pos.y);
-            
-            layer.add_child(o);
-            this.obsticles.push(o);
-            
-        }else if (obsticle.object_type === "Point") {
-      
-            var circle = new Circle(new Vector(obsticle.pos.x, obsticle.pos.y), 10);            
-            
-            var o = new Obsticle();
-            
-            o.bounds = circle;            
-            o.layer = layer;
-            o.layer_name = layer.name;
-            o.inner_type = "Point";
-            o.z_index = obsticle.z_index;
-            o.c_index = obsticle.c_index;
-            o.tag = obsticle.tag;
-            o.name = obsticle.name;
-            o.type = obsticle.type;
-            o.normal_color = "yellow";
-            
-            o.set_position(obsticle.pos.x, obsticle.pos.y);
-            
-            layer.add_child(o);
-            this.obsticles.push(o);
-            
-        }else if (obsticle.object_type === "Path") {
-            
-            var points = this.get_points(obsticle);
-            var o = new Path();
-            
-            for(var j=0;j<points.length;j++){
-                var p = points[j];
-                o.add_point(p);
+            for(var j=0;j<obsticle.children.length;j++){
+                var c = this.unfold_object(obsticle.children[j],layer);
+                o.add_child(c);
             }
-                        
-            o.layer = layer;
-            o.layer_name = layer.name;
-            o.inner_type = "Path";
-            o.z_index = obsticle.z_index;
-            o.c_index = obsticle.c_index;
-            o.tag = obsticle.tag;
-            o.name = obsticle.name;
-            o.type = obsticle.type;
-            
-            o.set_position(obsticle.pos.x, obsticle.pos.y);
-            
-            layer.add_child(o);
-            this.obsticles.push(o);
-            
-        }else if (obsticle.object_type === "Graphic") {
-            
-            var image_name = obsticle.image_name;
-            var o = new Graphic(image_name);
-                      
-            o.layer = layer;
-            o.layer_name = layer.name;
-            o.inner_type = "Graphic";
-            o.z_index = obsticle.z_index;
-            o.c_index = obsticle.c_index;
-            o.tag = obsticle.tag;
-            o.name = obsticle.name;
-            o.type = obsticle.type;
-            
-            o.set_position(obsticle.pos.x, obsticle.pos.y);
-            
-            layer.add_child(o);
-            this.obsticles.push(o);
-            this.graphics.push(o);
             
         }
 
 
-        
+
     }
 
 
 
+
+};
+
+GameScreen.prototype.unfold_object = function (obsticle,layer) {
+
+    if (obsticle.object_type === "Polygon") {
+        var points = this.get_points(obsticle);
+        var polygon = new Polygon(new Vector(obsticle.pos.x, obsticle.pos.y), points);
+
+        var o = new Obsticle();
+
+        o.bounds = polygon;
+        o.layer = layer;
+        o.layer_name = layer.name;
+        o.inner_type = "Polygon";
+        o.z_index = obsticle.z_index;
+        o.c_index = obsticle.c_index;
+        o.tag = obsticle.tag;
+        o.name = obsticle.name;
+        o.type = obsticle.type;
+
+        o.set_position(obsticle.pos.x, obsticle.pos.y);
+
+
+        this.obsticles.push(o);
+
+    } else if (obsticle.object_type === "Circle") {
+
+        var radius = obsticle.radius;
+        var circle = new Circle(new Vector(obsticle.pos.x, obsticle.pos.y), radius);
+
+        var o = new Obsticle();
+
+        o.bounds = circle;
+        o.layer = layer;
+        o.layer_name = layer.name;
+        o.inner_type = "Circle";
+        o.z_index = obsticle.z_index;
+        o.c_index = obsticle.c_index;
+        o.tag = obsticle.tag;
+        o.name = obsticle.name;
+        o.type = obsticle.type;
+
+        o.set_position(obsticle.pos.x, obsticle.pos.y);
+
+
+        this.obsticles.push(o);
+
+    } else if (obsticle.object_type === "Point") {
+
+        var circle = new Circle(new Vector(obsticle.pos.x, obsticle.pos.y), 10);
+
+        var o = new Obsticle();
+
+        o.bounds = circle;
+        o.layer = layer;
+        o.layer_name = layer.name;
+        o.inner_type = "Point";
+        o.z_index = obsticle.z_index;
+        o.c_index = obsticle.c_index;
+        o.tag = obsticle.tag;
+        o.name = obsticle.name;
+        o.type = obsticle.type;
+        o.normal_color = "yellow";
+
+        o.set_position(obsticle.pos.x, obsticle.pos.y);
+
+
+        this.obsticles.push(o);
+
+    } else if (obsticle.object_type === "Path") {
+
+        var points = this.get_points(obsticle);
+        var o = new Path();
+
+        for (var j = 0; j < points.length; j++) {
+            var p = points[j];
+            o.add_point(p);
+        }
+
+        o.layer = layer;
+        o.layer_name = layer.name;
+        o.inner_type = "Path";
+        o.z_index = obsticle.z_index;
+        o.c_index = obsticle.c_index;
+        o.tag = obsticle.tag;
+        o.name = obsticle.name;
+        o.type = obsticle.type;
+
+        o.set_position(obsticle.pos.x, obsticle.pos.y);
+
+
+        this.obsticles.push(o);
+
+    } else if (obsticle.object_type === "Graphic") {
+
+        var image_name = obsticle.image_name;
+        var o = new Graphic(image_name);
+
+        o.layer = layer;
+        o.layer_name = layer.name;
+        o.inner_type = "Graphic";
+        o.z_index = obsticle.z_index;
+        o.c_index = obsticle.c_index;
+        o.tag = obsticle.tag;
+        o.name = obsticle.name;
+        o.type = obsticle.type;
+
+        o.set_position(obsticle.pos.x, obsticle.pos.y);
+
+
+        this.obsticles.push(o);
+        this.graphics.push(o);
+
+    }
+
+    return o;
 
 };
 
