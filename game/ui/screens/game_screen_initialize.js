@@ -147,6 +147,14 @@ GameScreen.prototype.initialize = function () {
     this.snap_axis_button.on_mouse_up = GameScreen.prototype.on_snap_axis_button.bind(this);
     this.snap_axis_button.on_mouse_down = GameScreen.prototype.on_snap_axis_button_down.bind(this);
 
+    this.empty_project_button = new Button({image: Images.blank_black});
+    this.empty_project_button.text_color = "#ffffff";
+    this.empty_project_button.text = "Empty Stage";
+    this.empty_project_button.set_position(button_padding + button_distance * 9, 20);
+    this.empty_project_button.on_mouse_up = GameScreen.prototype.on_empty_project_button.bind(this);
+    this.empty_project_button.on_mouse_down = GameScreen.prototype.on_empty_project_button_down.bind(this);
+    
+
     this.mouse_position_label = new Label();
     this.mouse_position_label.set({text: "x:0  y:0", text_color: "#ffffff"});
     this.mouse_position_label.set_position(20, 60);
@@ -192,6 +200,7 @@ GameScreen.prototype.initialize = function () {
     this.add_child(this.mouse_position_label);
     this.add_child(this.undo_button);
     this.add_child(this.snap_axis_button);
+    this.add_child(this.empty_project_button);
 
     input_state.subscribe('*', this);
 

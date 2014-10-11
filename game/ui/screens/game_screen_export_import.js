@@ -102,6 +102,8 @@ GameScreen.prototype.make_obsticle = function (obsticle) {
 
 GameScreen.prototype.import = function (json) {
     var data = JSON.parse(json);
+    
+    this.clear_project();
 
     for (var i = 0; i < data.images.length; i++) {
 
@@ -122,6 +124,19 @@ GameScreen.prototype.import = function (json) {
         that.import_obsticles(data);
     });
 
+};
+
+GameScreen.prototype.clear_project = function(){
+    
+    for(var i=0;i<this.obsticles.length;i++){
+        var obsticle = this.obsticles[i];
+        obsticle.remove_from_parent();
+    }
+    
+    this.library.innerHTML = "";
+    this.obsticles = [];
+    this.graphics = [];    
+    
 };
 
 GameScreen.prototype.import_obsticles = function (data) {

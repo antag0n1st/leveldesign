@@ -90,6 +90,20 @@
         }
 
     };
+    GameScreen.prototype.on_empty_project_button = function (event) {
+        
+        if (confirm('Are you sure you want clear this project ?')) {
+           this.clear_project();
+        } else {
+           
+        }
+        
+        event.stop_propagation();
+    };
+
+    GameScreen.prototype.on_empty_project_button_down = function (event) {
+        event.stop_propagation();
+    };
 
     GameScreen.prototype.on_snap_axis_button_down = function (event) {
         event.stop_propagation();
@@ -109,19 +123,19 @@
 
             var obsticle = this.obsticles[i];
             if (obsticle.check(point)) {
-                if(obsticle.layer_name === this.active_layer.name){
+                if (obsticle.layer_name === this.active_layer.name) {
                     return obsticle;
-                }                
+                }
             }
         }
         return false;
 
     };
 
-    
+
 
     GameScreen.prototype.remove_obsticle = function (obsticle) {
-        
+
         var index = this.obsticles.indexOf(obsticle);
         if (index !== -1) {
             this.obsticles.splice(index, 1);
@@ -227,7 +241,7 @@
         context.lineWidth = lineWidth;
     };
 
-    
+
 
     GameScreen.prototype.draw_queue = function (context) {
 
@@ -293,7 +307,7 @@
     GameScreen.prototype.move_layers_to = function (point) {
 
         var pp = point.clone();
- 
+
         var d = this.active_layer.factor;
 
         for (var i = 0; i < this.layers.length; i++) {
@@ -316,6 +330,9 @@
 
         game.input.add(this.undo_button);
         game.input.add(this.snap_axis_button);
+        
+        game.input.add(this.empty_project_button);        
+        
     };
 
     GameScreen.prototype.hide = function () {
