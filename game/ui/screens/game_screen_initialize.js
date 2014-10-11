@@ -16,6 +16,7 @@ GameScreen.prototype.initialize = function () {
     
 
     this.inspector = document.getElementById('inspector');
+    this.layer_visibility = document.getElementById('visibility');
     this.layer_selector = document.getElementById('layers');
     this.name_label = document.getElementById('name');
     this.z_index_label = document.getElementById('z_index');
@@ -134,7 +135,7 @@ GameScreen.prototype.initialize = function () {
 
     this.undo_button = new Button({image: Images.blank_black});
     this.undo_button.text_color = "#ffffff";
-    this.undo_button.text = "Undo";
+    this.undo_button.text = "Remove Last";
     this.undo_button.set_position(button_padding + button_distance * 7, 20);
     this.undo_button.on_mouse_up = GameScreen.prototype.on_undo_button.bind(this);
     this.undo_button.on_mouse_down = GameScreen.prototype.on_undo_button_down.bind(this);

@@ -1,4 +1,8 @@
 GameScreen.prototype.on_mouse_move = function (event) {
+    
+    if(!this.active_layer.is_visible){ // do not interact with invisible layers
+        return;
+    }
 
     this.mouse_has_moved = true;
     event.point.x = Math.round(event.point.x);
@@ -132,6 +136,7 @@ GameScreen.prototype.on_mouse_move = function (event) {
                 this.queue_box.set_position(bb.pos.x, bb.pos.y);
                 this.active_layer.add_child(this.queue_box);
                 this.queue_box.layer_name = this.active_layer.name;
+                this.queue_box.layer = this.active_layer;
             }
 
 
@@ -154,6 +159,7 @@ GameScreen.prototype.on_mouse_move = function (event) {
             this.queue_circle.set_position(bb.pos.x, bb.pos.y);
             this.active_layer.add_child(this.queue_circle);
             this.queue_circle.layer_name = this.active_layer.name;
+            this.queue_circle.layer = this.active_layer;
 
         }
 

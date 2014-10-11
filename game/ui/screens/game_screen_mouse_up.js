@@ -1,4 +1,8 @@
 GameScreen.prototype.on_mouse_up = function (event) {
+    
+    if(!this.active_layer.is_visible){ // do not interact with invisible layers
+        return;
+    }
 
     event.point.x = Math.round(event.point.x);
     event.point.y = Math.round(event.point.y);
@@ -122,6 +126,7 @@ GameScreen.prototype.on_mouse_up = function (event) {
             this.obsticles.push(obsticle);
             this.active_layer.add_child(obsticle);
             obsticle.layer_name = this.active_layer.name;
+            obsticle.layer = this.active_layer;
         }
 
 
@@ -141,6 +146,7 @@ GameScreen.prototype.on_mouse_up = function (event) {
                 this.queue_path.add_point(pp);
                 this.active_layer.add_child(this.queue_path);
                 this.queue_path.layer_name = this.active_layer.name;
+                this.queue_path.layer = this.active_layer;
             } else {
                 this.queue_path.add_point(pp);
             }
@@ -191,6 +197,7 @@ GameScreen.prototype.on_mouse_up = function (event) {
             sprite.set_position(pp.x,pp.y);            
             this.active_layer.add_child(sprite);
             sprite.layer_name = this.active_layer.name;
+            sprite.layer = this.active_layer;
             this.obsticles.push(sprite);
             this.graphics.push(sprite);
         }else{

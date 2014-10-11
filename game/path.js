@@ -9,6 +9,7 @@
     Path.prototype.initialize = function(){        
         this.drawable_initialize();
         this.layer_name = "";
+        this.layer = null;
         this.type = 0;
         this.response = new Response();
         this.name = '';
@@ -82,10 +83,14 @@
     
     Path.prototype.check = function(point){
        
+       if(!this.layer.is_visible){
+            return false;
+        }
+       
        for(var i=0;i<this.circles.length;i++){
            var b = this.circles[i].bounds;
            if(SAT.pointInCircle(point,b)){
-               return true;
+               return this;
            }
        }
        return false;

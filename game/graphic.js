@@ -10,6 +10,7 @@
         this.sprite_initialize(image_name); // your image name
         
         this.layer_name = "";
+        this.layer = null;
         this.type = 0;
         this.response = new Response();
         this.name = '';
@@ -22,16 +23,20 @@
     Graphic.prototype.check = function (point) {
 
         var bounds = this.bounds;
+        
+        if(!this.layer.is_visible){
+            return false;
+        }
 
         if (bounds instanceof Circle) {
 
             if (SAT.pointInCircle(point, bounds)) {
-                return true;
+                return this;
             }
 
         } else if (bounds instanceof Polygon) {
             if (SAT.pointInPolygon(point, bounds)) {
-                return true;
+                return this;
             }
         }
 

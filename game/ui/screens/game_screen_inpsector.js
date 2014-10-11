@@ -2,8 +2,17 @@ GameScreen.prototype.on_layer_change = function(object){
     
     var value = object.value;
     this.active_layer = this.layers[value];
+    this.layer_visibility.checked = this.active_layer.is_visible;
     
 };
+
+GameScreen.prototype.on_layer_visibility_change = function(object){
+    
+    this.active_layer.is_visible = object.checked;
+    
+};
+
+
 
 GameScreen.prototype.on_name_change = function (object) {
 

@@ -130,6 +130,7 @@
         <script src="game/ui/screens/game_screen_mouse_down.js" type="text/javascript"></script>
         <script src="game/ui/screens/game_screen_mouse_move.js" type="text/javascript"></script>
         <script src="game/ui/screens/game_screen_mouse_up.js" type="text/javascript"></script>
+        <script src="game/ui/screens/game_screen_right_click.js" type="text/javascript"></script>
         <script src="game/ui/screens/game_screen_inpsector.js" type="text/javascript"></script>
         
 
@@ -252,6 +253,7 @@
                 width: 100%;
                 overflow: hidden;
                 text-align: right;
+                margin: 3px 0 3px 0;
             }
             .separator{
                 width: 210px;
@@ -284,7 +286,9 @@
         
           <div id="inspector" class="inspector">
             
-            <div class="i-w"><label>Layer: </label> <select onchange="game.navigator.current_screen.on_layer_change(this);" id="layers"></select> </div>
+            <div class="i-w">
+                <input checked="checked" id="visibility" type="checkbox" onchange="game.navigator.current_screen.on_layer_visibility_change(this);" />
+                <label>Layer: </label> <select style="width: 150px;" onchange="game.navigator.current_screen.on_layer_change(this);" id="layers"></select> </div>
                           
             <div class="separator"></div>
             
