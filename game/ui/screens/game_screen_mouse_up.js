@@ -99,7 +99,7 @@ GameScreen.prototype.on_mouse_up = function (event) {
             p.x = Math.round(p.x);
             p.y = Math.round(p.y);
             this.queue_circle.set_position(p.x,p.y);
-            
+            this.queue_circle.inner_type = "Circle";
             this.obsticles.push(this.queue_circle);
             this.queue_circle = null;
             this.selected_obsticle = null;
@@ -121,6 +121,7 @@ GameScreen.prototype.on_mouse_up = function (event) {
             var bb = new Circle(new V().copy(pp), 10);
             obsticle.bounds = bb;
             obsticle.normal_color = 'yellow';
+            obsticle.inner_type = "Point";
             bb.pos.x = Math.round(bb.pos.x);
             bb.pos.y = Math.round(bb.pos.y);
             obsticle.set_position(bb.pos.x, bb.pos.y);

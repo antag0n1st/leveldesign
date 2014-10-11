@@ -8,7 +8,6 @@
     GameScreen.prototype.screen_initialize = GameScreen.prototype.initialize;
 
 
-
     GameScreen.prototype.on_state = function (prev_state, current_state, data) {
         this.end_polygon();
         if (this.selected_image) {
@@ -16,9 +15,6 @@
             this.selected_image = null;
             this.deselect_images();
         }
-//        if(this.selected_graphics){
-//            this.deselect_graphics();
-//        }
     };
 
     GameScreen.prototype.deselect_buttons = function () {
@@ -85,11 +81,11 @@
 
         this.snap_axis_mode = this.snap_axis_mode % 3;
 
-        if (this.snap_axis_mode == 0) {
+        if (this.snap_axis_mode === 0) {
             this.snap_axis_button.text = 'Free';
-        } else if (this.snap_axis_mode == 1) {
+        } else if (this.snap_axis_mode === 1) {
             this.snap_axis_button.text = 'Snap X';
-        } else if (this.snap_axis_mode == 2) {
+        } else if (this.snap_axis_mode === 2) {
             this.snap_axis_button.text = 'Snap Y';
         }
 
@@ -125,6 +121,7 @@
     
 
     GameScreen.prototype.remove_obsticle = function (obsticle) {
+        
         var index = this.obsticles.indexOf(obsticle);
         if (index !== -1) {
             this.obsticles.splice(index, 1);
@@ -230,41 +227,7 @@
         context.lineWidth = lineWidth;
     };
 
-    GameScreen.prototype.export_polygons = function () {
-        this.end_polygon();
-        // console.log(JSON.stringify(this.obsticles));
-
-        var json = [];
-        var the_pos = this.active_layer.position.clone();
-        this.active_layer.set_position(0, 0);
-
-        var create_string = "";
-
-        for (var i = 0; i < this.obsticles.length; i++) {
-            var o = {};
-            o.pos = this.obsticles[i].bounds.pos;
-            o.points = this.obsticles[i].bounds.points;
-            json.push(o);
-
-            create_string += " var bounds = new Polygon(new Vector(" + 0 + "," + 0 + "), [";
-            for (var j = 0; j < o.points.length; j++) {
-                var pp = o.points[j];
-                create_string += " new Vector(" + pp.x + "," + pp.y + "),";
-            }
-            create_string = create_string.slice(0, -1);
-            create_string += " ]); ";
-            create_string += " bounds.translate(" + o.pos.x + "," + o.pos.y + "); ";
-
-        }
-
-        log(JSON.stringify(json));
-        log("");
-        log(create_string);
-
-
-        this.active_layer.set_position(the_pos.x, the_pos.y);
-
-    };
+    
 
     GameScreen.prototype.draw_queue = function (context) {
 
@@ -330,7 +293,7 @@
     GameScreen.prototype.move_layers_to = function (point) {
 
         var pp = point.clone();
-        // log(pp);
+ 
         var d = this.active_layer.factor;
 
         for (var i = 0; i < this.layers.length; i++) {

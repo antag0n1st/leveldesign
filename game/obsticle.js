@@ -16,6 +16,7 @@
         this.is_selected = false;
         this.normal_color = null;
         this.c_index = 0;
+        this.inner_type = "Polygon";
 
     };
 

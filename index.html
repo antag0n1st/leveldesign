@@ -133,6 +133,7 @@
         <script src="game/ui/screens/game_screen_mouse_up.js" type="text/javascript"></script>
         <script src="game/ui/screens/game_screen_right_click.js" type="text/javascript"></script>
         <script src="game/ui/screens/game_screen_inpsector.js" type="text/javascript"></script>
+        <script src="game/ui/screens/game_screen_export_import.js" type="text/javascript"></script>
         
 
         <style type="text/css">
@@ -270,7 +271,7 @@
                 padding: 5px;
                 background-color: #bdedf6;
                 margin: 5px 0px 5px 10px;
-                height: 300px;
+                height: 210px;
             }
             .library img{
                 float: right;
@@ -311,7 +312,10 @@
             
             <div class="separator"></div>
             
-            <div class="i-w"><input onclick="game.navigator.current_screen.export_polygons();" type="button" value="export" /></div>
+            <div class="i-w">
+                <input style="width:100px;" onclick="game.navigator.current_screen.export_polygons(this);" type="button" value="export" />
+                <input style="width:100px;" type="file" onchange="game.navigator.current_screen.load_file(this.files);" />
+            </div>
             
             <div class="separator"></div>
             

@@ -146,7 +146,7 @@ GameScreen.prototype.list_files = function (files) {
         element += " />";
 
         game.navigator.current_screen.library.innerHTML += element;
-        log(name);
+
     }
 
     ContentManager.download_resources(this.stage, function () {
