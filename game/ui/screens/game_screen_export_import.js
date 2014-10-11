@@ -114,7 +114,7 @@ GameScreen.prototype.import = function (json) {
         element += " onclick=\"game.navigator.current_screen.on_image_click(this,'" + img.key + "')\" ";
         element += " />";
 
-        game.navigator.current_screen.library.innerHTML += element;
+        this.library.innerHTML += element;
 
     }
     var that = this;

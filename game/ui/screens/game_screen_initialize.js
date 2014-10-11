@@ -262,9 +262,21 @@ GameScreen.prototype.initialize = function () {
 
     // START AUTO SAVE 
     
+    // try to read from the last state
+    
+    var saved_data = localStorage.getItem("level_editor_auto_save");
+    if(saved_data){
+        saved_data = JSON.parse(saved_data);
+        if(saved_data.length>1){
+            var data = saved_data.pop();
+            this.import(data);
+        }
+    }
+    
+    
     window.setInterval(function(){
         that.save_current_data();
-    },1000*60); // save every minute
+    },1000*30); // save every 30 seconds
 
 
 };
