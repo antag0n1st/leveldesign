@@ -37,11 +37,13 @@
         
         this.loading_width = this.loading_fr.width;
         
-        this.add_child(logo);
-        this.add_child(light1);
-        this.add_child(light2);
+        
+        
         this.add_child(loading_bg);
         this.add_child(this.loading_fr);
+        this.add_child(light1);
+        this.add_child(light2);
+        this.add_child(logo);
         
         this.rotate_light1 = new TweenRotate(light1,1,null,10000);
         this.rotate_light1.run();
