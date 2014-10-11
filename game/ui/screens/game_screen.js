@@ -104,6 +104,19 @@
     GameScreen.prototype.on_empty_project_button_down = function (event) {
         event.stop_propagation();
     };
+    
+    
+    GameScreen.prototype.on_save_button = function (event) {
+        this.save_current_data();
+        Popup.show("Data Saved",this);
+        event.stop_propagation();
+    };
+
+    GameScreen.prototype.on_save_button_down = function (event) {
+        event.stop_propagation();
+    };
+    
+    
 
     GameScreen.prototype.on_snap_axis_button_down = function (event) {
         event.stop_propagation();
@@ -331,7 +344,8 @@
         game.input.add(this.undo_button);
         game.input.add(this.snap_axis_button);
         
-        game.input.add(this.empty_project_button);        
+        game.input.add(this.empty_project_button);   
+        game.input.add(this.save_button);
         
     };
 

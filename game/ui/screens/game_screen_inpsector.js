@@ -123,11 +123,11 @@ GameScreen.prototype.list_files = function (files) {
 
     var base_url = window.document.URL.replace("index.html", "library") + '/';
 
-    files = [
-        {name: "attack-trail.png"},
-        {name: "child.png"},
-        {name: "face.png"}
-    ];
+//    files = [
+//        {name: "attack-trail.png"},
+//        {name: "child.png"},
+//        {name: "face.png"}
+//    ];
 
     for (var i = 0; i < files.length; i++) {
 

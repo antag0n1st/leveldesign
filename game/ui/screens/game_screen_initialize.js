@@ -150,9 +150,16 @@ GameScreen.prototype.initialize = function () {
     this.empty_project_button = new Button({image: Images.blank_black});
     this.empty_project_button.text_color = "#ffffff";
     this.empty_project_button.text = "Empty Stage";
-    this.empty_project_button.set_position(button_padding + button_distance * 9, 20);
+    this.empty_project_button.set_position(button_padding, 120);
     this.empty_project_button.on_mouse_up = GameScreen.prototype.on_empty_project_button.bind(this);
     this.empty_project_button.on_mouse_down = GameScreen.prototype.on_empty_project_button_down.bind(this);
+    
+    this.save_button = new Button({image: Images.blank_black});
+    this.save_button.text_color = "#ffffff";
+    this.save_button.text = "Save State";
+    this.save_button.set_position(button_padding, 160);
+    this.save_button.on_mouse_up = GameScreen.prototype.on_save_button.bind(this);
+    this.save_button.on_mouse_down = GameScreen.prototype.on_save_button_down.bind(this);
     
 
     this.mouse_position_label = new Label();
@@ -200,6 +207,8 @@ GameScreen.prototype.initialize = function () {
     this.add_child(this.mouse_position_label);
     this.add_child(this.undo_button);
     this.add_child(this.snap_axis_button);
+    
+    this.add_child(this.save_button);
     this.add_child(this.empty_project_button);
 
     input_state.subscribe('*', this);
