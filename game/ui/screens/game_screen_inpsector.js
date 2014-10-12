@@ -89,7 +89,14 @@ GameScreen.prototype.on_type_change = function (object) {
 GameScreen.prototype.on_set_parent = function () {
 
     if (this.selected_obsticle) {
-        input_state.set(States.main_states.set_parent);
+        
+        if(this.selected_obsticle instanceof Path){
+            Popup.show("can't add childs to path",this);
+        }else{
+            input_state.set(States.main_states.set_parent);
+        }
+        
+        
     }
 
 };

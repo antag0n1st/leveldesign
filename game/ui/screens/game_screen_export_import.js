@@ -46,12 +46,14 @@ GameScreen.prototype.get_export_data = function(){
             var o = this.make_obsticle(obsticle);
             o.children = [];
             obsticles.push(o);
-
-            for (var j = 0; j < obsticle.children.length; j++) {
-                var c = this.make_obsticle(obsticle.children[j]);
-                c.children = []; // just for consistency
-                o.children.push(c);
+            if(!(obsticle instanceof Path)){
+                for (var j = 0; j < obsticle.children.length; j++) {
+                    var c = this.make_obsticle(obsticle.children[j]);
+                    c.children = []; // just for consistency
+                    o.children.push(c);
+                }
             }
+            
 
         }
 
@@ -298,7 +300,6 @@ GameScreen.prototype.unfold_object = function (obsticle,layer) {
 
 GameScreen.prototype.get_points = function (object) {
     var points = [];
-
     for (var j = 0; j < object.points.length; j++) {
         var point = object.points[j];
         points.push(new Vector(point.x, point.y));
