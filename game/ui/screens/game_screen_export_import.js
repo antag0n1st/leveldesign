@@ -15,14 +15,16 @@ GameScreen.prototype.save_current_data = function(){
         if(saved_data.length > 10){
             saved_data.shift();
         }
-        saved_data.push(data);
-        
+        saved_data.push(JSON.parse(data));
+        localStorage.setItem("level_editor_auto_save",JSON.stringify(saved_data));
     }else{
         saved_data = [];
-        saved_data.push(data);        
+        data = JSON.parse(data);
+        saved_data.push(data);   
+        localStorage.setItem("level_editor_auto_save",JSON.stringify(saved_data));
     }
     
-    localStorage.setItem("level_editor_auto_save",JSON.stringify(saved_data));
+    
  
 };
 
@@ -73,7 +75,7 @@ GameScreen.prototype.get_export_data = function(){
 
     this.move_layers_to(the_pos);
     
-    return data = JSON.stringify(json);
+    return JSON.stringify(json);
 };
 
 GameScreen.prototype.make_obsticle = function (obsticle) {
@@ -102,8 +104,12 @@ GameScreen.prototype.make_obsticle = function (obsticle) {
 
 GameScreen.prototype.import = function (json) {
     var data = JSON.parse(json);
-    
+ 
     this.clear_project();
+   
+    var arr = [];
+    arr.push(data);
+    localStorage.setItem("level_editor_auto_save",JSON.stringify(arr));
 
     for (var i = 0; i < data.images.length; i++) {
 
@@ -135,7 +141,10 @@ GameScreen.prototype.clear_project = function(){
     
     this.library.innerHTML = "";
     this.obsticles = [];
-    this.graphics = [];    
+    this.graphics = [];   
+    
+    
+    localStorage.removeItem("level_editor_auto_save");
     
 };
 
@@ -289,10 +298,12 @@ GameScreen.prototype.unfold_object = function (obsticle,layer) {
 
 GameScreen.prototype.get_points = function (object) {
     var points = [];
+
     for (var j = 0; j < object.points.length; j++) {
         var point = object.points[j];
         points.push(new Vector(point.x, point.y));
     }
+    
     return points;
 };
 

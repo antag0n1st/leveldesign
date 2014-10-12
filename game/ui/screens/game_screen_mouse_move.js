@@ -82,7 +82,7 @@ GameScreen.prototype.on_mouse_move = function (event) {
                 } else {
                     h = w;
                 }
-                log(w + " : " + h);
+              
                 var tt = new V();
 
                 if (width >= 0 && height >= 0) {

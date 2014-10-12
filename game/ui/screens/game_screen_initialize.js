@@ -179,7 +179,7 @@ GameScreen.prototype.initialize = function () {
     this.current_mode = 'polygon';
     this.current_mode = this.modes[this.mode_count % this.modes.length];
     
-    
+    this.layers.length = ContentManager.layers.length;
     for(var i=ContentManager.layers.length-1;i>=0;i--){
         
         var l = ContentManager.layers[i];
@@ -187,7 +187,7 @@ GameScreen.prototype.initialize = function () {
         layer.factor = l.factor;
         layer.name = l.name;
         layer.set_size(Config.screen_width, Config.screen_height);
-        this.layers.push(layer);
+        this.layers[i] = layer;
         this.add_child(layer);
         
         if(i===0){
@@ -285,9 +285,9 @@ GameScreen.prototype.initialize = function () {
     var saved_data = localStorage.getItem("level_editor_auto_save");
     if(saved_data){
         saved_data = JSON.parse(saved_data);
-        if(saved_data.length>1){
-            var data = saved_data.pop();
-            this.import(data);
+        if(saved_data.length>=1){
+            var data = saved_data[saved_data.length-1]; 
+            this.import(JSON.stringify(data));
         }
     }
     
