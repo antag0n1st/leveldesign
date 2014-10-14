@@ -1,35 +1,35 @@
 GameScreen.prototype.export_polygons = function () {
 
-    var data = this.get_export_data();    
+    var data = this.get_export_data();
     window.open('data:application/json;charset=utf-8,' + escape(data), "_blank");
 
 };
 
-GameScreen.prototype.save_current_data = function(){
-    
+GameScreen.prototype.save_current_data = function () {
+
     var data = this.get_export_data();
-    
+
     var saved_data = localStorage.getItem("level_editor_auto_save");
-    if(saved_data){
+    if (saved_data) {
         saved_data = JSON.parse(saved_data);
-        if(saved_data.length > 10){
+        if (saved_data.length > 10) {
             saved_data.shift();
         }
         saved_data.push(JSON.parse(data));
-        localStorage.setItem("level_editor_auto_save",JSON.stringify(saved_data));
-    }else{
+        localStorage.setItem("level_editor_auto_save", JSON.stringify(saved_data));
+    } else {
         saved_data = [];
         data = JSON.parse(data);
-        saved_data.push(data);   
-        localStorage.setItem("level_editor_auto_save",JSON.stringify(saved_data));
+        saved_data.push(data);
+        localStorage.setItem("level_editor_auto_save", JSON.stringify(saved_data));
     }
-    
-    
- 
+
+
+
 };
 
-GameScreen.prototype.get_export_data = function(){
-    
+GameScreen.prototype.get_export_data = function () {
+
     this.end_polygon();
 
     var json = {}
@@ -46,14 +46,14 @@ GameScreen.prototype.get_export_data = function(){
             var o = this.make_obsticle(obsticle);
             o.children = [];
             obsticles.push(o);
-            if(!(obsticle instanceof Path)){
+            if (!(obsticle instanceof Path)) {
                 for (var j = 0; j < obsticle.children.length; j++) {
                     var c = this.make_obsticle(obsticle.children[j]);
                     c.children = []; // just for consistency
                     o.children.push(c);
                 }
             }
-            
+
 
         }
 
@@ -64,19 +64,35 @@ GameScreen.prototype.get_export_data = function(){
     json.types = ContentManager.object_types;
     json.images = [];
 
-    for (var image in Images) {
+    var images_to_exclued = [
+        "child_message.png",
+        "blank_black_highlighted.png",
+        "blank_black.png",
+        "loading_bg.png",
+        "loading_fr.png",
+        "logo.png",
+        "lights2.png",
+        "lights1.png"
+    ];
 
+    for (var image in Images) {
+        
         var im = Images[image];
-        json.images.push({
-            url: im.url,
-            file_name: im.file_name,
-            key: im.image_name
-        });
+        var idx = images_to_exclued.indexOf(im.file_name);
+        
+        if (idx === -1) {
+            json.images.push({
+                url: im.url,
+                file_name: im.file_name,
+                key: im.image_name
+            });
+        }
+
 
     }
 
     this.move_layers_to(the_pos);
-    
+
     return JSON.stringify(json);
 };
 
@@ -106,12 +122,12 @@ GameScreen.prototype.make_obsticle = function (obsticle) {
 
 GameScreen.prototype.import = function (json) {
     var data = JSON.parse(json);
- 
+
     this.clear_project();
-   
+
     var arr = [];
     arr.push(data);
-    localStorage.setItem("level_editor_auto_save",JSON.stringify(arr));
+    localStorage.setItem("level_editor_auto_save", JSON.stringify(arr));
 
     for (var i = 0; i < data.images.length; i++) {
 
@@ -134,20 +150,20 @@ GameScreen.prototype.import = function (json) {
 
 };
 
-GameScreen.prototype.clear_project = function(){
-    
-    for(var i=0;i<this.obsticles.length;i++){
+GameScreen.prototype.clear_project = function () {
+
+    for (var i = 0; i < this.obsticles.length; i++) {
         var obsticle = this.obsticles[i];
         obsticle.remove_from_parent();
     }
-    
+
     this.library.innerHTML = "";
     this.obsticles = [];
-    this.graphics = [];   
-    
-    
+    this.graphics = [];
+
+
     localStorage.removeItem("level_editor_auto_save");
-    
+
 };
 
 GameScreen.prototype.import_obsticles = function (data) {
@@ -160,16 +176,16 @@ GameScreen.prototype.import_obsticles = function (data) {
         var layer = this.get_layer_by_name(obsticle.layer_name);
 
 
-        var o = this.unfold_object(obsticle,layer);
+        var o = this.unfold_object(obsticle, layer);
         layer.add_child(o);
-        
-        if(obsticle.children){
-            
-            for(var j=0;j<obsticle.children.length;j++){
-                var c = this.unfold_object(obsticle.children[j],layer);
+
+        if (obsticle.children) {
+
+            for (var j = 0; j < obsticle.children.length; j++) {
+                var c = this.unfold_object(obsticle.children[j], layer);
                 o.add_child(c);
             }
-            
+
         }
 
 
@@ -181,7 +197,7 @@ GameScreen.prototype.import_obsticles = function (data) {
 
 };
 
-GameScreen.prototype.unfold_object = function (obsticle,layer) {
+GameScreen.prototype.unfold_object = function (obsticle, layer) {
 
     if (obsticle.object_type === "Polygon") {
         var points = this.get_points(obsticle);
@@ -304,7 +320,7 @@ GameScreen.prototype.get_points = function (object) {
         var point = object.points[j];
         points.push(new Vector(point.x, point.y));
     }
-    
+
     return points;
 };
 
