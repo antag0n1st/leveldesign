@@ -133,8 +133,10 @@ GameScreen.prototype.on_mouse_move = function (event) {
                 this.queue_box = new Obsticle();
                 var bb = new Box(bp, width, height).toPolygon();
                 this.queue_box.bounds = bb;
+                this.queue_box.set_size(width,height);
                 this.queue_box.set_position(bb.pos.x, bb.pos.y);
                 this.active_layer.add_child(this.queue_box);
+                this.queue_box.inner_type = "Box";
                 this.queue_box.layer_name = this.active_layer.name;
                 this.queue_box.layer = this.active_layer;
             }

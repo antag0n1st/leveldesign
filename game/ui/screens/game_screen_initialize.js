@@ -27,6 +27,16 @@ GameScreen.prototype.initialize = function () {
     this.y_position_label = document.getElementById('y_position');
     this.library = document.getElementById('library');
     
+    this.opacity_field = document.getElementById('opacity');
+    this.rotation_field = document.getElementById('rotation');
+    this.anchor_y_position = document.getElementById('anchor_y_position');
+    this.anchor_x_position = document.getElementById('anchor_x_position');    
+    this.set_child_button = document.getElementById('set_child_button');
+    
+    this.width_field = document.getElementById('width_field');
+    this.height_field = document.getElementById('height_field');
+    this.radius_field = document.getElementById('radius_field');    
+    
     this.inspector.style.height = (Config.screen_height-13)+"px";
 
     //////////////////////////////////////////////////////////////////
@@ -275,6 +285,8 @@ GameScreen.prototype.initialize = function () {
         opt.innerHTML = l.name;
         this.layer_selector.appendChild(opt);
     }
+    
+    this.set_all_properties('none');
 
 /////////////////////////////////////
 

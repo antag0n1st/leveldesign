@@ -12,6 +12,80 @@ GameScreen.prototype.on_layer_visibility_change = function(object){
     
 };
 
+GameScreen.prototype.on_opacity_change = function (object) {
+
+    var value = object.value;
+
+    if (this.selected_obsticle) {
+        this.selected_obsticle.set_alpha(value);
+    }
+
+};
+
+GameScreen.prototype.on_width_change = function (object) {
+
+    var value = object.value;
+
+    if (this.selected_obsticle) {        
+        this.selected_obsticle.set_size(value,this.selected_obsticle.height);
+    }
+
+};
+
+GameScreen.prototype.on_height_change = function (object) {
+
+    var value = object.value;
+
+    if (this.selected_obsticle) {
+        this.selected_obsticle.set_size(this.selected_obsticle.width,value);
+    }
+
+};
+
+GameScreen.prototype.on_radius_change = function (object) {
+
+    var value = object.value;
+
+    if (this.selected_obsticle) {
+        this.selected_obsticle.bounds.r = value;
+    }
+
+};
+
+
+
+GameScreen.prototype.on_rotation_change = function (object) {
+
+    var value = object.value;
+
+    if (this.selected_obsticle) {
+        this.selected_obsticle.rotate_to(Math.degrees_to_radians(value));
+    }
+
+};
+
+GameScreen.prototype.on_anchor_y_position_change = function (object) {
+
+    var value = object.value;
+
+    if (this.selected_obsticle) {
+        var x = this.selected_obsticle.get_anchor().x;
+        this.selected_obsticle.set_anchor(x,value);
+    }
+
+};
+
+GameScreen.prototype.on_anchor_x_position_change = function (object) {
+
+    var value = object.value;
+
+    if (this.selected_obsticle) {
+        var y = this.selected_obsticle.get_anchor().y;
+        this.selected_obsticle.set_anchor(value,y);
+    }
+
+};
+
 
 
 GameScreen.prototype.on_name_change = function (object) {
@@ -103,6 +177,9 @@ GameScreen.prototype.on_set_parent = function () {
 
 GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
 
+    this.set_all_properties('block');
+    this.remove_properties_for_obsticle(obsticle);
+
     if (obsticle) {
 
         this.name_label.value = obsticle.name;
@@ -112,6 +189,18 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
         this.type_selector.selectedIndex = obsticle.type;
         this.x_position_label.value = obsticle.get_position().x;
         this.y_position_label.value = obsticle.get_position().y;
+        
+        this.opacity_field.value = obsticle.alpha;
+        this.rotation_field.value = Math.radians_to_degrees(obsticle.angle);
+        this.anchor_x_position.value = obsticle.get_anchor().x;
+        this.anchor_y_position.value = obsticle.get_anchor().y;
+        
+        this.width_field.value = obsticle.width;
+        this.height_field.value = obsticle.height;
+        
+        if(obsticle.inner_type === "Circle"){
+            this.radius_field.value = obsticle.bounds.r;
+        }
 
     } else {
 
@@ -122,8 +211,91 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
         this.type_selector.selectedIndex = 0;
         this.x_position_label.value = '';
         this.y_position_label.value = '';
+        this.opacity_field.value = "";
+        this.rotation_field.value = "";
+        this.anchor_x_position.value = "";
+        this.anchor_y_position.value = "";
+        this.width_field.value = "";
+        this.height_field.value = "";
+        this.radius_field.value = "";
     }
 
+};
+
+GameScreen.prototype.set_all_properties = function(value){
+        this.z_index_label.parentElement.style.display = value;
+        this.c_index_label.parentElement.style.display = value;
+        this.tag_label.parentElement.style.display = value;
+        this.type_selector.parentElement.style.display = value;
+        this.opacity_field.parentElement.style.display = value;
+        this.rotation_field.parentElement.style.display = value;
+        this.anchor_x_position.parentElement.style.display = value;
+        this.anchor_y_position.parentElement.style.display = value;  
+        this.set_child_button.parentElement.style.display = value;
+        this.radius_field.parentElement.style.display = value;
+        this.width_field.parentElement.style.display = value;
+        this.height_field.parentElement.style.display = value;
+};
+
+GameScreen.prototype.remove_properties_for_obsticle = function(obsticle){
+    
+    if(!obsticle){
+        this.set_all_properties('none');
+        return;
+    }
+    
+    if(obsticle.inner_type === "Circle"){
+        this.anchor_y_position.parentElement.style.display = 'none';
+        this.anchor_x_position.parentElement.style.display = 'none';
+        this.rotation_field.parentElement.style.display = 'none';
+        this.width_field.parentElement.style.display = 'none';
+        this.height_field.parentElement.style.display = 'none';
+        this.opacity_field.parentElement.style.display = 'none';
+    }else if(obsticle.inner_type === "Box"){
+        this.radius_field.parentElement.style.display = 'none';
+        this.opacity_field.parentElement.style.display = 'none';
+    }else if(obsticle.inner_type === "Polygon"){
+        this.anchor_y_position.parentElement.style.display = 'none';
+        this.anchor_x_position.parentElement.style.display = 'none';
+        //this.rotation_field.parentElement.style.display = 'none';
+        this.opacity_field.parentElement.style.display = 'none';
+        this.width_field.parentElement.style.display = 'none';
+        this.height_field.parentElement.style.display = 'none';
+        this.radius_field.parentElement.style.display = 'none';
+    }else if(obsticle.inner_type === "Point"){
+        this.anchor_y_position.parentElement.style.display = 'none';
+        this.anchor_x_position.parentElement.style.display = 'none';
+        this.rotation_field.parentElement.style.display = 'none';
+        this.opacity_field.parentElement.style.display = 'none';
+        this.width_field.parentElement.style.display = 'none';
+        this.height_field.parentElement.style.display = 'none';
+        this.radius_field.parentElement.style.display = 'none';
+    }else if(obsticle.inner_type === "Path"){
+        this.anchor_y_position.parentElement.style.display = 'none';
+        this.anchor_x_position.parentElement.style.display = 'none';
+        this.rotation_field.parentElement.style.display = 'none';
+        this.opacity_field.parentElement.style.display = 'none';
+        this.width_field.parentElement.style.display = 'none';
+        this.height_field.parentElement.style.display = 'none';
+        this.radius_field.parentElement.style.display = 'none';
+    }else if(obsticle.inner_type === "Graphic"){
+        this.radius_field.parentElement.style.display = 'none';
+        this.width_field.parentElement.style.display = 'none';
+        this.height_field.parentElement.style.display = 'none';
+       // this.opacity_field.parentElement.style.display = 'none';
+    }
+    
+//        this.name_label.parentElement.style.display = 'block';
+//        this.z_index_label.parentElement.style.display = 'block';
+//        this.c_index_label.parentElement.style.display = 'block';
+//        this.tag_label.parentElement.style.display = 'block';
+//        this.type_selector.parentElement.style.display = 'block';
+//        this.x_position_label.parentElement.style.display = 'block';
+//        this.y_position_label.parentElement.style.display = 'block';
+//        this.opacity_field.parentElement.style.display = 'block';
+//        this.rotation_field.parentElement.style.display = 'block';
+//        this.anchor_x_position.parentElement.style.display = 'block';
+//        this.anchor_y_position.parentElement.style.display = 'block';    
 };
 
 GameScreen.prototype.list_files = function (files) {

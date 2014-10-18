@@ -32,7 +32,7 @@ GameScreen.prototype.get_export_data = function () {
 
     this.end_polygon();
 
-    var json = {}
+    var json = {};
     var obsticles = [];
     var the_pos = this.active_layer.get_position();
 
@@ -76,10 +76,10 @@ GameScreen.prototype.get_export_data = function () {
     ];
 
     for (var image in Images) {
-        
+
         var im = Images[image];
         var idx = images_to_exclued.indexOf(im.file_name);
-        
+
         if (idx === -1) {
             json.images.push({
                 url: im.url,
@@ -105,7 +105,13 @@ GameScreen.prototype.make_obsticle = function (obsticle) {
     o.c_index = obsticle.c_index;
     o.tag = obsticle.tag;
     o.name = obsticle.name;
-    o.type = obsticle.type;
+    o.angle = obsticle.angle;
+    o.alpha = obsticle.alpha;
+    o.anchor_x = obsticle.get_anchor().x;
+    o.anchor_y = obsticle.get_anchor().y;
+    o.type = Math.round(obsticle.type);
+    o.width = obsticle.width;
+    o.height = obsticle.height;
 
     if (obsticle.inner_type === "Path") {
         o.points = obsticle.points;
@@ -201,24 +207,12 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
 
     if (obsticle.object_type === "Polygon") {
         var points = this.get_points(obsticle);
-        var polygon = new Polygon(new Vector(obsticle.pos.x, obsticle.pos.y), points);
+        var polygon = new Polygon(new Vector(), points);
 
         var o = new Obsticle();
-
         o.bounds = polygon;
-        o.layer = layer;
-        o.layer_name = layer.name;
         o.inner_type = "Polygon";
-        o.z_index = obsticle.z_index;
-        o.c_index = obsticle.c_index;
-        o.tag = obsticle.tag;
-        o.name = obsticle.name;
-        o.type = obsticle.type;
-
-        o.set_position(obsticle.pos.x, obsticle.pos.y);
-
-
-        this.obsticles.push(o);
+        o.angle = obsticle.angle;
 
     } else if (obsticle.object_type === "Circle") {
 
@@ -226,21 +220,9 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
         var circle = new Circle(new Vector(obsticle.pos.x, obsticle.pos.y), radius);
 
         var o = new Obsticle();
-
         o.bounds = circle;
-        o.layer = layer;
-        o.layer_name = layer.name;
         o.inner_type = "Circle";
-        o.z_index = obsticle.z_index;
-        o.c_index = obsticle.c_index;
-        o.tag = obsticle.tag;
-        o.name = obsticle.name;
-        o.type = obsticle.type;
 
-        o.set_position(obsticle.pos.x, obsticle.pos.y);
-
-
-        this.obsticles.push(o);
 
     } else if (obsticle.object_type === "Point") {
 
@@ -249,20 +231,9 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
         var o = new Obsticle();
 
         o.bounds = circle;
-        o.layer = layer;
-        o.layer_name = layer.name;
         o.inner_type = "Point";
-        o.z_index = obsticle.z_index;
-        o.c_index = obsticle.c_index;
-        o.tag = obsticle.tag;
-        o.name = obsticle.name;
-        o.type = obsticle.type;
         o.normal_color = "yellow";
 
-        o.set_position(obsticle.pos.x, obsticle.pos.y);
-
-
-        this.obsticles.push(o);
 
     } else if (obsticle.object_type === "Path") {
 
@@ -274,41 +245,48 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
             o.add_point(p);
         }
 
-        o.layer = layer;
-        o.layer_name = layer.name;
         o.inner_type = "Path";
-        o.z_index = obsticle.z_index;
-        o.c_index = obsticle.c_index;
-        o.tag = obsticle.tag;
-        o.name = obsticle.name;
-        o.type = obsticle.type;
 
-        o.set_position(obsticle.pos.x, obsticle.pos.y);
-
-
-        this.obsticles.push(o);
 
     } else if (obsticle.object_type === "Graphic") {
 
         var image_name = obsticle.image_name;
         var o = new Graphic(image_name);
 
-        o.layer = layer;
-        o.layer_name = layer.name;
         o.inner_type = "Graphic";
-        o.z_index = obsticle.z_index;
-        o.c_index = obsticle.c_index;
-        o.tag = obsticle.tag;
-        o.name = obsticle.name;
-        o.type = obsticle.type;
-
-        o.set_position(obsticle.pos.x, obsticle.pos.y);
-
-
-        this.obsticles.push(o);
         this.graphics.push(o);
 
+    }else if (obsticle.object_type === "Box") {
+
+        var points = this.get_points(obsticle);
+        var polygon = new Polygon(new Vector(obsticle.pos.x, obsticle.pos.y), points);
+
+        var o = new Obsticle();
+        o.bounds = polygon;
+        o.inner_type = "Box";
+
     }
+
+    o.layer = layer;
+    o.layer_name = layer.name;
+    o.z_index = obsticle.z_index;
+    o.c_index = obsticle.c_index;
+    o.tag = obsticle.tag;
+    o.name = obsticle.name;
+    o.type = obsticle.type;
+    if (obsticle.width || obsticle.height) {
+        o.set_size(obsticle.width, obsticle.height);
+    }
+    if (obsticle.anchor_x || obsticle.anchor_y) {
+        o.set_anchor(obsticle.anchor_x, obsticle.anchor_y);
+    }
+    
+    o.set_alpha(obsticle.alpha);
+    o.rotate_to(obsticle.angle);
+    o.set_position(obsticle.pos.x, obsticle.pos.y);
+
+
+    this.obsticles.push(o);
 
     return o;
 
