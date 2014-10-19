@@ -1,7 +1,7 @@
 GameScreen.prototype.on_layer_change = function(object){
     
     var value = object.value;
-    this.active_layer = this.layers[value];
+    this.active_layer = this.get_layer_by_name(value);
     this.layer_visibility.checked = this.active_layer.is_visible;
     
 };
@@ -206,7 +206,14 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
         this.z_index_label.value = obsticle.z_index;
         this.c_index_label.value = obsticle.c_index;
         this.tag_label.value = obsticle.tag;
-        this.type_selector.selectedIndex = obsticle.type;
+        
+        var ind = ContentManager.object_types.indexOf(obsticle.type);
+        if(ind !== -1){
+            this.type_selector.selectedIndex = ind;
+        }else{
+            this.type_selector.selectedIndex = -1;
+        }
+        
         this.x_position_label.value = obsticle.get_position().x;
         this.y_position_label.value = obsticle.get_position().y;
         
@@ -407,4 +414,25 @@ GameScreen.prototype.deselect_images = function () {
         this.selected_image = null;
     }
 
+};
+
+GameScreen.prototype.on_mouse_wheel = function(event,increment,fn){
+    
+    
+    var val = Math.abs(event.target.value);
+    if(val < 1){
+        increment = 0.1;
+    }
+    
+    if(event.deltaY < 0){
+        val = event.target.value/1.0 + increment;
+    }else{
+        val = event.target.value/1.0 - increment;
+    }
+    
+    val = Math.round_decimal(val,2);
+    
+    event.target.value = val;
+    
+    this[fn](event.target);
 };

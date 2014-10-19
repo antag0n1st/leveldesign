@@ -109,7 +109,7 @@ GameScreen.prototype.make_obsticle = function (obsticle) {
     o.alpha = obsticle.alpha;
     o.anchor_x = obsticle.get_anchor().x;
     o.anchor_y = obsticle.get_anchor().y;
-    o.type = Math.round(obsticle.type);
+    o.type = obsticle.type;
     o.width = obsticle.width;
     o.height = obsticle.height;
     o.scale_x = obsticle.scale_x;
@@ -175,7 +175,7 @@ GameScreen.prototype.clear_project = function () {
 };
 
 GameScreen.prototype.import_obsticles = function (data) {
-    var types = data.types;
+   
     var obsticles = data.obsticles;
 
 

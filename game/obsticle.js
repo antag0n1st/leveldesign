@@ -11,7 +11,7 @@
         this.sprite_initialize();
         this.layer_name = "";
         this.layer = null;
-        this.type = 0;
+        this.type = "";
         this.response = new Response();
         this.name = '';
         this.is_selected = false;

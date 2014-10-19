@@ -13,34 +13,86 @@ GameScreen.prototype.initialize = function () {
     this.selected_image = null;
     this.is_shift_pressed = false;
     this.is_space_pressed = false;
-    
+
 
     this.inspector = document.getElementById('inspector');
     this.layer_visibility = document.getElementById('visibility');
     this.layer_selector = document.getElementById('layers');
     this.name_label = document.getElementById('name');
+
+    this.x_position_label = document.getElementById('x_position');
+    this.y_position_label = document.getElementById('y_position');
+
     this.z_index_label = document.getElementById('z_index');
     this.c_index_label = document.getElementById('c_index');
     this.tag_label = document.getElementById('tag');
     this.type_selector = document.getElementById('type');
-    this.x_position_label = document.getElementById('x_position');
-    this.y_position_label = document.getElementById('y_position');
+
     this.library = document.getElementById('library');
-    
+
     this.opacity_field = document.getElementById('opacity');
     this.rotation_field = document.getElementById('rotation');
     this.anchor_y_position = document.getElementById('anchor_y_position');
-    this.anchor_x_position = document.getElementById('anchor_x_position');    
+    this.anchor_x_position = document.getElementById('anchor_x_position');
     this.set_child_button = document.getElementById('set_child_button');
-    
+
     this.width_field = document.getElementById('width_field');
     this.height_field = document.getElementById('height_field');
-    this.radius_field = document.getElementById('radius_field');    
-    
+    this.radius_field = document.getElementById('radius_field');
+
     this.scale_x_field = document.getElementById('scale_x');
-    this.scale_y_field = document.getElementById('scale_y'); 
+    this.scale_y_field = document.getElementById('scale_y');
+
+    this.inspector.style.height = (Config.screen_height - 13) + "px";
+
+
+    //////////////////////////////////////
+
+    // bind mouse wheel events
+
+    this.x_position_label.addEventListener("mousewheel", function (event) {
+        that.on_mouse_wheel(event, 1, 'on_x_position_change');
+    });
+
+    this.y_position_label.addEventListener("mousewheel", function (event) {
+        that.on_mouse_wheel(event, 1, 'on_y_position_change');
+    });
+
+    this.opacity_field.addEventListener("mousewheel", function (event) {
+        that.on_mouse_wheel(event, 0.1, 'on_opacity_change');
+    });
+
+    this.rotation_field.addEventListener("mousewheel", function (event) {
+        that.on_mouse_wheel(event, 1, 'on_rotation_change');
+    });
+
+    this.anchor_y_position.addEventListener("mousewheel", function (event) {
+        that.on_mouse_wheel(event, 0.1, 'on_anchor_y_position_change');
+    });
+
+    this.anchor_x_position.addEventListener("mousewheel", function (event) {
+        that.on_mouse_wheel(event, 0.1, 'on_anchor_x_position_change');
+    });
+
+    this.width_field.addEventListener("mousewheel", function (event) {
+        that.on_mouse_wheel(event, 1, 'on_width_change');
+    });
+
+    this.height_field.addEventListener("mousewheel", function (event) {
+        that.on_mouse_wheel(event, 1, 'on_height_change');
+    });
+
+    this.radius_field.addEventListener("mousewheel", function (event) {
+        that.on_mouse_wheel(event, 1, 'on_radius_change');
+    });
     
-    this.inspector.style.height = (Config.screen_height-13)+"px";
+    this.scale_x_field.addEventListener("mousewheel", function (event) {
+        that.on_mouse_wheel(event,0.1, 'on_scale_x_change');
+    });
+    
+    this.scale_y_field.addEventListener("mousewheel", function (event) {
+        that.on_mouse_wheel(event,0.1, 'on_scale_y_change');
+    });
 
     //////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////
@@ -166,14 +218,14 @@ GameScreen.prototype.initialize = function () {
     this.empty_project_button.set_position(button_padding, 120);
     this.empty_project_button.on_mouse_up = GameScreen.prototype.on_empty_project_button.bind(this);
     this.empty_project_button.on_mouse_down = GameScreen.prototype.on_empty_project_button_down.bind(this);
-    
+
     this.save_button = new Button({image: Images.blank_black});
     this.save_button.text_color = "#ffffff";
     this.save_button.text = "Save State";
     this.save_button.set_position(button_padding, 160);
     this.save_button.on_mouse_up = GameScreen.prototype.on_save_button.bind(this);
     this.save_button.on_mouse_down = GameScreen.prototype.on_save_button_down.bind(this);
-    
+
 
     this.mouse_position_label = new Label();
     this.mouse_position_label.set({text: "x:0  y:0", text_color: "#ffffff"});
@@ -187,14 +239,14 @@ GameScreen.prototype.initialize = function () {
         States.main_states.path_draw,
         States.main_states.graphics_draw
     ];
-    
+
     this.mode_count = 0;
     this.current_mode = 'polygon';
     this.current_mode = this.modes[this.mode_count % this.modes.length];
-    
+
     this.layers.length = ContentManager.layers.length;
-    for(var i=ContentManager.layers.length-1;i>=0;i--){
-        
+    for (var i = ContentManager.layers.length - 1; i >= 0; i--) {
+
         var l = ContentManager.layers[i];
         var layer = new Layer();
         layer.factor = l.factor;
@@ -202,12 +254,12 @@ GameScreen.prototype.initialize = function () {
         layer.set_size(Config.screen_width, Config.screen_height);
         this.layers[i] = layer;
         this.add_child(layer);
-        
-        if(i===0){
+
+        if (i === 0) {
             this.active_layer = layer;
         }
     }
-    
+
     this.move_layers_to(new V(Config.screen_width / 2, Config.screen_height / 2));
 
     this.add_child(this.polygon_button);
@@ -220,7 +272,7 @@ GameScreen.prototype.initialize = function () {
     this.add_child(this.mouse_position_label);
     this.add_child(this.undo_button);
     this.add_child(this.snap_axis_button);
-    
+
     this.add_child(this.save_button);
     this.add_child(this.empty_project_button);
 
@@ -228,7 +280,7 @@ GameScreen.prototype.initialize = function () {
 
     input_state.set(States.main_states.polygon_draw);
 
-    
+
     var that = this;
 
     this.kibo = new Kibo();
@@ -242,8 +294,8 @@ GameScreen.prototype.initialize = function () {
         that.is_space_pressed = false;
         game.stage.context.canvas.style.cursor = 'default';
     });
-    
-    
+
+
     this.kibo.down('shift', function () {
         that.is_shift_pressed = true;
     });
@@ -251,19 +303,19 @@ GameScreen.prototype.initialize = function () {
     this.kibo.up('shift', function () {
         that.is_shift_pressed = false;
     });
-    
+
     this.kibo.down('right', function () {
         that.move_right();
     });
-    
+
     this.kibo.down('down', function () {
         that.move_down();
     });
-    
+
     this.kibo.down('left', function () {
         that.move_left();
     });
-    
+
     this.kibo.down('up', function () {
         that.move_up();
     });
@@ -274,42 +326,42 @@ GameScreen.prototype.initialize = function () {
         var type = ContentManager.object_types[i];
 
         var opt = document.createElement('option');
-        opt.value = i;
+        opt.value = type;
         opt.innerHTML = type;
         this.type_selector.appendChild(opt);
     }
-    
+
     for (var i = 0; i < ContentManager.layers.length; i++) {
 
         var l = ContentManager.layers[i];
 
         var opt = document.createElement('option');
-        opt.value = i;
+        opt.value = l.name;
         opt.innerHTML = l.name;
         this.layer_selector.appendChild(opt);
     }
-    
+
     this.set_all_properties('none');
 
 /////////////////////////////////////
 
     // START AUTO SAVE 
-    
+
     // try to read from the last state
-    
+
     var saved_data = localStorage.getItem("level_editor_auto_save");
-    if(saved_data){
+    if (saved_data) {
         saved_data = JSON.parse(saved_data);
-        if(saved_data.length>=1){
-            var data = saved_data[saved_data.length-1]; 
+        if (saved_data.length >= 1) {
+            var data = saved_data[saved_data.length - 1];
             this.import(JSON.stringify(data));
         }
     }
-    
-    
-    window.setInterval(function(){
+
+
+    window.setInterval(function () {
         that.save_current_data();
-    },1000*30); // save every 30 seconds
+    }, 1000 * 30); // save every 30 seconds
 
 
 };

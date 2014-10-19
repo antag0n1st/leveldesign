@@ -10,7 +10,7 @@
         this.drawable_initialize();
         this.layer_name = "";
         this.layer = null;
-        this.type = 0;
+        this.type = "";
         this.response = new Response();
         this.name = '';
         this._is_selected = false;
