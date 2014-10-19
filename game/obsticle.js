@@ -63,6 +63,8 @@
         
         Sprite.prototype.draw.call(this,context);
         
+        this.debug_bounds(context);
+        
         var fillStyle = context.fillStyle;
         var alpha = context.globalAlpha;
 
@@ -74,7 +76,7 @@
         }
 
 
-        this.debug_bounds(context);
+        
 
         if (this.is_selected || this.normal_color) {
             context.globalAlpha = 0.3;

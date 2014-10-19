@@ -279,6 +279,10 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
     o.tag = obsticle.tag;
     o.name = obsticle.name;
     o.type = obsticle.type;
+    var _type = this.find_type_by_name(obsticle.type);
+    if(_type){
+        o.normal_color = _type.color;
+    }
     if (obsticle.width || obsticle.height) {
         o.set_size(obsticle.width, obsticle.height);
     }

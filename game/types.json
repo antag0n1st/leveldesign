@@ -1,8 +1,8 @@
 [
-    "Default",
-    "Pushable Object",
-    "Solid Platform",
-    "Moving Platform",
-    "down-up Platform",    
-    "Enemy"
+    {"name":"Default","color":"#654872"},
+    {"name":"Pushable Object","color":"#126871"},
+    {"name":"Solid Platform","color":"#984320"},
+    {"name":"Moving Platform","color":"#001482"},
+    {"name":"down-up Platform","color":"#aa4870"},
+    {"name":"Enemy","color":"#123456"}
 ]

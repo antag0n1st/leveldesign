@@ -326,8 +326,8 @@ GameScreen.prototype.initialize = function () {
         var type = ContentManager.object_types[i];
 
         var opt = document.createElement('option');
-        opt.value = type;
-        opt.innerHTML = type;
+        opt.value = type.name;
+        opt.innerHTML = type.name;
         this.type_selector.appendChild(opt);
     }
 

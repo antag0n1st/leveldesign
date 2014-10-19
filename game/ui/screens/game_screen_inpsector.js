@@ -175,7 +175,11 @@ GameScreen.prototype.on_type_change = function (object) {
     var value = object.value;
 
     if (this.selected_obsticle) {
-        this.selected_obsticle.type = value;
+        
+        var type = this.find_type_by_name(value);
+        
+        this.selected_obsticle.type = type.name;
+        this.selected_obsticle.normal_color = type.color;
     }
 
 };
@@ -195,6 +199,15 @@ GameScreen.prototype.on_set_parent = function () {
 
 };
 
+GameScreen.prototype.find_type_by_name = function(name){
+    for(var i=0;i<ContentManager.object_types.length;i++){
+        var type = ContentManager.object_types[i];
+        if(type.name === name){
+            return type;
+        }
+    }
+};
+
 GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
 
     this.set_all_properties('block');
@@ -207,12 +220,28 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
         this.c_index_label.value = obsticle.c_index;
         this.tag_label.value = obsticle.tag;
         
-        var ind = ContentManager.object_types.indexOf(obsticle.type);
-        if(ind !== -1){
-            this.type_selector.selectedIndex = ind;
+        var object_type = this.find_type_by_name(obsticle.type);
+        
+        if(object_type){
+            
+            for(var i=0;i<ContentManager.object_types.length;i++){
+                var type = ContentManager.object_types[i];
+                if(type.name === obsticle.type){
+                    this.type_selector.selectedIndex = i;
+                    break;
+                }
+            }
+            
         }else{
             this.type_selector.selectedIndex = -1;
         }
+        
+//        var ind = ContentManager.object_types.indexOf(obsticle.type);
+//        if(ind !== -1){
+//            this.type_selector.selectedIndex = ind;
+//        }else{
+//            this.type_selector.selectedIndex = -1;
+//        }
         
         this.x_position_label.value = obsticle.get_position().x;
         this.y_position_label.value = obsticle.get_position().y;

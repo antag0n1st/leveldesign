@@ -15,7 +15,7 @@
         this.name = '';
         this._is_selected = false;
         this.c_index = 0;
-        this.normal_color = null;
+        this.normal_color = "#000000";
         this.inner_type = "Path";
         
         this.points = [];
@@ -122,7 +122,7 @@
         if(this.is_selected){
             context.strokeStyle = "blue";
         }else{
-            context.strokeStyle = "#fcff00";
+            context.strokeStyle = this.normal_color;
         }
         
         context.globalAlpha = 0.3;
