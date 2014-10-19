@@ -112,6 +112,8 @@ GameScreen.prototype.make_obsticle = function (obsticle) {
     o.type = Math.round(obsticle.type);
     o.width = obsticle.width;
     o.height = obsticle.height;
+    o.scale_x = obsticle.scale_x;
+    o.scale_y = obsticle.scale_y;
 
     if (obsticle.inner_type === "Path") {
         o.points = obsticle.points;
@@ -254,6 +256,9 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
         var o = new Graphic(image_name);
 
         o.inner_type = "Graphic";
+        o.set_scale_x(obsticle.scale_x);
+        o.set_scale_y(obsticle.scale_y);
+        
         this.graphics.push(o);
 
     }else if (obsticle.object_type === "Box") {

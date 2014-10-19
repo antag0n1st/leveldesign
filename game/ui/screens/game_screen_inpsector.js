@@ -22,6 +22,26 @@ GameScreen.prototype.on_opacity_change = function (object) {
 
 };
 
+GameScreen.prototype.on_scale_x_change = function (object) {
+
+    var value = object.value;
+
+    if (this.selected_obsticle) {
+        this.selected_obsticle.set_scale_x(value);
+    }
+
+};
+
+GameScreen.prototype.on_scale_y_change = function (object) {
+
+    var value = object.value;
+
+    if (this.selected_obsticle) {
+        this.selected_obsticle.set_scale_y(value);
+    }
+
+};
+
 GameScreen.prototype.on_width_change = function (object) {
 
     var value = object.value;
@@ -198,6 +218,9 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
         this.width_field.value = obsticle.width;
         this.height_field.value = obsticle.height;
         
+        this.scale_x_field.value = obsticle.scale_x;
+        this.scale_y_field.value = obsticle.scale_y;
+        
         if(obsticle.inner_type === "Circle"){
             this.radius_field.value = obsticle.bounds.r;
         }
@@ -218,6 +241,8 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
         this.width_field.value = "";
         this.height_field.value = "";
         this.radius_field.value = "";
+        this.scale_x_field.value = "";
+        this.scale_y_field.value = "";
     }
 
 };
@@ -235,6 +260,8 @@ GameScreen.prototype.set_all_properties = function(value){
         this.radius_field.parentElement.style.display = value;
         this.width_field.parentElement.style.display = value;
         this.height_field.parentElement.style.display = value;
+        this.scale_x_field.parentElement.style.display = value;
+        this.scale_y_field.parentElement.style.display = value;
 };
 
 GameScreen.prototype.remove_properties_for_obsticle = function(obsticle){
@@ -251,17 +278,23 @@ GameScreen.prototype.remove_properties_for_obsticle = function(obsticle){
         this.width_field.parentElement.style.display = 'none';
         this.height_field.parentElement.style.display = 'none';
         this.opacity_field.parentElement.style.display = 'none';
+        this.scale_x_field.parentElement.style.display = 'none';
+        this.scale_y_field.parentElement.style.display = 'none';
+        
     }else if(obsticle.inner_type === "Box"){
         this.radius_field.parentElement.style.display = 'none';
         this.opacity_field.parentElement.style.display = 'none';
+        this.scale_x_field.parentElement.style.display = 'none';
+        this.scale_y_field.parentElement.style.display = 'none';
     }else if(obsticle.inner_type === "Polygon"){
         this.anchor_y_position.parentElement.style.display = 'none';
         this.anchor_x_position.parentElement.style.display = 'none';
-        //this.rotation_field.parentElement.style.display = 'none';
         this.opacity_field.parentElement.style.display = 'none';
         this.width_field.parentElement.style.display = 'none';
         this.height_field.parentElement.style.display = 'none';
         this.radius_field.parentElement.style.display = 'none';
+        this.scale_x_field.parentElement.style.display = 'none';
+        this.scale_y_field.parentElement.style.display = 'none';
     }else if(obsticle.inner_type === "Point"){
         this.anchor_y_position.parentElement.style.display = 'none';
         this.anchor_x_position.parentElement.style.display = 'none';
@@ -270,6 +303,8 @@ GameScreen.prototype.remove_properties_for_obsticle = function(obsticle){
         this.width_field.parentElement.style.display = 'none';
         this.height_field.parentElement.style.display = 'none';
         this.radius_field.parentElement.style.display = 'none';
+        this.scale_x_field.parentElement.style.display = 'none';
+        this.scale_y_field.parentElement.style.display = 'none';
     }else if(obsticle.inner_type === "Path"){
         this.anchor_y_position.parentElement.style.display = 'none';
         this.anchor_x_position.parentElement.style.display = 'none';
@@ -278,6 +313,8 @@ GameScreen.prototype.remove_properties_for_obsticle = function(obsticle){
         this.width_field.parentElement.style.display = 'none';
         this.height_field.parentElement.style.display = 'none';
         this.radius_field.parentElement.style.display = 'none';
+        this.scale_x_field.parentElement.style.display = 'none';
+        this.scale_y_field.parentElement.style.display = 'none';
     }else if(obsticle.inner_type === "Graphic"){
         this.radius_field.parentElement.style.display = 'none';
         this.width_field.parentElement.style.display = 'none';
