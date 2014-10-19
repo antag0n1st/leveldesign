@@ -123,6 +123,9 @@
             context.strokeStyle = "blue";
         }else{
             context.strokeStyle = this.normal_color;
+            if(this.normal_color === "transparent"){
+                context.strokeStyle = "black";
+            }
         }
         
         context.globalAlpha = 0.3;

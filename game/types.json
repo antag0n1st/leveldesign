@@ -1,8 +1,9 @@
 [
-    {"name":"Default","color":"#654872"},
+    {"name":"Default","color":"transparent"},
     {"name":"Pushable Object","color":"#126871"},
     {"name":"Solid Platform","color":"#984320"},
     {"name":"Moving Platform","color":"#001482"},
-    {"name":"down-up Platform","color":"#aa4870"},
-    {"name":"Enemy","color":"#123456"}
+    {"name":"Passable Platform","color":"#aa4870"},
+    {"name":"Enemy","color":"#123456"},
+    {"name":"Player","color":"#654321"}    
 ]
