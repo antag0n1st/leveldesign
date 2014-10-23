@@ -9,12 +9,7 @@
 
 
     GameScreen.prototype.on_state = function (prev_state, current_state, data) {
-        this.end_polygon();
-        if (this.selected_image) {
-            this.selected_image.remove_from_parent();
-            this.selected_image = null;
-            this.deselect_images();
-        }
+        this.deselect_all();
     };
 
     GameScreen.prototype.deselect_buttons = function () {
@@ -91,32 +86,32 @@
 
     };
     GameScreen.prototype.on_empty_project_button = function (event) {
-        
+
         if (confirm('Are you sure you want clear this project ?')) {
-           this.clear_project();
+            this.clear_project();
         } else {
-           
+
         }
-        
+
         event.stop_propagation();
     };
 
     GameScreen.prototype.on_empty_project_button_down = function (event) {
         event.stop_propagation();
     };
-    
-    
+
+
     GameScreen.prototype.on_save_button = function (event) {
         this.save_current_data();
-        Popup.show("Data Saved",this);
+        Popup.show("Data Saved", this);
         event.stop_propagation();
     };
 
     GameScreen.prototype.on_save_button_down = function (event) {
         event.stop_propagation();
     };
-    
-    
+
+
 
     GameScreen.prototype.on_snap_axis_button_down = function (event) {
         event.stop_propagation();
@@ -343,10 +338,10 @@
 
         game.input.add(this.undo_button);
         game.input.add(this.snap_axis_button);
-        
-        game.input.add(this.empty_project_button);   
+
+        game.input.add(this.empty_project_button);
         game.input.add(this.save_button);
-        
+
     };
 
     GameScreen.prototype.hide = function () {
@@ -415,7 +410,11 @@
                 g.alpha = 1;
             }
         }
-        this.selected_obsticle = null;
+        if (this.selected_obsticle) {
+            this.selected_obsticle.is_selected = false;
+            this.selected_obsticle = null;
+        }
+
     };
 
     GameScreen.prototype.move_up = function () {
@@ -452,6 +451,21 @@
             this.selected_obsticle.set_position(p.x, p.y);
         }
         this.update_inspector_with_obsticle(this.selected_obsticle);
+    };
+
+    GameScreen.prototype.on_esc = function () {
+        this.deselect_all();
+    };
+    
+    GameScreen.prototype.deselect_all = function(){
+        this.end_polygon();
+        this.deselect_images();
+        this.deselect_graphics();
+        this.update_inspector_with_obsticle();
+    };
+
+    GameScreen.prototype.on_m = function () {
+        this.on_snap_axis_button();
     };
 
     window.GameScreen = GameScreen;

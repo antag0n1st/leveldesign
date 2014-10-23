@@ -320,6 +320,13 @@ GameScreen.prototype.initialize = function () {
         that.move_up();
     });
 
+    this.kibo.up('m',function(){
+        that.on_m();
+    });
+    
+    this.kibo.down('esc', function () {
+        that.on_esc();
+    });
 
     for (var i = 0; i < ContentManager.object_types.length; i++) {
 
