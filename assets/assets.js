@@ -9,12 +9,12 @@ Game.prototype.load_assets = function() {
     ContentManager.add_image('blank_black_highlighted','assets/images/blank_black_highlighted.png');
     ContentManager.add_image('child_message','assets/images/child_message.png');
     
-    ContentManager.add_file('game/types.json',function(data){
+    ContentManager.add_file('types.json',function(data){
         var types = JSON.parse(data);      
         ContentManager.object_types = types;
     },function(){});
     
-    ContentManager.add_file('game/layers.json',function(data){
+    ContentManager.add_file('layers.json',function(data){
         var layers = JSON.parse(data);      
         ContentManager.layers = layers;
     },function(){});

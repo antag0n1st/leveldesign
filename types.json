@@ -4,6 +4,7 @@
     {"name":"Solid Platform","color":"#984320"},
     {"name":"Moving Platform","color":"#001482"},
     {"name":"Passable Platform","color":"#aa4870"},
+    {"name":"Passable Bounce Platform","color":"#a12870"},
     {"name":"Enemy","color":"#123456"},
     {"name":"Player","color":"#654321"}    
 ]

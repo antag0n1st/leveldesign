@@ -167,13 +167,8 @@ GameScreen.prototype.on_mouse_up = function (event) {
             } else {
                 collided.set_position(0, 0);
             }
-            input_state.go_to_previus_state();
-
-
-            this.selected_obsticle.is_selected = false;
-            this.selected_obsticle = null;
-            this.update_inspector_with_obsticle();
             
+            input_state.go_to_previus_state();
             
             Popup.show("element is now child",this);
             

@@ -9,7 +9,10 @@
 
 
     GameScreen.prototype.on_state = function (prev_state, current_state, data) {
-        this.deselect_all();
+        if(current_state.name !== States.main_states.set_parent){
+            this.deselect_all();
+        }
+        
     };
 
     GameScreen.prototype.deselect_buttons = function () {
