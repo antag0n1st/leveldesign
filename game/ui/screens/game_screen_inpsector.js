@@ -64,9 +64,9 @@ GameScreen.prototype.on_height_change = function (object) {
 
 GameScreen.prototype.on_radius_change = function (object) {
 
-    var value = object.value;
+    var value = Math.round_decimal(object.value,2);
 
-    if (this.selected_obsticle) {
+    if (this.selected_obsticle && value > 3) {
         this.selected_obsticle.bounds.r = value;
     }
 
