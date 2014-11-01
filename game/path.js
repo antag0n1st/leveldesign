@@ -17,6 +17,7 @@
         this.c_index = 0;
         this.normal_color = "#000000";
         this.inner_type = "Path";
+        this.value = "";
         
         this.points = [];
         this.circles = [];

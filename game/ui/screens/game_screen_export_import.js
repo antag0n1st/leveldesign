@@ -63,6 +63,7 @@ GameScreen.prototype.get_export_data = function () {
     json.layers = ContentManager.layers;
     json.types = ContentManager.object_types;
     json.images = [];
+    json.pos = the_pos;
 
     var images_to_exclued = [
         "child_message.png",
@@ -114,6 +115,7 @@ GameScreen.prototype.make_obsticle = function (obsticle) {
     o.height = obsticle.height;
     o.scale_x = obsticle.scale_x;
     o.scale_y = obsticle.scale_y;
+    o.value = obsticle.value;
 
     if (obsticle.inner_type === "Path") {
         o.points = obsticle.points;
@@ -154,6 +156,7 @@ GameScreen.prototype.import = function (json) {
     var that = this;
     ContentManager.download_resources(this.stage, function () {
         that.import_obsticles(data);
+        that.move_layers_to(new V(data.pos.x,data.pos.y));
     });
 
 };
@@ -175,7 +178,7 @@ GameScreen.prototype.clear_project = function () {
 };
 
 GameScreen.prototype.import_obsticles = function (data) {
-   
+
     var obsticles = data.obsticles;
 
 
@@ -199,8 +202,8 @@ GameScreen.prototype.import_obsticles = function (data) {
 
 
     }
-
-
+   
+    
 
 
 };
@@ -258,10 +261,10 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
         o.inner_type = "Graphic";
         o.set_scale_x(obsticle.scale_x);
         o.set_scale_y(obsticle.scale_y);
-        
+
         this.graphics.push(o);
 
-    }else if (obsticle.object_type === "Box") {
+    } else if (obsticle.object_type === "Box") {
 
         var points = this.get_points(obsticle);
         var polygon = new Polygon(new Vector(obsticle.pos.x, obsticle.pos.y), points);
@@ -279,8 +282,10 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
     o.tag = obsticle.tag;
     o.name = obsticle.name;
     o.type = obsticle.type;
+    o.value = obsticle.value;
+    
     var _type = this.find_type_by_name(obsticle.type);
-    if(_type){
+    if (_type) {
         o.normal_color = _type.color;
     }
     if (obsticle.width || obsticle.height) {
@@ -289,7 +294,7 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
     if (obsticle.anchor_x || obsticle.anchor_y) {
         o.set_anchor(obsticle.anchor_x, obsticle.anchor_y);
     }
-    
+
     o.set_alpha(obsticle.alpha);
     o.rotate_to(obsticle.angle);
     o.set_position(obsticle.pos.x, obsticle.pos.y);

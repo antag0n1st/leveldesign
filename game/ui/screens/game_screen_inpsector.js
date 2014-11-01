@@ -6,6 +6,14 @@ GameScreen.prototype.on_layer_change = function(object){
     
 };
 
+GameScreen.prototype.on_generic_value_change = function(object){
+    
+    if (this.selected_obsticle) {
+        this.selected_obsticle.value = object.value;
+    }
+    
+};
+
 GameScreen.prototype.on_layer_visibility_change = function(object){
     
     this.active_layer.is_visible = object.checked;
@@ -257,6 +265,8 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
         this.scale_x_field.value = obsticle.scale_x;
         this.scale_y_field.value = obsticle.scale_y;
         
+        this.generic_value_field.value = obsticle.value;
+        
         if(obsticle.inner_type === "Circle"){
             this.radius_field.value = obsticle.bounds.r;
         }
@@ -279,6 +289,7 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
         this.radius_field.value = "";
         this.scale_x_field.value = "";
         this.scale_y_field.value = "";
+        this.generic_value_field.value = "";
     }
 
 };
@@ -298,6 +309,7 @@ GameScreen.prototype.set_all_properties = function(value){
         this.height_field.parentElement.style.display = value;
         this.scale_x_field.parentElement.style.display = value;
         this.scale_y_field.parentElement.style.display = value;
+        this.generic_value_field.parentElement.style.display = value;
 };
 
 GameScreen.prototype.remove_properties_for_obsticle = function(obsticle){
