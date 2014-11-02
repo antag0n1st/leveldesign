@@ -22,6 +22,10 @@ GameScreen.prototype.on_layer_visibility_change = function(object){
 
 GameScreen.prototype.on_opacity_change = function (object) {
 
+    if( isNaN(object.value)){
+        return;
+    }
+
     var value = object.value;
 
     if (this.selected_obsticle) {
@@ -31,6 +35,10 @@ GameScreen.prototype.on_opacity_change = function (object) {
 };
 
 GameScreen.prototype.on_scale_x_change = function (object) {
+
+    if( isNaN(object.value)){
+        return;
+    }
 
     var value = object.value;
 
@@ -42,6 +50,10 @@ GameScreen.prototype.on_scale_x_change = function (object) {
 
 GameScreen.prototype.on_scale_y_change = function (object) {
 
+    if( isNaN(object.value)){
+        return;
+    }
+
     var value = object.value;
 
     if (this.selected_obsticle) {
@@ -51,6 +63,10 @@ GameScreen.prototype.on_scale_y_change = function (object) {
 };
 
 GameScreen.prototype.on_width_change = function (object) {
+
+    if( isNaN(object.value)){
+        return;
+    }
 
     var value = object.value;
 
@@ -62,6 +78,10 @@ GameScreen.prototype.on_width_change = function (object) {
 
 GameScreen.prototype.on_height_change = function (object) {
 
+    if( isNaN(object.value)){
+        return;
+    }
+
     var value = object.value;
 
     if (this.selected_obsticle) {
@@ -72,7 +92,11 @@ GameScreen.prototype.on_height_change = function (object) {
 
 GameScreen.prototype.on_radius_change = function (object) {
 
-    var value = Math.round_decimal(object.value,2);
+    if( isNaN(object.value)){
+        return;
+    }
+
+    var value = object.value;
 
     if (this.selected_obsticle && value > 3) {
         this.selected_obsticle.bounds.r = value;
@@ -84,7 +108,12 @@ GameScreen.prototype.on_radius_change = function (object) {
 
 GameScreen.prototype.on_rotation_change = function (object) {
 
+    if( isNaN(object.value)){
+        return;
+    }
+
     var value = object.value;
+
 
     if (this.selected_obsticle) {
         this.selected_obsticle.rotate_to(Math.degrees_to_radians(value));
@@ -93,6 +122,10 @@ GameScreen.prototype.on_rotation_change = function (object) {
 };
 
 GameScreen.prototype.on_anchor_y_position_change = function (object) {
+
+    if( isNaN(object.value)){
+        return;
+    }
 
     var value = object.value;
 
@@ -104,6 +137,10 @@ GameScreen.prototype.on_anchor_y_position_change = function (object) {
 };
 
 GameScreen.prototype.on_anchor_x_position_change = function (object) {
+
+    if( isNaN(object.value)){
+        return;
+    }
 
     var value = object.value;
 
@@ -128,6 +165,10 @@ GameScreen.prototype.on_name_change = function (object) {
 
 GameScreen.prototype.on_z_index_change = function (object) {
 
+    if( isNaN(object.value)){
+        return;
+    }
+
     var value = object.value;
 
     if (this.selected_obsticle) {
@@ -137,6 +178,10 @@ GameScreen.prototype.on_z_index_change = function (object) {
 };
 
 GameScreen.prototype.on_c_index_change = function (object) {
+
+    if( isNaN(object.value)){
+        return;
+    }
 
     var value = object.value;
 
@@ -148,6 +193,10 @@ GameScreen.prototype.on_c_index_change = function (object) {
 
 GameScreen.prototype.on_tag_change = function (object) {
 
+    if( isNaN(object.value)){
+        return;
+    }
+
     var value = object.value;
 
     if (this.selected_obsticle) {
@@ -158,7 +207,7 @@ GameScreen.prototype.on_tag_change = function (object) {
 
 GameScreen.prototype.on_x_position_change = function (object) {
 
-    var value = object.value;
+    var value = Math.round_decimal(object.value,2);
 
     if (this.selected_obsticle) {
         var pos = this.selected_obsticle.get_position();
@@ -169,7 +218,7 @@ GameScreen.prototype.on_x_position_change = function (object) {
 
 GameScreen.prototype.on_y_position_change = function (object) {
 
-    var value = object.value;
+    var value = Math.round_decimal(object.value,2);
 
     if (this.selected_obsticle) {
         var pos = this.selected_obsticle.get_position();
@@ -274,21 +323,21 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
     } else {
 
         this.name_label.value = '';
-        this.z_index_label.value = '';
-        this.c_index_label.value = '';
-        this.tag_label.value = '';
+        this.z_index_label.value = 0;
+        this.c_index_label.value = 0;
+        this.tag_label.value = 0;
         this.type_selector.selectedIndex = 0;
-        this.x_position_label.value = '';
-        this.y_position_label.value = '';
-        this.opacity_field.value = "";
-        this.rotation_field.value = "";
-        this.anchor_x_position.value = "";
-        this.anchor_y_position.value = "";
-        this.width_field.value = "";
-        this.height_field.value = "";
-        this.radius_field.value = "";
-        this.scale_x_field.value = "";
-        this.scale_y_field.value = "";
+        this.x_position_label.value = 0;
+        this.y_position_label.value = 0;
+        this.opacity_field.value = 0;
+        this.rotation_field.value = 0;
+        this.anchor_x_position.value = 0;
+        this.anchor_y_position.value = 0;
+        this.width_field.value = 0;
+        this.height_field.value = 0;
+        this.radius_field.value = 0;
+        this.scale_x_field.value = 0;
+        this.scale_y_field.value = 0;
         this.generic_value_field.value = "";
     }
 
@@ -367,31 +416,13 @@ GameScreen.prototype.remove_properties_for_obsticle = function(obsticle){
         this.radius_field.parentElement.style.display = 'none';
         this.width_field.parentElement.style.display = 'none';
         this.height_field.parentElement.style.display = 'none';
-       // this.opacity_field.parentElement.style.display = 'none';
     }
     
-//        this.name_label.parentElement.style.display = 'block';
-//        this.z_index_label.parentElement.style.display = 'block';
-//        this.c_index_label.parentElement.style.display = 'block';
-//        this.tag_label.parentElement.style.display = 'block';
-//        this.type_selector.parentElement.style.display = 'block';
-//        this.x_position_label.parentElement.style.display = 'block';
-//        this.y_position_label.parentElement.style.display = 'block';
-//        this.opacity_field.parentElement.style.display = 'block';
-//        this.rotation_field.parentElement.style.display = 'block';
-//        this.anchor_x_position.parentElement.style.display = 'block';
-//        this.anchor_y_position.parentElement.style.display = 'block';    
 };
 
 GameScreen.prototype.list_files = function (files) {
 
     var base_url = window.document.URL.replace("index.html", "library") + '/';
-
-//    files = [
-//        {name: "attack-trail.png"},
-//        {name: "child.png"},
-//        {name: "face.png"}
-//    ];
 
     for (var i = 0; i < files.length; i++) {
 
