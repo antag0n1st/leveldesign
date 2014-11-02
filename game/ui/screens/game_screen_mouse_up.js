@@ -1,5 +1,5 @@
 GameScreen.prototype.on_mouse_up = function (event) {
-    
+   
     if(!this.active_layer.is_visible){ // do not interact with invisible layers
         Popup.show("layer is invisible",this);
         return;
@@ -72,8 +72,10 @@ GameScreen.prototype.on_mouse_up = function (event) {
         
         this.deselect_graphics();
 
+       
 
         if (this.queue_points.length < 2 && !this.mouse_has_moved && this.queue_path === null) {
+         
             var collided = this.is_point_in_obsticles(event.point);
             if (collided) {
                 collided.is_selected = true;
@@ -213,6 +215,8 @@ GameScreen.prototype.on_mouse_up = function (event) {
             
         }
     }
+    
+   
 
     this.mouse_has_moved = false;
 };

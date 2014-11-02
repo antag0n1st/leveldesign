@@ -33,7 +33,8 @@ var _main_states = [
             graphics_selected: 'graphics_selected',
             path_draw: 'path_draw',
             path_selected: 'path_selected',
-            set_parent : 'set_parent'
+            set_parent : 'set_parent',
+            box_draw: 'box_draw'
         }
     },
     {

@@ -11,6 +11,7 @@ GameScreen.prototype.initialize = function () {
     this.layers = [];
     this.mouse_has_moved = false;
     this.selected_image = null;
+    this.selected_obsticle = null;
     this.is_shift_pressed = false;
     this.is_space_pressed = false;
 
@@ -146,7 +147,6 @@ GameScreen.prototype.initialize = function () {
     // polygon
     this.polygon_button = new Button({image: Images.blank_black, selected_image: Images.blank_black_highlighted});
     this.polygon_button.tag = 0;
-    this.polygon_button.is_selected = true;
     this.polygon_button.text = "Polygon";
     this.polygon_button.text_color = "#ffffff";
     this.polygon_button.set_position(button_padding + button_distance * 0, 20);
@@ -156,6 +156,7 @@ GameScreen.prototype.initialize = function () {
     //box
     this.box_button = new Button({image: Images.blank_black, selected_image: Images.blank_black_highlighted});
     this.box_button.tag = 1;
+    this.box_button.is_selected = true;
     this.box_button.text = "Box";
     this.box_button.text_color = "#ffffff";
     this.box_button.set_position(button_padding + button_distance * 1, 20);
@@ -242,8 +243,7 @@ GameScreen.prototype.initialize = function () {
         States.main_states.graphics_draw
     ];
 
-    this.mode_count = 0;
-    this.current_mode = 'polygon';
+    this.mode_count = 1;
     this.current_mode = this.modes[this.mode_count % this.modes.length];
 
     this.layers.length = ContentManager.layers.length;
@@ -280,7 +280,7 @@ GameScreen.prototype.initialize = function () {
 
     input_state.subscribe('*', this);
 
-    input_state.set(States.main_states.polygon_draw);
+    
 
 
     var that = this;
@@ -351,6 +351,8 @@ GameScreen.prototype.initialize = function () {
     }
 
     this.set_all_properties('none');
+    
+    input_state.set(States.main_states.box_draw);
 
 /////////////////////////////////////
 
