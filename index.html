@@ -262,7 +262,7 @@
                 width: 230px;
                 height: 1px;
                 background-color: gray;
-                margin: 20px 0 20px 0;
+                margin: 10px 0 10px 0;
                 float: right;
 
             }
@@ -293,8 +293,8 @@
 
             .tab {
                 position: absolute;
-                padding: 15px 0px 10px 0px;
-                width: 110px;
+                padding: 3px;
+                width: 60px;
                 text-align: center;  
                 height: 100%;
                 background-color: transparent;
@@ -333,13 +333,44 @@
             }
 
             #properties_panel{
-                margin-top: 200px;
+                margin-top: 180px;
                 display: block;
+                width: 250px;
             }
 
             #library_panel{
-                margin-top: 200px;
+                margin-top: 180px;
                 display: none;
+                width: 250px;
+            }
+
+            #settings_panel{
+                margin-top: 180px;
+                display: none;
+                width: 250px;
+            }
+
+            #property_dialog{
+                width: 250px; 
+                height: 100px; 
+                background-color: white;
+                border: 1px solid black;
+                position: absolute;
+                margin-left: 30%;
+                margin-top: 10%;
+                z-index: 100000;
+                text-align: center;
+                display: none;
+            }
+            #property_dialog div{
+                margin-top: 10px;
+            }
+            #property_dialog input[type="text"]{
+                margin-top: 25px;
+            }
+            
+            #property_dialog input[type="button"]{
+                
             }
 
         </style>
@@ -351,8 +382,9 @@
         <div id="inspector" class="inspector">
 
             <div class="nav">
-                <div id="inspector_tab" onclick="on_inspector_click();" class="tab active"><span>Properties</span></div>
-                <div id="library_tab" onclick="on_library_click();" class="tab" style="margin-left: 130px;"><span>Library</span></div>
+                <div id="inspector_tab" onclick="on_inspector_click();" class="tab active"><img src="assets/images/properties.png"/></div>
+                <div id="library_tab" onclick="on_library_click();" class="tab" style="margin-left: 90px;"><img src="assets/images/library.png"/></div>
+                <div id="settings_tab" onclick="on_settings_click();" class="tab" style="margin-left: 170px;"><img src="assets/images/settings.png"/></div>
             </div>
 
             <div class="panel" id="basic_panel">
@@ -375,6 +407,8 @@
 
             <div class="panel" id="properties_panel">
 
+
+
                 <div class="i-w"><label>Z-index: </label><input onkeyup="game.navigator.current_screen.on_z_index_change(this);" id="z_index" type="text" /></div>
 
                 <div class="i-w"><label>C-index: </label><input onkeyup="game.navigator.current_screen.on_c_index_change(this);" id="c_index" type="text" /></div>
@@ -382,16 +416,18 @@
                 <div class="i-w"><label>Tag: </label><input onkeyup="game.navigator.current_screen.on_tag_change(this);" id="tag" type="text" /></div>
 
                 <div class="i-w"><label>Opacity: </label><input onkeyup="game.navigator.current_screen.on_opacity_change(this);" id="opacity" type="text" /></div>
-                
+
                 <div class="i-w"><label>Rotation: </label><input onkeyup="game.navigator.current_screen.on_rotation_change(this);" id="rotation" type="text" /></div>
 
                 <div class="i-w" style="width: 110px;"><label>AY </label><input style="width: 60px;" onkeyup="game.navigator.current_screen.on_anchor_y_position_change(this);" id="anchor_y_position" type="text" /></div>
 
                 <div class="i-w" style="width: 140px;"><label>Anchor X </label><input style="width: 60px;" onkeyup="game.navigator.current_screen.on_anchor_x_position_change(this);" id="anchor_x_position" type="text" /></div>
 
-                <div class="i-w"><label>Width: </label><input onkeyup="game.navigator.current_screen.on_width_change(this);" id="width_field" type="text" /></div>
+                <div class="i-w" style="width: 110px;"><label>H: </label><input style="width: 60px;" onkeyup="game.navigator.current_screen.on_height_change(this);" id="height_field" type="text" /></div>
 
-                <div class="i-w"><label>Height: </label><input onkeyup="game.navigator.current_screen.on_height_change(this);" id="height_field" type="text" /></div>
+
+                <div class="i-w" style="width: 140px;"><label>Width:</label><input style="width: 60px;" onkeyup="game.navigator.current_screen.on_width_change(this);" id="width_field" type="text" /></div>
+
 
                 <div class="i-w"><label>Radius </label><input onkeyup="game.navigator.current_screen.on_radius_change(this);" id="radius_field" type="text" /></div>
 
@@ -400,18 +436,15 @@
                 <div class="i-w" style="width: 140px;"><label>Scale X: </label><input style="width: 60px;" onkeyup="game.navigator.current_screen.on_scale_x_change(this);" id="scale_x" type="text" /></div>
 
                 <div class="i-w"><label>Value: </label><input onkeyup="game.navigator.current_screen.on_generic_value_change(this);" id="generic_value_field" type="text" /></div>
-                
-                
+
+
                 <div class="i-w"><label>Type: </label> <select onchange="game.navigator.current_screen.on_type_change(this);" id="type"></select> </div>
 
                 <div class="i-w"><input id="set_child_button" onclick="game.navigator.current_screen.on_set_parent();" type="button" value="set child" /></div>
 
-                <div class="separator"></div>
+                <div class="i-w" id="properties_container"></div>
 
-                <div class="i-w">
-                    <input style="width:100px;" onclick="game.navigator.current_screen.export_polygons(this);" type="button" value="export" />
-                    <input style="width:100px;" type="file" onchange="game.navigator.current_screen.load_file(this.files);" />
-                </div>
+                <div class="i-w"><input id="add_property_button" onclick="game.navigator.current_screen.on_add_property();" type="button" value="add property" /></div>
 
             </div>
 
@@ -424,44 +457,94 @@
                 </div>
             </div>
 
+
+            <div class="panel" id="settings_panel">
+
+                <div class="i-w">
+                    <input style="width:100px;" onclick="game.navigator.current_screen.export_polygons(this);" type="button" value="export" />
+                    <input style="width:100px;" type="file" onchange="game.navigator.current_screen.load_file(this.files);" />
+                </div>
+            </div>
+
         </div>
-        
+
         <script type="text/javascript">
-            
-            function on_inspector_click(){
+
+            function on_inspector_click() {
                 var elm = document.getElementById("properties_panel");
                 elm.style.display = "block";
-              
-              
+
                 var elm2 = document.getElementById("library_panel");
                 elm2.style.display = "none";
-                
+
+                var elm3 = document.getElementById("settings_panel");
+                elm3.style.display = "none";
+
                 var tab1 = document.getElementById("inspector_tab");
                 var tab2 = document.getElementById("library_tab");
-                
+                var tab3 = document.getElementById("settings_tab");
+
                 tab1.className = "tab active";
                 tab2.className = "tab";
-            };
-            
-            function on_library_click(){
-                var elm = document.getElementById("library_panel");
-                elm.style.display = "block";
-              
-                var elm2 = document.getElementById("properties_panel");
+                tab3.className = "tab";
+            }
+            ;
+
+            function on_library_click() {
+                var elm = document.getElementById("properties_panel");
+                elm.style.display = "none";
+
+                var elm2 = document.getElementById("library_panel");
+                elm2.style.display = "block";
+
+                var elm3 = document.getElementById("settings_panel");
+                elm3.style.display = "none";
+
+                var tab1 = document.getElementById("inspector_tab");
+                var tab2 = document.getElementById("library_tab");
+                var tab3 = document.getElementById("settings_tab");
+
+                tab1.className = "tab";
+                tab2.className = "tab active";
+                tab3.className = "tab";
+            }
+            ;
+
+            function on_settings_click() {
+                var elm = document.getElementById("properties_panel");
+                elm.style.display = "none";
+
+                var elm2 = document.getElementById("library_panel");
                 elm2.style.display = "none";
-                
-                var tab1 = document.getElementById("library_tab");
-                var tab2 = document.getElementById("inspector_tab");
-                
-                tab1.className = "tab active";
+
+                var elm3 = document.getElementById("settings_panel");
+                elm3.style.display = "block";
+
+                var tab1 = document.getElementById("inspector_tab");
+                var tab2 = document.getElementById("library_tab");
+                var tab3 = document.getElementById("settings_tab");
+
+                tab1.className = "tab";
                 tab2.className = "tab";
-            };
-            
+                tab3.className = "tab active";
+            }
+            ;
+
         </script>
 
 
+        <div id="property_dialog">
+            <label>Key:</label> <input id="property_name" onkeyup="game.navigator.current_screen.on_property_name_type(event);" type="text" />
+            <div>
+                <input type="button" value="add" onclick="game.navigator.current_screen.on_dialog_add();" />
+                <input type="button" value="cancel" onclick="game.navigator.current_screen.on_dialog_cancel();" />
+            </div>            
+        </div>
 
         <div id="wrapper" style="position: fixed;top:200px;">
+
+
+
             <canvas id="stage" >
                 <h1>Your browser does not appear to support HTML5.  Try upgrading your browser to the latest version.  <a href="http://www.whatbrowser.org">What is a browser?</a>
                     <br/><br/><a href="http://www.microsoft.com/windows/internet-explorer/default.aspx">Microsoft Internet Explorer</a><br/>
@@ -471,6 +554,8 @@
                     <a href="http://www.google.com/chromeframe">Google Chrome Frame for Internet Explorer</a><br/></h1>
 
             </canvas>
+
+
         </div>
 
         <script type="text/javascript">

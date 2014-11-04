@@ -30,7 +30,7 @@ GameScreen.prototype.save_current_data = function () {
 
 GameScreen.prototype.get_export_data = function () {
 
-    this.end_polygon();
+    //this.end_polygon();
 
     var json = {};
     var obsticles = [];
@@ -64,6 +64,7 @@ GameScreen.prototype.get_export_data = function () {
     json.types = ContentManager.object_types;
     json.images = [];
     json.pos = the_pos;
+    
 
     var images_to_exclued = [
         "child_message.png",
@@ -116,6 +117,7 @@ GameScreen.prototype.make_obsticle = function (obsticle) {
     o.scale_x = obsticle.scale_x;
     o.scale_y = obsticle.scale_y;
     o.value = obsticle.value;
+    o.properties = obsticle.properties;
 
     if (obsticle.inner_type === "Path") {
         o.points = obsticle.points;
@@ -283,6 +285,7 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
     o.name = obsticle.name;
     o.type = obsticle.type;
     o.value = obsticle.value;
+    o.properties = obsticle.properties;
     
     var _type = this.find_type_by_name(obsticle.type);
     if (_type) {

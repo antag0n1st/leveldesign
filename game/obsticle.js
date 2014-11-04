@@ -19,6 +19,7 @@
         this.c_index = 0;
         this.inner_type = "Polygon";
         this.value = "";
+        this.properties = {};
 
     };
 

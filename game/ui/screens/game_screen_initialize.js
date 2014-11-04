@@ -45,6 +45,14 @@ GameScreen.prototype.initialize = function () {
     this.scale_y_field = document.getElementById('scale_y');
     
     this.generic_value_field = document.getElementById('generic_value_field');
+    
+    this.add_property_button = document.getElementById('add_property_button');
+    
+    this.properties_container = document.getElementById('properties_container');
+    this.property_dialog = document.getElementById('property_dialog');
+    this.property_name = document.getElementById('property_name');
+    
+    
 
     this.inspector.style.height = (Config.screen_height - 13) + "px";
 

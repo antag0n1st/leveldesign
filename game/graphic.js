@@ -19,6 +19,7 @@ Graphic.prototype.initialize = function (image_name) {
     this.inner_type = "Graphic";
     this.c_index = 0;
     this.value = "";
+    this.properties = {};
 
 };
 
