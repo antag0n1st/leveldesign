@@ -116,7 +116,6 @@ GameScreen.prototype.make_obsticle = function (obsticle) {
     o.height = obsticle.height;
     o.scale_x = obsticle.scale_x;
     o.scale_y = obsticle.scale_y;
-    o.value = obsticle.value;
     o.properties = obsticle.properties;
 
     if (obsticle.inner_type === "Path") {
@@ -284,7 +283,6 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
     o.tag = obsticle.tag;
     o.name = obsticle.name;
     o.type = obsticle.type;
-    o.value = obsticle.value;
     o.properties = obsticle.properties;
     
     var _type = this.find_type_by_name(obsticle.type);

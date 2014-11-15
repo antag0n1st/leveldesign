@@ -435,9 +435,7 @@
 
                 <div class="i-w" style="width: 140px;"><label>Scale X: </label><input style="width: 60px;" onkeyup="game.navigator.current_screen.on_scale_x_change(this);" id="scale_x" type="text" /></div>
 
-                <div class="i-w"><label>Value: </label><input onkeyup="game.navigator.current_screen.on_generic_value_change(this);" id="generic_value_field" type="text" /></div>
-
-
+                
                 <div class="i-w"><label>Type: </label> <select onchange="game.navigator.current_screen.on_type_change(this);" id="type"></select> </div>
 
                 <div class="i-w"><input id="set_child_button" onclick="game.navigator.current_screen.on_set_parent();" type="button" value="set child" /></div>
@@ -463,6 +461,12 @@
                 <div class="i-w">
                     <input style="width:100px;" onclick="game.navigator.current_screen.export_polygons(this);" type="button" value="export" />
                     <input style="width:100px;" type="file" onchange="game.navigator.current_screen.load_file(this.files);" />
+                   
+                    
+                </div>
+                
+                <div class="i-w">
+                    <input style="" onclick="game.navigator.current_screen.copy_selected_object();" type="button" value="Make Copy" />
                 </div>
             </div>
 
@@ -487,8 +491,7 @@
                 tab1.className = "tab active";
                 tab2.className = "tab";
                 tab3.className = "tab";
-            }
-            ;
+            };
 
             function on_library_click() {
                 var elm = document.getElementById("properties_panel");
@@ -507,8 +510,7 @@
                 tab1.className = "tab";
                 tab2.className = "tab active";
                 tab3.className = "tab";
-            }
-            ;
+            };
 
             function on_settings_click() {
                 var elm = document.getElementById("properties_panel");
@@ -527,8 +529,7 @@
                 tab1.className = "tab";
                 tab2.className = "tab";
                 tab3.className = "tab active";
-            }
-            ;
+            };
 
         </script>
 

@@ -6,14 +6,6 @@ GameScreen.prototype.on_layer_change = function (object) {
 
 };
 
-GameScreen.prototype.on_generic_value_change = function (object) {
-
-    if (this.selected_obsticle) {
-        this.selected_obsticle.value = object.value;
-    }
-
-};
-
 GameScreen.prototype.on_layer_visibility_change = function (object) {
 
     this.active_layer.is_visible = object.checked;
@@ -310,8 +302,6 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
         this.scale_x_field.value = obsticle.scale_x;
         this.scale_y_field.value = obsticle.scale_y;
 
-        this.generic_value_field.value = obsticle.value;
-
         if (obsticle.inner_type === "Circle") {
             this.radius_field.value = obsticle.bounds.r;
         }
@@ -349,7 +339,6 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
         this.radius_field.value = 0;
         this.scale_x_field.value = 0;
         this.scale_y_field.value = 0;
-        this.generic_value_field.value = "";
 
         this.properties_container.innerHTML = "";
     }
@@ -371,7 +360,6 @@ GameScreen.prototype.set_all_properties = function (value) {
     this.height_field.parentElement.style.display = value;
     this.scale_x_field.parentElement.style.display = value;
     this.scale_y_field.parentElement.style.display = value;
-    this.generic_value_field.parentElement.style.display = value;
     this.add_property_button.parentElement.style.display = value;
 };
 
@@ -562,10 +550,10 @@ GameScreen.prototype.hide_dialog = function () {
 };
 
 
-GameScreen.prototype.on_property_name_type = function (e) {    
-     if (e.keyCode === 13) {
-         this.on_dialog_add();
-     }     
+GameScreen.prototype.on_property_name_type = function (e) {
+    if (e.keyCode === 13) {
+        this.on_dialog_add();
+    }
 };
 
 GameScreen.prototype.on_property_value_change = function (object, key) {
@@ -581,3 +569,60 @@ GameScreen.prototype.on_property_delete = function (object, key) {
     }
 };
 
+
+GameScreen.prototype.copy_selected_object = function () {
+
+    if (this.selected_obsticle) {
+
+        var ob = this.make_obsticle(this.selected_obsticle);
+
+        ob.children = [];
+
+        if (!(ob instanceof Path)) {
+            for (var j = 0; j < ob.children.length; j++) {
+                var c = this.make_obsticle(ob.children[j]);
+                c.children = []; // just for consistency
+                ob.children.push(c);
+            }
+        }
+
+        var json = JSON.stringify(ob);
+        var obsticle = JSON.parse(json);
+
+        var layer = this.get_layer_by_name(obsticle.layer_name);
+
+
+        var o = this.unfold_object(obsticle, layer);
+        layer.add_child(o);
+
+        if (obsticle.children) {
+
+            for (var j = 0; j < obsticle.children.length; j++) {
+                var c = this.unfold_object(obsticle.children[j], layer);
+                o.add_child(c);
+            }
+
+        }
+        
+        var cp = o;
+
+        //////////////////   
+
+
+        var pos = cp.get_position();
+        cp.set_position(pos.x + 20, pos.y + 20);
+
+        var parent = this.selected_obsticle.get_parent();
+        parent.add_child(cp);
+
+        this.obsticles.push(cp);
+
+        this.deselect_all();
+
+        cp.is_selected = true;
+        this.selected_obsticle = cp;
+        this.update_inspector_with_obsticle(cp);
+
+    }
+
+};

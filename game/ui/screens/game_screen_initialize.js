@@ -44,8 +44,6 @@ GameScreen.prototype.initialize = function () {
     this.scale_x_field = document.getElementById('scale_x');
     this.scale_y_field = document.getElementById('scale_y');
     
-    this.generic_value_field = document.getElementById('generic_value_field');
-    
     this.add_property_button = document.getElementById('add_property_button');
     
     this.properties_container = document.getElementById('properties_container');
