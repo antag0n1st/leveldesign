@@ -161,8 +161,13 @@
 
     };
 
+    GameScreen.prototype.order_z_index = function(a, b) {
+        return a.z_index > b.z_index;
+    };
 
     GameScreen.prototype.update = function () {
+
+        Math.insertionSort(this.obsticles, this.order_z_index);
 
         var p = this.active_layer.get_position();
         p.scale(this.active_layer.factor, this.active_layer.factor);

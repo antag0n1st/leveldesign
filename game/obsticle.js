@@ -76,9 +76,6 @@
             context.fillStyle = "blue";
         }
 
-
-
-
         if (this.is_selected || this.normal_color) {
             context.globalAlpha = 0.3;
 
@@ -87,10 +84,45 @@
         if (this.normal_color || this.is_selected) {
             context.fill();
         }
+        
+        if(this.name){
+            this.draw_label(context);
+        }
 
         context.fillStyle = fillStyle;
         context.globalAlpha = alpha;
 
+    };
+    
+    Obsticle.prototype.draw_label = function (context){
+        
+        var padding = 10;
+        var height = 25;
+        
+        var alpha = context.globalAlpha;
+        var fillStyle = context.fillStyle;
+        var size = context.measureText(this.name);
+        
+        var p = this.bounds.pos;
+        
+        context.fillStyle = "white";
+        context.globalAlpha = 0.3;
+        
+        context.fillRect(p.x,p.y - height - padding,size.width+padding*2,height);
+        
+        
+        
+        context.fillStyle = "black";
+        context.globalAlpha = 1.0;
+        
+        
+        
+        context.fillText(this.name,p.x+padding,p.y - height - 7);
+        
+        
+        context.fillStyle = fillStyle;
+        context.globalAlpha = alpha;
+        
     };
 
     Obsticle.prototype.clear = function (context) {
