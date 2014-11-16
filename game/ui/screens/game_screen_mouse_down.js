@@ -1,5 +1,7 @@
 GameScreen.prototype.on_mouse_down = function (event) {
     
+    
+    
     if(!this.active_layer.is_visible){ // do not interact with invisible layers
         return;
     }

@@ -170,9 +170,17 @@ GameScreen.prototype.on_mouse_up = function (event) {
                 collided.set_position(0, 0);
             }
             
+            // remove from obsticles
+            
+            var index = this.obsticles.indexOf(collided);
+            if(index >=0 ){
+                this.obsticles.splice(index,1);
+            }
+            
             input_state.go_to_previus_state();
             
             Popup.show("element is now child",this);
+            
             
         }
     }
@@ -195,28 +203,12 @@ GameScreen.prototype.on_mouse_up = function (event) {
         }else{
             
 
-            
-//            this.deselect_graphics();
-//            this.update_inspector_with_obsticle();
-//            
-//            for(var i=0;i<this.graphics.length;i++){
-//                var g = this.graphics[i];
-//                if(g.layer_name === this.active_layer.name){
-//                    if( SAT.pointInPolygon(event.point,g.bounds) ){
-//                       this.selected_obsticle = g;
-//                       this.selected_obsticle.is_selected = true;
-//                       this.selected_obsticle.alpha = 0.5;
-//                       this.update_inspector_with_obsticle(this.selected_obsticle);
-//                       this.start_obsticle_position = new V().copy(this.selected_obsticle.get_position());
-//                       break;
-//                    }
-//                }
-//            }
-            
         }
     }
     
-   
+   this.update_inspector_with_obsticle(this.selected_obsticle);
 
     this.mouse_has_moved = false;
+    
+    this.is_mouse_down = false;
 };

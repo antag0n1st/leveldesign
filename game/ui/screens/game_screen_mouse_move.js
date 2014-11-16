@@ -1,6 +1,6 @@
 GameScreen.prototype.on_mouse_move = function (event) {
-   
-    if(!this.active_layer.is_visible){ // do not interact with invisible layers
+
+    if (!this.active_layer.is_visible) { // do not interact with invisible layers
         return;
     }
 
@@ -54,7 +54,26 @@ GameScreen.prototype.on_mouse_move = function (event) {
                 obsticle.set_position(p.x, p.y);
                 this.update_inspector_with_obsticle(obsticle);
                 break;
+            } else {
+                for (var j = 0; j < obsticle.children.length; j++) {
+
+                    var obs = obsticle.children[j];
+
+                    if (obs.is_selected) {
+                        // move the obs
+                        var v = new V(event.point.x, event.point.y);
+                        v.sub(this.start_drag_point.clone());
+                        var p = this.start_obsticle_position.clone().add(v);
+
+                        obs.set_position(p.x, p.y);
+                        this.update_inspector_with_obsticle(obs);
+                        break;
+                    }
+
+                }
             }
+
+
 
         }
 
@@ -82,7 +101,7 @@ GameScreen.prototype.on_mouse_move = function (event) {
                 } else {
                     h = w;
                 }
-              
+
                 var tt = new V();
 
                 if (width >= 0 && height >= 0) {
@@ -108,7 +127,7 @@ GameScreen.prototype.on_mouse_move = function (event) {
                 bp.add(tt);
 
             } else {
-                
+
                 var width = v.x - bp.x;
                 var height = v.y - bp.y;
 
@@ -133,7 +152,7 @@ GameScreen.prototype.on_mouse_move = function (event) {
                 this.queue_box = new Obsticle();
                 var bb = new Box(bp, width, height).toPolygon();
                 this.queue_box.bounds = bb;
-                this.queue_box.set_size(width,height);
+                this.queue_box.set_size(width, height);
                 this.queue_box.set_position(bb.pos.x, bb.pos.y);
                 this.active_layer.add_child(this.queue_box);
                 this.queue_box.inner_type = "Box";

@@ -182,30 +182,24 @@ GameScreen.prototype.import_obsticles = function (data) {
 
     var obsticles = data.obsticles;
 
-
     for (var i = 0; i < obsticles.length; i++) {
         var obsticle = obsticles[i];
         var layer = this.get_layer_by_name(obsticle.layer_name);
 
-
         var o = this.unfold_object(obsticle, layer);
+        this.obsticles.push(o);
         layer.add_child(o);
 
         if (obsticle.children) {
 
             for (var j = 0; j < obsticle.children.length; j++) {
-                var c = this.unfold_object(obsticle.children[j], layer);
+                var c = this.unfold_object(obsticle.children[j], layer);               
                 o.add_child(c);
             }
 
         }
 
-
-
     }
-   
-    
-
 
 };
 
@@ -301,7 +295,7 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
     o.set_position(obsticle.pos.x, obsticle.pos.y);
 
 
-    this.obsticles.push(o);
+  //  this.obsticles.push(o);
 
     return o;
 

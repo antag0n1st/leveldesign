@@ -9,10 +9,10 @@
 
 
     GameScreen.prototype.on_state = function (prev_state, current_state, data) {
-        if(current_state.name !== States.main_states.set_parent){
+        if (current_state.name !== States.main_states.set_parent) {
             this.deselect_all();
         }
-        
+
     };
 
     GameScreen.prototype.deselect_buttons = function () {
@@ -133,11 +133,27 @@
         for (var i = this.obsticles.length - 1; i >= 0; i--) {
 
             var obsticle = this.obsticles[i];
+
+            for (var j = obsticle.children.length - 1; j >= 0; j--) {
+
+                var obs = obsticle.children[j];
+                if (obs.check(point)) {
+                    if (obs.layer_name === this.active_layer.name) {
+                        return obs;
+                    }
+                }
+            }
+
             if (obsticle.check(point)) {
                 if (obsticle.layer_name === this.active_layer.name) {
                     return obsticle;
                 }
             }
+
+
+
+
+
         }
         return false;
 
@@ -161,7 +177,7 @@
 
     };
 
-    GameScreen.prototype.order_z_index = function(a, b) {
+    GameScreen.prototype.order_z_index = function (a, b) {
         return a.z_index > b.z_index;
     };
 
@@ -464,8 +480,8 @@
     GameScreen.prototype.on_esc = function () {
         this.deselect_all();
     };
-    
-    GameScreen.prototype.deselect_all = function(){
+
+    GameScreen.prototype.deselect_all = function () {
         this.end_polygon();
         this.deselect_images();
         this.deselect_graphics();

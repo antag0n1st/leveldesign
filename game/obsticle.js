@@ -38,7 +38,7 @@
 
     Obsticle.prototype.check = function (point) {
 
-        if (!this.layer.is_visible) {
+        if (!this.layer || !this.layer.is_visible) {
             return false;
         }
 

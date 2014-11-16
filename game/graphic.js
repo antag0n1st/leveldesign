@@ -59,9 +59,9 @@ Graphic.prototype.on_remove_from_parent = function (parent) {
 };
 
 Graphic.prototype.draw = function (context) {
-    
+
     var alpha = this.alpha;
-    
+
     if (this.is_selected) {
         this.alpha = 0.5;
     }
@@ -76,9 +76,44 @@ Graphic.prototype.draw = function (context) {
     context.arc(pos.x, pos.y, 2, 0, 2 * Math.PI);
     context.fill();
     context.closePath();
-    context.fillStyle = fillStyle;
 
+    context.fillStyle = fillStyle;
     this.alpha = alpha;
+
+    if (this.name) {
+        this.draw_label(context);
+    }
+};
+
+Graphic.prototype.draw_label = function (context) {
+
+    var padding = 10;
+    var height = 25;
+
+    var alpha = context.globalAlpha;
+    var fillStyle = context.fillStyle;
+    var size = context.measureText(this.name);
+
+    var p = this.bounds.pos;
+
+    context.fillStyle = "white";
+    context.globalAlpha = 0.3;
+
+    context.fillRect(p.x, p.y - height - padding, size.width + padding * 2, height);
+
+
+
+    context.fillStyle = "black";
+    context.globalAlpha = 1.0;
+
+
+
+    context.fillText(this.name, p.x + padding, p.y - height - 7);
+
+
+    context.fillStyle = fillStyle;
+    context.globalAlpha = alpha;
+
 };
 
 Graphic.prototype.update = function (dt) {
