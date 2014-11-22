@@ -50,7 +50,8 @@ GameScreen.prototype.initialize = function () {
     this.property_dialog = document.getElementById('property_dialog');
     this.property_name = document.getElementById('property_name');
     
-    
+    this.copy_angle_field = document.getElementById('copy_angle');
+    this.copy_length_field = document.getElementById('copy_length');
 
     this.inspector.style.height = (Config.screen_height - 13) + "px";
 
