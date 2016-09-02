@@ -49,12 +49,10 @@
 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-        <link rel="apple-touch-icon" sizes="256x256" href="icon-256.png" />
         <meta name="HandheldFriendly" content="true" />
 
         <!-- Chrome for Android web app tags -->
         <meta name="mobile-web-app-capable" content="yes" />
-        <link rel="shortcut icon" sizes="256x256" href="icon-256.png" />
 
 
         <!-- CONFIGURATION -->
@@ -462,6 +460,8 @@
                     <input style="width:100px;" onclick="game.navigator.current_screen.export_polygons(this);" type="button" value="export" />
                     <input style="width:100px;" type="file" onchange="game.navigator.current_screen.load_file(this.files);" />
                    
+                    <textarea id="import-text" style="width:200px; height:200px; overflow:auto; text-align: left;"></textarea>
+                     <input style="width:200px;" onclick="game.navigator.current_screen.import_from_text();" type="button" value="import from text" />
                     
                 </div>
                 
@@ -572,7 +572,7 @@
 
             function game_start() {
 
-                Config.set_game_size(960, 640, Config.MODE_FLEXIBLE_WIDTH);
+                Config.set_game_size(1920, 1080, Config.MODE_FLEXIBLE_WIDTH);
                 game = new Game();
 
                 if (isAndroid) {

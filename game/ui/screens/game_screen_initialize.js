@@ -43,13 +43,13 @@ GameScreen.prototype.initialize = function () {
 
     this.scale_x_field = document.getElementById('scale_x');
     this.scale_y_field = document.getElementById('scale_y');
-    
+
     this.add_property_button = document.getElementById('add_property_button');
-    
+
     this.properties_container = document.getElementById('properties_container');
     this.property_dialog = document.getElementById('property_dialog');
     this.property_name = document.getElementById('property_name');
-    
+
     this.copy_angle_field = document.getElementById('copy_angle');
     this.copy_length_field = document.getElementById('copy_length');
 
@@ -95,13 +95,13 @@ GameScreen.prototype.initialize = function () {
     this.radius_field.addEventListener("mousewheel", function (event) {
         that.on_mouse_wheel(event, 1, 'on_radius_change');
     });
-    
+
     this.scale_x_field.addEventListener("mousewheel", function (event) {
-        that.on_mouse_wheel(event,0.1, 'on_scale_x_change');
+        that.on_mouse_wheel(event, 0.1, 'on_scale_x_change');
     });
-    
+
     this.scale_y_field.addEventListener("mousewheel", function (event) {
-        that.on_mouse_wheel(event,0.1, 'on_scale_y_change');
+        that.on_mouse_wheel(event, 0.1, 'on_scale_y_change');
     });
 
     //////////////////////////////////////////////////////////////////
@@ -287,7 +287,7 @@ GameScreen.prototype.initialize = function () {
 
     input_state.subscribe('*', this);
 
-    
+
 
 
     var that = this;
@@ -329,10 +329,10 @@ GameScreen.prototype.initialize = function () {
         that.move_up();
     });
 
-    this.kibo.up('m',function(){
+    this.kibo.up('m', function () {
         that.on_m();
     });
-    
+
     this.kibo.down('esc', function () {
         that.on_esc();
     });
@@ -358,8 +358,12 @@ GameScreen.prototype.initialize = function () {
     }
 
     this.set_all_properties('none');
-    
+
     input_state.set(States.main_states.box_draw);
+
+
+
+
 
 /////////////////////////////////////
 
@@ -374,6 +378,14 @@ GameScreen.prototype.initialize = function () {
             var data = saved_data[saved_data.length - 1];
             this.import(JSON.stringify(data));
         }
+    } else {
+        // load from the library
+        var that = this;
+        setTimeout(function () {
+            ajax_get('load_library.php', function (data) {
+                that.list_files(data);
+            });
+        }, 1000);
     }
 
 

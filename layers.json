@@ -1,5 +1,5 @@
 [
     {"name":"forground","factor":1},
-    {"name":"midground","factor":0.5},
-    {"name":"background","factor":0.2}
+    {"name":"midground","factor":1},
+    {"name":"background","factor":1}
 ]

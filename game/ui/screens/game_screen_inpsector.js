@@ -309,20 +309,20 @@ GameScreen.prototype.update_inspector_with_obsticle = function (obsticle) {
         // add the custom properties
 
         var html_string = "";
-        
+
         for (var prop in obsticle.properties) {
             var value = obsticle.properties[prop];
 
-            
+
             html_string += '<div class="i-w">';
             html_string += '<label style="width:80px;">' + prop + ':</label>';
             html_string += '<input id="custom_property_' + prop + '" style="width:100px;" onkeyup="game.navigator.current_screen.on_property_value_change(this,\'' + prop + '\');"  type="text" value="' + value + '" />';
             html_string += '<input style="width:50px; margin-left: 5px;" onclick="game.navigator.current_screen.on_property_delete(this,\'' + prop + '\');"  type="button" value="delete" />';
             html_string += '</div>';
 
-            
+
         }
-        
+
         this.properties_container.innerHTML = html_string;
 
     } else {
@@ -428,7 +428,14 @@ GameScreen.prototype.remove_properties_for_obsticle = function (obsticle) {
 
 GameScreen.prototype.list_files = function (files) {
 
-    var base_url = window.document.URL.replace("index.html", "library") + '/';
+    var base_url = window.document.URL;
+
+    if (base_url.indexOf('index.html') !== -1) {
+        base_url = base_url.replace("index.html", "library") + '/';
+    } else {
+        base_url += 'library/';
+    }
+
 
     for (var i = 0; i < files.length; i++) {
 
@@ -441,9 +448,10 @@ GameScreen.prototype.list_files = function (files) {
         ContentManager.add_image(key, image_with_full_path);
 
         var element = "<img ";
-        element += " src='" + image_with_full_path + "' ";
-        element += " id='" + key + "' ";
+        element += " src=\"" + image_with_full_path + "\" ";
+        element += " title='" + name + "' ";
         element += " onclick=\"game.navigator.current_screen.on_image_click(this,'" + key + "')\" ";
+        element += " id='" + key + "' ";
         element += " />";
 
         game.navigator.current_screen.library.innerHTML += element;
@@ -532,11 +540,11 @@ GameScreen.prototype.on_dialog_add = function () {
     if (key_name && this.selected_obsticle) {
 
         // add property to the object
-        
+
         this.selected_obsticle.properties[key_name] = "";
         this.update_inspector_with_obsticle(this.selected_obsticle);
 
-        document.getElementById("custom_property_"+key_name).focus();
+        document.getElementById("custom_property_" + key_name).focus();
 
     }
 
@@ -598,40 +606,40 @@ GameScreen.prototype.copy_selected_object = function () {
         var layer = this.get_layer_by_name(obsticle.layer_name);
 
         var o = this.unfold_object(obsticle, layer);
-      
+
 
         if (obsticle.children) {
 
             for (var j = 0; j < obsticle.children.length; j++) {
                 var c = this.unfold_object(obsticle.children[j], o);
-               
+
             }
 
         }
-        
+
         var cp = o;
-        
-      
+
+
 
         //////////////////   
 
 
         var pos = new V().copy(cp.get_position());
-        
+
         var length = this.copy_length_field.value;
         var angle = this.copy_angle_field.value;
-        
-        if (isNaN(length) || isNaN(angle)){
+
+        if (isNaN(length) || isNaN(angle)) {
             length = 20;
             angle = 0;
         }
-        
+
         var addition_vector = new V();
         addition_vector.setLength(length);
         addition_vector.setAngle(Math.degrees_to_radians(angle));
-        
+
         pos.add(addition_vector);
-        
+
         cp.set_position(pos.x, pos.y);
 
         var parent = this.selected_obsticle.get_parent();

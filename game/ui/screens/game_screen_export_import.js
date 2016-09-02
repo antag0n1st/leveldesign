@@ -131,6 +131,11 @@ GameScreen.prototype.make_obsticle = function (obsticle) {
     return o;
 };
 
+GameScreen.prototype.import_from_text = function () {
+    var textarea = document.getElementById('import-text');
+    this.import(textarea.value);
+};
+
 GameScreen.prototype.import = function (json) {
     var data = JSON.parse(json);
 
@@ -148,6 +153,7 @@ GameScreen.prototype.import = function (json) {
         var element = "<img ";
         element += " src='" + img.url + "' ";
         element += " id='" + img.key + "' ";
+        element += " title='" + img.key + "' ";
         element += " onclick=\"game.navigator.current_screen.on_image_click(this,'" + img.key + "')\" ";
         element += " />";
 
@@ -325,7 +331,7 @@ GameScreen.prototype.load_file = function (files) {
 
     if (files[0]) {
 
-        var base_url = window.document.URL.replace("index.html", "import") + '/';
+        var base_url = window.document.URL.replace("index.html", "") + 'import/';
         var name = files[0].name;
         var full_path = base_url + name;
         var that = this;
