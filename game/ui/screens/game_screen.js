@@ -491,6 +491,31 @@
     GameScreen.prototype.on_m = function () {
         this.on_snap_axis_button();
     };
+    
+    GameScreen.prototype.on_o = function () {
+        if(this.selected_obsticle){
+            this.selected_obsticle.set_anchor(0.5,0.5);
+            this.update_inspector_with_obsticle(this.selected_obsticle);
+        }
+    };
+
+    GameScreen.prototype.on_delete = function () {
+
+        this.end_polygon();
+
+        if (this.queue_path !== null) {
+            this.obsticles.push(this.queue_path);
+            this.queue_path = null;
+        }
+
+        if (this.selected_obsticle) {
+            this.selected_obsticle.is_selected = false;
+            this.remove_obsticle(this.selected_obsticle);
+            this.selected_obsticle.remove_from_parent();
+            this.selected_obsticle = null;
+        }
+
+    };
 
     window.GameScreen = GameScreen;
 

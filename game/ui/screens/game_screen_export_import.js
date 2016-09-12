@@ -134,6 +134,7 @@ GameScreen.prototype.make_obsticle = function (obsticle) {
 GameScreen.prototype.import_from_text = function () {
     var textarea = document.getElementById('import-text');
     this.import(textarea.value);
+    textarea.value = '';
 };
 
 GameScreen.prototype.import = function (json) {

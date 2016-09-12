@@ -101,7 +101,7 @@ function listFolderFiles($dir) {
 
 
             if (is_dir($dir . DS . $ff)) {
-                $content .= "\n";
+              //  $content .= "\n";
                 listFolderFiles($dir . DS . $ff);
             }
         }

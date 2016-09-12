@@ -332,6 +332,15 @@ GameScreen.prototype.initialize = function () {
     this.kibo.up('m', function () {
         that.on_m();
     });
+    
+    this.kibo.up('alt a', function () {
+        that.on_o();
+        return false;
+    });
+    
+    this.kibo.up('delete', function () {
+        that.on_delete();
+    });
 
     this.kibo.down('esc', function () {
         that.on_esc();

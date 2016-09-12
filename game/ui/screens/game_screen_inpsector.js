@@ -431,9 +431,9 @@ GameScreen.prototype.list_files = function (files) {
     var base_url = window.document.URL;
 
     if (base_url.indexOf('index.html') !== -1) {
-        base_url = base_url.replace("index.html", "library") + '/';
+        base_url = base_url.replace("index.html", "") + '/';
     } else {
-        base_url += 'library/';
+        base_url += '/';
     }
 
 
@@ -443,7 +443,7 @@ GameScreen.prototype.list_files = function (files) {
 
         var key = name.replace('.', '_');
 
-        var image_with_full_path = base_url + name;
+        var image_with_full_path = base_url + files[i].url;
 
         ContentManager.add_image(key, image_with_full_path);
 

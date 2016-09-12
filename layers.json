@@ -1,4 +1,5 @@
 [
+	{"name":"items_layer","factor":1},
     {"name":"forground","factor":1},
     {"name":"midground","factor":1},
     {"name":"background","factor":1}
