@@ -44,6 +44,9 @@ GameScreen.prototype.initialize = function () {
     this.scale_x_field = document.getElementById('scale_x');
     this.scale_y_field = document.getElementById('scale_y');
 
+    this.import_files = document.getElementById('import-files');
+    this.export_filename = document.getElementById("export_filename");
+
     this.add_property_button = document.getElementById('add_property_button');
 
     this.properties_container = document.getElementById('properties_container');
@@ -52,6 +55,8 @@ GameScreen.prototype.initialize = function () {
 
     this.copy_angle_field = document.getElementById('copy_angle');
     this.copy_length_field = document.getElementById('copy_length');
+    
+    this.objects_list = document.getElementById('objects_list');
 
     this.inspector.style.height = (Config.screen_height - 13) + "px";
 
@@ -104,38 +109,6 @@ GameScreen.prototype.initialize = function () {
         that.on_mouse_wheel(event, 0.1, 'on_scale_y_change');
     });
 
-    //////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-//        knight = new SpineAnimation('child');
-//        knight.set_position(0,0);
-//        knight.play('run');
-//        //knight.set_scale(0.4,0.4);
-//        knight.z_index = -10;
-//        this.active_layer.add_child(knight);
-//        Config.slow_motion_factor = 0.2;
-
-
-
-
-
-
-
-
-
-
-
-    ////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////
 
     this.start_drag_point = new Vector();
     this.start_drag_screen_position = new Vector();
@@ -332,14 +305,15 @@ GameScreen.prototype.initialize = function () {
     this.kibo.up('m', function () {
         that.on_m();
     });
-    
-    this.kibo.up('alt a', function () {
+
+    this.kibo.down('alt a', function () {
         that.on_o();
         return false;
     });
-    
+
     this.kibo.up('delete', function () {
         that.on_delete();
+        that.update_objects_list();
     });
 
     this.kibo.down('esc', function () {
@@ -372,31 +346,50 @@ GameScreen.prototype.initialize = function () {
 
 
 
+///////////////////// LIBRARY //////////////////////////
 
+// try to read from the last state
 
-/////////////////////////////////////
-
-    // START AUTO SAVE 
-
-    // try to read from the last state
+    // load from the library
+    var that = this;
+    setTimeout(function () {
+        ajax_get('load_library.php', function (data) {
+            that.list_files(data);
+        });
+    }, 100);
 
     var saved_data = localStorage.getItem("level_editor_auto_save");
     if (saved_data) {
         saved_data = JSON.parse(saved_data);
         if (saved_data.length >= 1) {
             var data = saved_data[saved_data.length - 1];
-            this.import(JSON.stringify(data));
+
+            setTimeout(function () {
+                that.import(JSON.stringify(data));
+            }, 1000);
+
         }
     } else {
-        // load from the library
-        var that = this;
-        setTimeout(function () {
-            ajax_get('load_library.php', function (data) {
-                that.list_files(data);
-            });
-        }, 1000);
+
     }
 
+
+/////////////////// READ IMPORT FILES /////////////////////
+
+    ajax_get('import_files.php', function (data) {
+        // set options
+       
+        for (var i = 0; i < data.length; i++) {
+            var op = data[i];
+            var html = "<option value='"+op.url+"' selected='unselected'>" + op.name + ".json" + "</option>";
+            that.import_files.innerHTML += html;
+        }
+        
+        that.import_files.selectedIndex = -1;
+    });
+
+
+///////////////// START AUTO SAVE /////////////////////////////
 
     window.setInterval(function () {
         that.save_current_data();

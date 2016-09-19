@@ -61,8 +61,6 @@
         <!-- EXTERNAL -->
         <script src="lib/external/sat.js" type="application/javascript"></script>
         <script src="lib/external/kibo.js" type="application/javascript"></script>
-        <script src="lib/external/howler.js" type="application/javascript"></script>
-        <script src="lib/external/spine.js" type="application/javascript"></script>
 
         <!-- UTILITY -->
         <script src="lib/utility/helpers.js" type="application/javascript"></script>
@@ -265,20 +263,11 @@
 
             }
             .library{
-                overflow-x: hidden;
                 overflow-y: scroll;
-                padding: 5px;
-                background-color: #bdedf6;
-                margin: 5px 0px 5px 10px;
                 height: 350px;
+                text-align: left;
             }
-            .library img{
-                float: right;
-                width: 90px;
-                height: 90px;
-                border: 1px solid black;
-                margin: 5px 3px 5px 3px;
-            }
+
 
             .nav{
                 position: absolute;
@@ -292,7 +281,7 @@
             .tab {
                 position: absolute;
                 padding: 3px;
-                width: 60px;
+                width: 50px;
                 text-align: center;  
                 height: 100%;
                 background-color: transparent;
@@ -348,6 +337,12 @@
                 width: 250px;
             }
 
+            #objects_panel{
+                margin-top: 180px;
+                display: none;
+                width: 250px;
+            }
+
             #property_dialog{
                 width: 250px; 
                 height: 100px; 
@@ -366,13 +361,41 @@
             #property_dialog input[type="text"]{
                 margin-top: 25px;
             }
-            
+
             #property_dialog input[type="button"]{
-                
+
+            }
+
+            #objects_list{
+                line-height: 30px;
+                background-color: #bdedf6;
+                overflow-y: scroll;
+            }
+            
+            #objects_list li{
+                margin: 5px 2px 5px 0px;
+                padding: 0px 0px 0px 10px;
+            }
+            
+            #objects_list li:hover{
+                background-color: #959595;
+            }
+            
+            #objects_list img{
+                float: right;
+                padding: 5px;
+            }
+            
+            #objects_list img:hover{
+                cursor:pointer;
             }
 
         </style>
 
+
+        <link href="jstree/themes/default/style.css" rel="stylesheet" type="text/css"/>
+        <script src="jstree/jquery-3.1.0.min.js" type="text/javascript"></script>
+        <script src="jstree/jstree.min.js" type="text/javascript"></script>
 
     </head>
     <body>
@@ -380,9 +403,11 @@
         <div id="inspector" class="inspector">
 
             <div class="nav">
-                <div id="inspector_tab" onclick="on_inspector_click();" class="tab active"><img src="assets/images/properties.png"/></div>
-                <div id="library_tab" onclick="on_library_click();" class="tab" style="margin-left: 90px;"><img src="assets/images/library.png"/></div>
-                <div id="settings_tab" onclick="on_settings_click();" class="tab" style="margin-left: 170px;"><img src="assets/images/settings.png"/></div>
+                <div id="properties_tab" onclick="on_inspector_click();" class="tab active"><img src="assets/images/properties.png"/></div>
+                <div id="library_tab" onclick="on_library_click();" class="tab" style="margin-left: 60px;"><img src="assets/images/library.png"/></div>
+                <div id="objects_tab" onclick="on_objects_tab_click();" class="tab" style="margin-left: 120px;"><img src="assets/images/objects_tab.png"/></div>
+                <div id="settings_tab" onclick="on_settings_click();" class="tab" style="margin-left: 180px;"><img src="assets/images/settings.png"/></div>
+
             </div>
 
             <div class="panel" id="basic_panel">
@@ -433,7 +458,7 @@
 
                 <div class="i-w" style="width: 140px;"><label>Scale X: </label><input style="width: 60px;" onkeyup="game.navigator.current_screen.on_scale_x_change(this);" id="scale_x" type="text" /></div>
 
-                
+
                 <div class="i-w"><label>Type: </label> <select onchange="game.navigator.current_screen.on_type_change(this);" id="type"></select> </div>
 
                 <div class="i-w"><input id="set_child_button" onclick="game.navigator.current_screen.on_set_parent();" type="button" value="set child" /></div>
@@ -453,38 +478,66 @@
                 </div>
             </div>
 
+            <div class="panel" id="objects_panel">
+                <ul id="objects_list">
+                </ul>
+            </div>
 
             <div class="panel" id="settings_panel">
 
                 <div class="i-w">
-                    <input style="width:100px;" onclick="game.navigator.current_screen.export_polygons(this);" type="button" value="export" />
-                    <input style="width:100px;" type="file" onchange="game.navigator.current_screen.load_file(this.files);" />
-                   
-                    <textarea id="import-text" style="width:200px; height:200px; overflow:auto; text-align: left;"></textarea>
-                     <input style="width:200px;" onclick="game.navigator.current_screen.import_from_text();" type="button" value="import from text" />
-                    
+                    <label>Import: </label> <select onchange="game.navigator.current_screen.on_import_file_selected(this);" id="import-files"></select> 
                 </div>
-                
+                <div class="i-w">
+                    <label>Export: </label> <input style="width:170px;" type="text" id="export_filename"  />
+                </div>
+
+                <div class="i-w">
+                    <input style="width:180px;" type="button" value="Export" onclick="game.navigator.current_screen.export_file();" />
+                </div>
+
                 <div class="separator"></div>
-                
+
                 <div class="i-w">
                     <input style="" onclick="game.navigator.current_screen.copy_selected_object();" type="button" value="Make Copy" />
                 </div>
-                
+
                 <div class="i-w" style="width: 120px;"><label>Angle: </label><input style="width: 50px;"  id="copy_angle" type="text" value="0" /></div>
 
                 <div class="i-w" style="width: 130px;"><label>Length: </label><input style="width: 50px;"  id="copy_length" type="text" value="20" /></div>
 
-                
+
             </div>
+
+
 
         </div>
 
         <script type="text/javascript">
 
-            function on_inspector_click() {
-                var elm = document.getElementById("properties_panel");
+
+
+            function activate_tab(part_of_name) {
+                var elm = document.getElementById(part_of_name + "_panel");
                 elm.style.display = "block";
+                var tab = document.getElementById(part_of_name + "_tab");
+                tab.className = "tab active";
+            }
+
+            function turn_of_tabs() {
+
+                var tab1 = document.getElementById("properties_tab");
+                var tab2 = document.getElementById("library_tab");
+                var tab3 = document.getElementById("objects_tab");
+                var tab4 = document.getElementById("settings_tab");
+
+                tab1.className = "tab";
+                tab2.className = "tab";
+                tab3.className = "tab";
+                tab4.className = "tab";
+
+                var elm = document.getElementById("properties_panel");
+                elm.style.display = "none";
 
                 var elm2 = document.getElementById("library_panel");
                 elm2.style.display = "none";
@@ -492,52 +545,29 @@
                 var elm3 = document.getElementById("settings_panel");
                 elm3.style.display = "none";
 
-                var tab1 = document.getElementById("inspector_tab");
-                var tab2 = document.getElementById("library_tab");
-                var tab3 = document.getElementById("settings_tab");
+                var elm4 = document.getElementById("objects_panel");
+                elm4.style.display = "none";
+            }
 
-                tab1.className = "tab active";
-                tab2.className = "tab";
-                tab3.className = "tab";
-            };
+            function on_inspector_click() {
+                turn_of_tabs();
+                activate_tab('properties');
+            }
 
             function on_library_click() {
-                var elm = document.getElementById("properties_panel");
-                elm.style.display = "none";
-
-                var elm2 = document.getElementById("library_panel");
-                elm2.style.display = "block";
-
-                var elm3 = document.getElementById("settings_panel");
-                elm3.style.display = "none";
-
-                var tab1 = document.getElementById("inspector_tab");
-                var tab2 = document.getElementById("library_tab");
-                var tab3 = document.getElementById("settings_tab");
-
-                tab1.className = "tab";
-                tab2.className = "tab active";
-                tab3.className = "tab";
-            };
+                turn_of_tabs();
+                activate_tab('library');
+            }
 
             function on_settings_click() {
-                var elm = document.getElementById("properties_panel");
-                elm.style.display = "none";
+                turn_of_tabs();
+                activate_tab('settings');
+            }
 
-                var elm2 = document.getElementById("library_panel");
-                elm2.style.display = "none";
-
-                var elm3 = document.getElementById("settings_panel");
-                elm3.style.display = "block";
-
-                var tab1 = document.getElementById("inspector_tab");
-                var tab2 = document.getElementById("library_tab");
-                var tab3 = document.getElementById("settings_tab");
-
-                tab1.className = "tab";
-                tab2.className = "tab";
-                tab3.className = "tab active";
-            };
+            function on_objects_tab_click() {
+                turn_of_tabs();
+                activate_tab('objects');
+            }
 
         </script>
 

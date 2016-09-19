@@ -9,6 +9,7 @@
     Obsticle.prototype.initialize = function () {
 
         this.sprite_initialize();
+        this.id = UID.gen();
         this.layer_name = "";
         this.layer = null;
         this.type = "";

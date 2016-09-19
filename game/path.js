@@ -8,6 +8,7 @@ Path.prototype = new Drawable();
 Path.prototype.drawable_initialize = Path.prototype.initialize;
 Path.prototype.initialize = function () {
     this.drawable_initialize();
+    this.id = UID.gen();
     this.layer_name = "";
     this.layer = null;
     this.type = "";

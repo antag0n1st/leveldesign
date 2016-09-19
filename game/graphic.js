@@ -9,6 +9,7 @@ Graphic.prototype.sprite_initialize = Graphic.prototype.initialize;
 Graphic.prototype.initialize = function (image_name) {
     this.sprite_initialize(image_name); // your image name
 
+    this.id = UID.gen();
     this.layer_name = "";
     this.layer = null;
     this.type = "";
@@ -19,6 +20,7 @@ Graphic.prototype.initialize = function (image_name) {
     this.inner_type = "Graphic";
     this.c_index = 0;
     this.properties = {};
+    
 
 };
 

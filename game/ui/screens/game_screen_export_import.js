@@ -5,6 +5,23 @@ GameScreen.prototype.export_polygons = function () {
 
 };
 
+GameScreen.prototype.export_file = function () {
+
+    var data = this.get_export_data();
+    this.save_current_data();
+
+    if (this.export_filename.value) {
+        var base_url = window.document.URL.replace("index.html", '');
+        var file_name = this.export_filename.value;
+        ajax_post(base_url + "export.php", {file_name: file_name, data: data}, function (data) {
+            log(data);
+        });
+    } else {
+        alert("Set a file name to export");
+    }
+
+};
+
 GameScreen.prototype.save_current_data = function () {
 
     var data = this.get_export_data();
@@ -23,8 +40,6 @@ GameScreen.prototype.save_current_data = function () {
         saved_data.push(data);
         localStorage.setItem("level_editor_auto_save", JSON.stringify(saved_data));
     }
-
-
 
 };
 
@@ -62,36 +77,9 @@ GameScreen.prototype.get_export_data = function () {
     json.obsticles = obsticles;
     json.layers = ContentManager.layers;
     json.types = ContentManager.object_types;
-    json.images = [];
+    json.import_file = this.export_filename.value;
     json.pos = the_pos;
-    
 
-    var images_to_exclued = [
-        "child_message.png",
-        "blank_black_highlighted.png",
-        "blank_black.png",
-        "loading_bg.png",
-        "loading_fr.png",
-        "logo.png",
-        "lights2.png",
-        "lights1.png"
-    ];
-
-    for (var image in Images) {
-
-        var im = Images[image];
-        var idx = images_to_exclued.indexOf(im.file_name);
-
-        if (idx === -1) {
-            json.images.push({
-                url: im.url,
-                file_name: im.file_name,
-                key: im.image_name
-            });
-        }
-
-
-    }
 
     this.move_layers_to(the_pos);
 
@@ -146,25 +134,12 @@ GameScreen.prototype.import = function (json) {
     arr.push(data);
     localStorage.setItem("level_editor_auto_save", JSON.stringify(arr));
 
-    for (var i = 0; i < data.images.length; i++) {
+   // this.export_filename.value = data.import_file;
 
-        var img = data.images[i];
-        ContentManager.add_image(img.key, img.url);
-
-        var element = "<img ";
-        element += " src='" + img.url + "' ";
-        element += " id='" + img.key + "' ";
-        element += " title='" + img.key + "' ";
-        element += " onclick=\"game.navigator.current_screen.on_image_click(this,'" + img.key + "')\" ";
-        element += " />";
-
-        this.library.innerHTML += element;
-
-    }
     var that = this;
     ContentManager.download_resources(this.stage, function () {
         that.import_obsticles(data);
-        that.move_layers_to(new V(data.pos.x,data.pos.y));
+        that.move_layers_to(new V(data.pos.x, data.pos.y));
     });
 
 };
@@ -176,7 +151,7 @@ GameScreen.prototype.clear_project = function () {
         obsticle.remove_from_parent();
     }
 
-    this.library.innerHTML = "";
+    //  this.library.innerHTML = "";
     this.obsticles = [];
     this.graphics = [];
 
@@ -200,13 +175,15 @@ GameScreen.prototype.import_obsticles = function (data) {
         if (obsticle.children) {
 
             for (var j = 0; j < obsticle.children.length; j++) {
-                var c = this.unfold_object(obsticle.children[j], layer);               
+                var c = this.unfold_object(obsticle.children[j], layer);
                 o.add_child(c);
             }
 
         }
 
     }
+    
+    this.update_objects_list();
 
 };
 
@@ -258,6 +235,7 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
     } else if (obsticle.object_type === "Graphic") {
 
         var image_name = obsticle.image_name;
+        image_name = image_name.replace('_png', '');
         var o = new Graphic(image_name);
 
         o.inner_type = "Graphic";
@@ -285,7 +263,7 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
     o.name = obsticle.name;
     o.type = obsticle.type;
     o.properties = obsticle.properties;
-    
+
     var _type = this.find_type_by_name(obsticle.type);
     if (_type) {
         o.normal_color = _type.color;
@@ -302,7 +280,7 @@ GameScreen.prototype.unfold_object = function (obsticle, layer) {
     o.set_position(obsticle.pos.x, obsticle.pos.y);
 
 
-  //  this.obsticles.push(o);
+    //  this.obsticles.push(o);
 
     return o;
 

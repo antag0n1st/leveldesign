@@ -1,7 +1,7 @@
 <?php
 
 define('DS', DIRECTORY_SEPARATOR);
-$main_dir = getcwd() . DS . 'library';
+$main_dir = getcwd() . DS ."..".DS. 'assets'.DS.'images';
 
 $content = [];
 
@@ -28,13 +28,30 @@ function create_url($dir) {
     global $main_dir;
     $url = str_replace($main_dir, '', $dir);
     $url = str_replace(DS, "/", $url);
-    return 'library' . $url . '/';
+  //  return $url;
+    return '../assets/images' . $url . '/';
 }
 
-function listFolderFiles($dir) {
+function listFolderFiles($dir,$folder_name) {
     $ffs = scandir($dir);
     global $main_dir, $content;
+
+    $folder = [];
+    $folder['text'] = $folder_name;
+    $folder['children'] = [];
+    
+    if($folder_name == 'root'){
+        $folder['state'] = ["opened" => true];
+    }
+//        state       : {
+////            opened    : boolean  // is the node open
+////            disabled  : boolean  // is the node disabled
+////            selected  : boolean  // is the node selected
+////        }
+//    }
+
     foreach ($ffs as $ff) {
+
         if ($ff != '.' && $ff != '..') {
 
             /////////////////////////
@@ -43,71 +60,36 @@ function listFolderFiles($dir) {
             if ($ff === "assets.js" || $ff === "css") {
                 // do nothing   
             } else {
-                
-                 if (endsWith($ff, '.png')) {
-                        $basic = beforeComma($ff);
-                        $url = create_url($dir);
-                        $url = str_replace('assets/images', '', $url);
-                        $url = ltrim($url, '/');
-                        $content[] = ['url' =>  $url . $ff , 'name' => $basic.'.png']; 
-                    }
 
-//                if (endsWith($dir, DS . 'spine')) {
-//                    if (endsWith($ff, '.png')) {
-//                        $basic = beforeComma($ff);
-//                        $content .= "ContentManager.add_spine('" . $basic . "');\n";
-//                    }
-//                } else if (stringContains($dir, 'sounds' . DS . 'effects')) {
-//                    if (endsWith($ff, '.ogg')) {
-//                        $basic = beforeComma($ff);
-//                        $content .= "ContentManager.add_sound('" . $basic . "','" . create_url($dir) . $basic . "');\n";
-//                    }
-//                } else if (stringContains($dir, 'sounds' . DS . 'music')) {
-//                    if (endsWith($ff, '.ogg')) {
-//                        $basic = beforeComma($ff);
-//                        $content .= "ContentManager.add_audio('" . $basic . "','" . create_url($dir) . $basic . "');\n";
-//                    }
-//                } else if (endsWith($dir, DS . 'fonts')) {
-//                    if (endsWith($ff, '.ttf')) {
-//                        $basic = beforeComma($ff);
-//                        $content .= "ContentManager.add_font('" . $basic . "','" . create_url($dir) . $ff . "');\n";
-//                    }
-//                } else if (stringContains($dir, 'assets' . DS . 'images' . DS . "atlases")) {
-//                    if (endsWith($ff, '.png')) {
-//                        $basic = beforeComma($ff);
-//                        $content .= "ContentManager.add_atlas('" . $basic . "');\n";
-//                    }
-//                } else if (endsWith($dir, DS . 'localization')) {
-//                    if (endsWith($ff, '.txt')) {
-//                        $basic = beforeComma($ff);
-//                        $content .= "ContentManager.add_file('" . $basic . "','" . create_url($dir) . $ff . "');\n";
-//                    }
-//                } else if (stringContains($dir, 'assets' . DS . 'images')) {
-//                    if (endsWith($ff, '.png')) {
-//                        $basic = beforeComma($ff);
-//                        $url = create_url($dir);
-//                        $url = str_replace('assets/images', '', $url);
-//                        $url = ltrim($url, '/');
-//                        $content .= "ContentManager.add_image('" . $basic . "','" . $url . $ff . "');\n";
-//                    }
-//                } else if (endsWith($ff, '.json')) {
-//                    // looking for json files 
-//                    $basic = beforeComma($ff);
-//                    $content .= "ContentManager.add_file('" . $basic . "','" . create_url($dir) . $ff . "');\n";
-//                }
+                if (endsWith($ff, '.png')) {
+
+                    $basic = beforeComma($ff);
+                    $url = create_url($dir);
+                 //   $url = str_replace('', '', $url);
+                    $url = ltrim($url, '/');
+                    
+                    $node =  ['icon' => $url . $ff, 'text' => $basic];
+                    
+                    $folder['children'][] = $node;
+                }
             }
 
             ///////////////////////////////
 
 
             if (is_dir($dir . DS . $ff)) {
-              //  $content .= "\n";
-                listFolderFiles($dir . DS . $ff);
+
+                $sub_folder = listFolderFiles($dir . DS . $ff , $ff);
+               array_unshift($folder['children'],$sub_folder);
             }
         }
     }
+    
+    return $folder;
 }
 
-listFolderFiles($main_dir);
+$structure = listFolderFiles($main_dir, 'root');
+print_r(json_encode($structure));
 
-print_r(json_encode($content));
+
+//print_r(json_encode($content));

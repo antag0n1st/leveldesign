@@ -42,6 +42,8 @@ GameScreen.prototype.on_mouse_up = function (event) {
             this.obsticles.push(this.queue_box);
             this.queue_box = null;
             this.selected_obsticle = null;
+            
+            this.update_objects_list();
 
         }
 
@@ -105,6 +107,7 @@ GameScreen.prototype.on_mouse_up = function (event) {
             this.obsticles.push(this.queue_circle);
             this.queue_circle = null;
             this.selected_obsticle = null;
+            this.update_objects_list();
         }
     }
 
@@ -131,6 +134,7 @@ GameScreen.prototype.on_mouse_up = function (event) {
             this.active_layer.add_child(obsticle);
             obsticle.layer_name = this.active_layer.name;
             obsticle.layer = this.active_layer;
+            this.update_objects_list();
         }
 
 
@@ -200,6 +204,7 @@ GameScreen.prototype.on_mouse_up = function (event) {
             sprite.layer = this.active_layer;
             this.obsticles.push(sprite);
             this.graphics.push(sprite);
+            this.update_objects_list();
         }else{
             
 

@@ -3,7 +3,7 @@ GameScreen.prototype.on_layer_change = function (object) {
     var value = object.value;
     this.active_layer = this.get_layer_by_name(value);
     this.layer_visibility.checked = this.active_layer.is_visible;
-
+    this.update_objects_list();
 };
 
 GameScreen.prototype.on_layer_visibility_change = function (object) {
@@ -152,6 +152,8 @@ GameScreen.prototype.on_name_change = function (object) {
     if (this.selected_obsticle) {
         this.selected_obsticle.name = value;
     }
+
+    this.update_objects_list();
 
 };
 
@@ -428,6 +430,28 @@ GameScreen.prototype.remove_properties_for_obsticle = function (obsticle) {
 
 GameScreen.prototype.list_files = function (files) {
 
+    var data = {'core': {
+            'data': [
+                files
+            ]
+        }};
+
+    var that = this;
+
+    // $.jstree.defaults.core.themes.variant = "large";
+
+    $('#library').jstree(data).on('changed.jstree', function (e, data) {
+        var i, j, r = null;
+        for (i = 0, j = data.selected.length; i < j; i++) {
+            r = data.instance.get_node(data.selected[i]);
+        }
+
+        if (typeof r.icon === "string") {
+            that.on_image_click(r.text);
+        }
+    });
+
+
     var base_url = window.document.URL;
 
     if (base_url.indexOf('index.html') !== -1) {
@@ -436,43 +460,62 @@ GameScreen.prototype.list_files = function (files) {
         base_url += '/';
     }
 
+    base_url = base_url.replace("/leveldesign/", "");
 
-    for (var i = 0; i < files.length; i++) {
 
-        var name = files[i].name;
+    this.load_images_for_library(files.children, '');
 
-        var key = name.replace('.', '_');
-
-        var image_with_full_path = base_url + files[i].url;
-
-        ContentManager.add_image(key, image_with_full_path);
-
-        var element = "<img ";
-        element += " src=\"" + image_with_full_path + "\" ";
-        element += " title='" + name + "' ";
-        element += " onclick=\"game.navigator.current_screen.on_image_click(this,'" + key + "')\" ";
-        element += " id='" + key + "' ";
-        element += " />";
-
-        game.navigator.current_screen.library.innerHTML += element;
-
-    }
 
     ContentManager.download_resources(this.stage, function () {
+
     });
 
 
 };
 
-GameScreen.prototype.on_image_click = function (element, name) {
+GameScreen.prototype.on_import_file_selected = function (element) {
+
+    //TODO read the file and import it
+    this.clear_project();
+
+    var base_url = window.document.URL;
+
+    if (base_url.indexOf('index.html') !== -1) {
+        base_url = base_url.replace("index.html", "");
+    } else {
+        base_url;
+    }
+
+    this.export_filename.value = element.value;
+
+    var that = this;
+
+    ajax_get(base_url + '../assets/data/' + element.value, function (data) {
+
+        that.import(JSON.stringify(data));
+        that.save_current_data();
+    });
+};
+
+GameScreen.prototype.load_images_for_library = function (files, base_url) {
+
+    for (var i = 0; i < files.length; i++) {
+        var node = files[i];
+        if (node.icon) {
+            ContentManager.add_image(node.text, node.icon);
+        } else if (node.children) {
+            this.load_images_for_library(node.children, base_url);
+        }
+    }
+};
+
+GameScreen.prototype.on_image_click = function (name) {
 
     this.deselect_images();
     this.deselect_graphics();
 
 
     if (input_state.get() === States.main_states.graphics_draw) {
-
-        element.style.backgroundColor = "blue";
 
         if (this.selected_image) {
             this.selected_image.remove_from_parent();
@@ -653,5 +696,49 @@ GameScreen.prototype.copy_selected_object = function () {
         this.update_inspector_with_obsticle(cp);
 
     }
+
+};
+
+
+GameScreen.prototype.update_objects_list = function () {
+
+    // now generate a new list
+    var html = "";
+    for (var i = 0; i < this.obsticles.length; i++) {
+        var obsticle = this.obsticles[i];
+
+        if (obsticle.get_parent().name === this.active_layer.name) {
+            var name = obsticle.name ? obsticle.name : obsticle.inner_type;
+            html += '<li onclick="game.navigator.current_screen.on_object_list_click(' + obsticle.id + ');">' + name + ' <img onclick="game.navigator.current_screen.on_object_delete_click();" src="assets/images/close_x.png" /></li>';
+
+        }
+
+    }
+
+    this.objects_list.innerHTML = html;
+
+};
+
+GameScreen.prototype.on_object_list_click = function (id) {
+    for (var i = 0; i < this.obsticles.length; i++) {
+        var obsticle = this.obsticles[i];
+        if (obsticle.id == id) {
+
+            if (this.selected_obsticle) {
+                this.selected_obsticle.is_selected = false;
+            }
+
+            this.selected_obsticle = obsticle;
+            this.selected_obsticle.is_selected = true;
+            this.update_inspector_with_obsticle(this.selected_obsticle);
+            break;
+        }
+    }
+};
+
+GameScreen.prototype.on_object_delete_click = function () {
+
+    this.on_delete();
+    this.update_objects_list();
 
 };
